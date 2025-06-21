@@ -171,7 +171,7 @@
     </div>
 
     <div id="contact" class="section">
-      <form id="contactForm" action="https://formsubmit.co/zulfugarov06@gmail.com" method="POST" onsubmit="return handleSubmit()">
+      <form id="contactForm" action="https://getform.io/f/bqomyqzb" method="POST">
         <h2 style="text-align:center;">Bize Yazın</h2>
 
         <label>Ad:</label><br>
@@ -188,11 +188,6 @@
 
         <label>Mektubunuz:</label><br>
         <textarea name="Mesaj" rows="5" required></textarea><br>
-
-        <!-- Form ayarları -->
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_subject" value="Yeni İletişim Formu Mesajı">
-        <input type="hidden" name="_next" value="https://teşekkürler-sayfanız.com">
 
         <button type="submit">Gönder</button>
 
@@ -216,13 +211,26 @@
       document.body.classList.toggle('dark');
     }
 
-    function handleSubmit() {
-      setTimeout(() => {
-        document.getElementById("contactForm").reset();
-        document.getElementById("successMessage").style.display = "block";
-      }, 500);
-      return true;
-    }
+    const form = document.getElementById("contactForm");
+    const successMessage = document.getElementById("successMessage");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      fetch(form.action, {
+        method: "POST",
+        body: new FormData(form)
+      })
+      .then(() => {
+        form.reset();
+        successMessage.style.display = "block";
+      })
+      .catch(() => {
+        successMessage.innerText = "Bir hata oluştu. Lütfen tekrar deneyin.";
+        successMessage.style.display = "block";
+        successMessage.style.color = "red";
+      });
+    });
   </script>
 </body>
 </html>
