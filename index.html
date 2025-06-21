@@ -31,7 +31,6 @@
       background-color: var(--bg-color);
       color: var(--text-color);
       transition: background-color 0.3s, color 0.3s;
-
       display: flex;
       flex-direction: column;
       min-height: 100vh;
@@ -97,104 +96,99 @@
       color: var(--primary);
     }
 
+    form {
+      background-color: var(--card-bg);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin: 30px auto;
+      text-align: left;
+    }
+
+    form input,
+    form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      resize: vertical;
+      box-sizing: border-box;
+    }
+
+    form button {
+      display: block;
+      margin: 20px auto 0;
+      padding: 12px 25px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
     footer {
       background-color: var(--footer-bg);
       color: white;
       text-align: center;
       padding: 20px;
+      margin-top: auto;
     }
   </style>
 </head>
 <body>
-<!-- basliq 
-  <header style="background-color: var(--bg-color); padding: 30px 20px 10px; text-align: center;">
-    <h1 style="margin: 0; font-size: 32px; color: var(--primary);">Ramin'in Web Sitesi</h1>
-  </header>
-  -->
-  <!-- Navbar -->
   <nav>
-  <div class="nav-container">
-    <div class="logo">
-      <img src="r-agency-logo.png" alt="Logo" style="height: 60px;" />
+    <div class="nav-container">
+      <div class="logo">
+        <img src="r-agency-logo.png" alt="Logo" style="height: 60px;" />
+      </div>
+      <ul>
+        <li><a onclick="showSection('about')">Hakkımda</a></li>
+        <li><a onclick="showSection('projects')">Projeler</a></li>
+        <li><a onclick="showSection('contact')">İletişim</a></li>
+      </ul>
+      <button class="theme-toggle" onclick="toggleTheme()">KARANLIK MOD</button>
     </div>
-    <ul>
-      <li><a onclick="showSection('about')">Hakkımda</a></li>
-      <li><a onclick="showSection('projects')">Projeler</a></li>
-      <li><a onclick="showSection('contact')">İletişim</a></li>
-    </ul>
-    <button class="theme-toggle" onclick="toggleTheme()">KARANLIK MOD</button>
-  </div>
-</nav>
+  </nav>
 
-  <!-- Ana İçerik -->
   <main>
-    <!-- Hakkımda -->
     <div id="about" class="section active">
-      
-      <p>
-Merhaba! Ben Ramin, front-end web geliştirme alanında çalışan tutkulu bir geliştiriciyim. HTML, CSS ve JavaScript gibi temel teknolojilerle modern, kullanıcı dostu ve mobil uyumlu web siteleri geliştiriyorum.
-</p>
-<p>
-Kullanıcı arayüzü tasarımı, etkileşimli deneyimler ve sade ama etkili kod yapıları oluşturmak en büyük tutkularımdan biri. Yeni şeyler öğrenmeye açık, gelişime önem veren ve detaylara dikkat eden bir yapım var.
-</p>
-<p>
-Amacım, hem bireysel hem de ekip projelerinde kaliteli işler ortaya koymak ve sürekli olarak kendimi geliştirmeye devam etmek.
-</p>
+      <p>Merhaba! Ben Ramin, front-end web geliştirme alanında çalışan tutkulu bir geliştiriciyim...</p>
     </div>
 
-    <!-- Projeler -->
     <div id="projects" class="section">
-      
-     <p>
-Geliştirdiğim projeler, kullanıcı odaklı tasarımı ve temiz kod yapısını bir araya getirerek sade, hızlı ve etkili çözümler sunmayı hedefler. Her bir proje; yeni bir şey öğrenmek, karşılaşılan sorunlara yaratıcı çözümler üretmek ve gerçek dünya ihtiyaçlarına cevap vermek amacıyla tasarlanmıştır.
-</p>
-
-<p>
-Çalışmalarım arasında portfolyo siteleri, mobil uyumlu blog şablonları, interaktif JavaScript uygulamaları ve eğitim amaçlı mini projeler yer alıyor. Tüm projelerimde <strong>HTML</strong>, <strong>CSS</strong> ve <strong>JavaScript</strong> gibi temel teknolojileri kullanırken; zaman zaman <strong>Bootstrap</strong>, <strong>React</strong> veya <strong>Git</strong> gibi modern araçlardan da yararlanıyorum.
-</p>
-
-<p>
-Projelerimi geliştirirken erişilebilirlik, performans ve kullanıcı deneyimi benim için ön planda olur. Ayrıca GitHub üzerinden tüm projelerimi açık kaynak olarak paylaşıyor ve sürekli güncelliyorum.
-</p>
-
-<p><strong>Öne çıkan bazı projelerim:</strong></p>
-<ul style="text-align:left; max-width: 600px; margin:auto;">
-  <li><strong>🌐 Kişisel Portfolyo Sitesi:</strong> Tamamen responsive, karanlık mod destekli ve sade bir arayüze sahip.</li>
-  <li><strong>📰 Blog Sayfası:</strong> Kart yapısı ve mobil uyumu olan, modern blog tasarımı.</li>
-  <li><strong>🕹️ JavaScript Mini Oyunlar:</strong> Sayı tahmin, hafıza kart oyunu gibi eğlenceli ve öğretici projeler.</li>
-  <li><strong>📊 Veri Görselleştirme Paneli:</strong> (React ile) Dinamik grafik ve kullanıcı arayüzü.</li>
-</ul>
+      <p>Geliştirdiğim projeler kullanıcı odaklı tasarımıyla...</p>
     </div>
 
-    <!-- İletişim -->
     <div id="contact" class="section">
-           
-<h2>Bize Yazın</h2>
-<form style="max-width: 600px; margin: 30px auto; text-align: left; background-color: var(--card-bg); padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-  <label>Ad:</label><br>
-  <input type="text" name="ad" required style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;"><br>
+      <h2>Bize Yazın</h2>
+      <form action="https://formspree.io/f/your-form-id" method="POST">
+        <label>Ad:</label>
+        <input type="text" name="ad" required>
 
-  <label>Soyad:</label><br>
-  <input type="text" name="soyad" required style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;"><br>
+        <label>Soyad:</label>
+        <input type="text" name="soyad" required>
 
-  <label>E-posta:</label><br>
-  <input type="email" name="email" required style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;"><br>
+        <label>E-posta:</label>
+        <input type="email" name="email" required>
 
-  <label>Telefon Numarası:</label><br>
-  <input type="tel" name="telefon" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;"><br>
+        <label>Telefon Numarası:</label>
+        <input type="tel" name="telefon">
 
-  <label>Mektubunuz:</label><br>
-  <textarea name="mesaj" rows="5" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;"></textarea><br><br>
+        <label>Mektubunuz:</label>
+        <textarea name="mesaj" rows="5" required></textarea>
 
-  <button type="submit" style="padding: 12px 25px; background-color: var(--primary); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Gönder</button>
-</form>
+        <button type="submit">Gönder</button>
+      </form>
+    </div>
+  </main>
 
-  <!-- Footer -->
   <footer>
     <p>© 2025 R-Agency. Tüm hakları saklıdır.</p>
   </footer>
 
-  <!-- JavaScript -->
   <script>
     function showSection(id) {
       const sections = document.querySelectorAll('.section');
