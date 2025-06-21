@@ -129,6 +129,14 @@
       font-size: 16px;
     }
 
+    #successMessage {
+      display: none;
+      color: green;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 20px;
+    }
+
     footer {
       background-color: var(--footer-bg);
       color: white;
@@ -163,32 +171,33 @@
     </div>
 
     <div id="contact" class="section">
-      <form action="https://formsubmit.co/zulfugarov06@gmail.com" method="POST" style="max-width: 600px; margin: 30px auto; text-align: left; background-color: var(--card-bg); padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-  <h2 style="text-align:center;">Bize Yazın</h2>
+      <form id="contactForm" action="https://formsubmit.co/zulfugarov06@gmail.com" method="POST" onsubmit="return handleSubmit()">
+        <h2 style="text-align:center;">Bize Yazın</h2>
 
-  <label>Ad:</label><br>
-  <input type="text" name="Ad" required style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;"><br>
+        <label>Ad:</label><br>
+        <input type="text" name="Ad" required>
 
-  <label>Soyad:</label><br>
-  <input type="text" name="Soyad" required style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;"><br>
+        <label>Soyad:</label><br>
+        <input type="text" name="Soyad" required>
 
-  <label>E-posta:</label><br>
-  <input type="email" name="E-posta" required style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;"><br>
+        <label>E-posta:</label><br>
+        <input type="email" name="E-posta" required>
 
-  <label>Telefon Numarası:</label><br>
-  <input type="tel" name="Telefon" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;"><br>
+        <label>Telefon Numarası:</label><br>
+        <input type="tel" name="Telefon">
 
-  <label>Mektubunuz:</label><br>
-  <textarea name="Mesaj" rows="5" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; resize: none;"></textarea><br><br>
+        <label>Mektubunuz:</label><br>
+        <textarea name="Mesaj" rows="5" required></textarea><br>
 
-  <!-- Gerekirse gizli ayarlar -->
-  <input type="hidden" name="_captcha" value="false">
-  <input type="hidden" name="_subject" value="Yeni İletişim Formu Mesajı">
-  <input type="hidden" name="_next" value="https://teşekkürler-sayfanız.com"> <!-- Opsiyonel yönlendirme -->
+        <!-- Form ayarları -->
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_subject" value="Yeni İletişim Formu Mesajı">
+        <input type="hidden" name="_next" value="https://teşekkürler-sayfanız.com">
 
-  <button type="submit" style="display: block; margin: 0 auto; padding: 12px 25px; background-color: var(--primary); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Gönder</button>
-</form>
+        <button type="submit">Gönder</button>
 
+        <p id="successMessage">Mesajınız başarıyla gönderildi. En kısa zamanda size geri dönüş yapılacaktır...</p>
+      </form>
     </div>
   </main>
 
@@ -205,6 +214,14 @@
 
     function toggleTheme() {
       document.body.classList.toggle('dark');
+    }
+
+    function handleSubmit() {
+      setTimeout(() => {
+        document.getElementById("contactForm").reset();
+        document.getElementById("successMessage").style.display = "block";
+      }, 500);
+      return true;
     }
   </script>
 </body>
