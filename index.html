@@ -31,6 +31,10 @@
       background-color: var(--bg-color);
       color: var(--text-color);
       transition: background-color 0.3s, color 0.3s;
+
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
 
     nav {
@@ -73,6 +77,10 @@
       cursor: pointer;
     }
 
+    main {
+      flex: 1;
+    }
+
     .section {
       display: none;
       padding: 40px 20px;
@@ -94,7 +102,6 @@
       color: white;
       text-align: center;
       padding: 20px;
-      margin-top: 40px;
     }
   </style>
 </head>
@@ -113,23 +120,26 @@
     </div>
   </nav>
 
-  <!-- Hakkımda -->
-  <div id="about" class="section active">
-    
-    <p>Ben Ramin, front-end geliştirme alanında çalışıyorum. HTML, CSS, JavaScript ile projeler geliştiriyorum.</p>
-  </div>
+  <!-- Ana İçerik -->
+  <main>
+    <!-- Hakkımda -->
+    <div id="about" class="section active">
+      <h2>Hakkımda</h2>
+      <p>Ben Ramin, front-end geliştirme alanında çalışıyorum. HTML, CSS, JavaScript ile projeler geliştiriyorum.</p>
+    </div>
 
-  <!-- Projeler -->
-  <div id="projects" class="section">
-    
-    <p>🎨 Portfolyo Web Sitesi<br>📱 Mobil Blog Tasarımı<br>🕹️ JavaScript Mini Oyun</p>
-  </div>
+    <!-- Projeler -->
+    <div id="projects" class="section">
+      <h2>Projeler</h2>
+      <p>🎨 Portfolyo Web Sitesi<br>📱 Mobil Blog Tasarımı<br>🕹️ JavaScript Mini Oyun</p>
+    </div>
 
-  <!-- İletişim -->
-  <div id="contact" class="section">
-    
-    <p>Bana ulaşmak için: <strong>ramin@example.com</strong></p>
-  </div>
+    <!-- İletişim -->
+    <div id="contact" class="section">
+      <h2>İletişim</h2>
+      <p>Bana ulaşmak için: <strong>ramin@example.com</strong></p>
+    </div>
+  </main>
 
   <!-- Footer -->
   <footer>
