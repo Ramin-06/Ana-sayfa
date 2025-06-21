@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ramin'in Web Sitesi</title>
-
   <style>
     :root {
       --bg-color: #f8f9fa;
@@ -26,42 +25,26 @@
       --footer-bg: #1a1a1a;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      scroll-behavior: smooth;
-    }
-
     body {
-      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      font-family: Arial, sans-serif;
       background-color: var(--bg-color);
       color: var(--text-color);
-      line-height: 1.6;
-    }
-
-    .container {
-      width: 90%;
-      max-width: 960px;
-      margin: auto;
-      padding: 20px;
+      transition: background-color 0.3s, color 0.3s;
     }
 
     nav {
       background-color: var(--nav-bg);
-      color: var(--nav-text);
-      padding: 15px 0;
+      padding: 10px 0;
     }
 
-    nav .container {
+    .nav-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-    }
-
-    .logo {
-      font-weight: bold;
-      font-size: 20px;
     }
 
     nav ul {
@@ -73,7 +56,8 @@
     nav ul li a {
       color: var(--nav-text);
       text-decoration: none;
-      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
     }
 
     nav ul li a:hover {
@@ -81,99 +65,85 @@
     }
 
     .theme-toggle {
-      background-color: transparent;
-      border: 1px solid var(--nav-text);
+      background: transparent;
       color: var(--nav-text);
+      border: 1px solid var(--nav-text);
       padding: 5px 10px;
       border-radius: 5px;
       cursor: pointer;
-      font-size: 14px;
-      transition: 0.3s;
     }
 
-    .theme-toggle:hover {
-      background-color: var(--primary);
-      color: #fff;
-    }
-
-    section {
-      margin: 60px 0;
+    .section {
+      display: none;
+      padding: 40px 20px;
+      max-width: 800px;
+      margin: auto;
       text-align: center;
     }
 
-    section h2 {
+    .section.active {
+      display: block;
+    }
+
+    h2 {
       color: var(--primary);
-      font-size: 28px;
-      margin-bottom: 10px;
     }
 
     footer {
       background-color: var(--footer-bg);
-      color: #fff;
+      color: white;
       text-align: center;
-      padding: 20px 0;
-    }
-
-    @media (max-width: 600px) {
-      nav .container {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      nav ul {
-        flex-direction: column;
-        gap: 10px;
-        margin-top: 10px;
-      }
+      padding: 20px;
+      margin-top: 40px;
     }
   </style>
 </head>
 <body>
+
   <!-- Navbar -->
   <nav>
-    <div class="container">
-      <div class="logo">Ramin</div>
+    <div class="nav-container">
+      <div class="logo" style="color:white; font-weight:bold;">Ramin</div>
       <ul>
-        <li><a href="#about">Hakkımda</a></li>
-        <li><a href="#projects">Projeler</a></li>
-        <li><a href="#contact">İletişim</a></li>
+        <li><a onclick="showSection('about')">Hakkımda</a></li>
+        <li><a onclick="showSection('projects')">Projeler</a></li>
+        <li><a onclick="showSection('contact')">İletişim</a></li>
       </ul>
-      <button class="theme-toggle" onclick="toggleTheme()">🌙 Karanlık Mod</button>
+      <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
     </div>
   </nav>
 
   <!-- Hakkımda -->
-  <section id="about">
-    <div class="container">
-      <h2>Hakkımda</h2>
-      <p>Ben Ramin, front-end geliştirme alanında çalışmalar yapıyorum. Bu sitede projelerimi ve iletişim bilgilerimi bulabilirsiniz.</p>
-    </div>
-  </section>
+  <div id="about" class="section active">
+    <h2>Hakkımda</h2>
+    <p>Ben Ramin, front-end geliştirme alanında çalışıyorum. HTML, CSS, JavaScript ile projeler geliştiriyorum.</p>
+  </div>
 
   <!-- Projeler -->
-  <section id="projects">
-    <div class="container">
-      <h2>Projeler</h2>
-      <p>🎨 Portfolyo Web Sitesi<br>📱 Mobil Uyumlu Blog Tasarımı<br>🕹️ JavaScript Mini Oyun</p>
-    </div>
-  </section>
+  <div id="projects" class="section">
+    <h2>Projeler</h2>
+    <p>🎨 Portfolyo Web Sitesi<br>📱 Mobil Blog Tasarımı<br>🕹️ JavaScript Mini Oyun</p>
+  </div>
 
   <!-- İletişim -->
-  <section id="contact">
-    <div class="container">
-      <h2>İletişim</h2>
-      <p>📧 ramin@example.com</p>
-    </div>
-  </section>
+  <div id="contact" class="section">
+    <h2>İletişim</h2>
+    <p>Bana ulaşmak için: <strong>ramin@example.com</strong></p>
+  </div>
 
   <!-- Footer -->
   <footer>
-    <div class="container">
-      <p>© 2025 Ramin. Tüm hakları saklıdır.</p>
-    </div>
+    <p>© 2025 Ramin. Tüm hakları saklıdır.</p>
   </footer>
 
+  <!-- JavaScript -->
   <script>
+    function showSection(id) {
+      const sections = document.querySelectorAll('.section');
+      sections.forEach(sec => sec.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
     function toggleTheme() {
       document.body.classList.toggle('dark');
     }
