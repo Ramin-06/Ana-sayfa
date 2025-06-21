@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ramin'in Web Sitesi</title>
+
+  <style>
+    :root {
+      --bg-color: #f8f9fa;
+      --text-color: #333;
+      --primary: #007bff;
+      --nav-bg: #343a40;
+      --nav-text: #fff;
+      --card-bg: #e9ecef;
+      --footer-bg: #343a40;
+    }
+
+    body.dark {
+      --bg-color: #121212;
+      --text-color: #eee;
+      --primary: #0d6efd;
+      --nav-bg: #1f1f1f;
+      --nav-text: #fff;
+      --card-bg: #1e1e1e;
+      --footer-bg: #1a1a1a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 960px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    nav {
+      background-color: var(--nav-bg);
+      color: var(--nav-text);
+      padding: 15px 0;
+    }
+
+    nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      color: var(--nav-text);
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    nav ul li a:hover {
+      color: var(--primary);
+    }
+
+    .theme-toggle {
+      background-color: transparent;
+      border: 1px solid var(--nav-text);
+      color: var(--nav-text);
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    .theme-toggle:hover {
+      background-color: var(--primary);
+      color: #fff;
+    }
+
+    section {
+      margin: 40px 0;
+    }
+
+    section h2 {
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+
+    .projects ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .projects li {
+      background: var(--card-bg);
+      padding: 10px;
+      margin-bottom: 10px;
+      border-left: 4px solid var(--primary);
+    }
+
+    footer {
+      background-color: var(--footer-bg);
+      color: #fff;
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    @media (max-width: 600px) {
+      nav .container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      nav ul {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav>
+    <div class="container">
+      <div class="logo">Ramin</div>
+      <ul>
+        <li><a href="#about">Hakkında</a></li>
+        <li><a href="#projects">Projeler</a></li>
+        <li><a href="#contact">İletişim</a></li>
+      </ul>
+      <button class="theme-toggle" onclick="toggleTheme()">🌙 Karanlık Mod</button>
+    </div>
+  </nav>
+
+  <!-- Hakkında -->
+  <section id="about">
+    <div class="container">
+      <h2>Hakkında</h2>
+      <p>Ben Ramin. Web geliştirme ve tasarım alanında çalışmalar yapıyorum. Bu site GitHub Pages ile yayınlanmıştır.</p>
+    </div>
+  </section>
+
+  <!-- Projeler -->
+  <section id="projects">
+    <div class="container">
+      <h2>Projeler</h2>
+      <ul>
+        <li>🎨 Portfolyo Web Sitesi – HTML & CSS</li>
+        <li>📱 Mobil Uyumlu Blog Tasarımı</li>
+        <li>🕹️ JavaScript ile yapılmış mini oyun</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- İletişim -->
+  <section id="contact">
+    <div class="container">
+      <h2>İletişim</h2>
+      <p>Bana ulaşmak için: <a href="mailto:ramin@example.com">ramin@example.com</a></p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>© 2025 Ramin. Tüm hakları saklıdır.</p>
+    </div>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+    }
+  </script>
+</body>
+</html>
