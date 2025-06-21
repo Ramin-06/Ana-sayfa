@@ -163,25 +163,32 @@
     </div>
 
     <div id="contact" class="section">
-      <h2>Bize Yazın</h2>
-      <form action="https://formspree.io/f/your-form-id" method="POST">
-        <label>Ad:</label>
-        <input type="text" name="ad" required>
+      <form action="https://formsubmit.co/zulfugarov06@gmail.com" method="POST" style="max-width: 600px; margin: 30px auto; text-align: left; background-color: var(--card-bg); padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+  <h2 style="text-align:center;">Bize Yazın</h2>
 
-        <label>Soyad:</label>
-        <input type="text" name="soyad" required>
+  <label>Ad:</label><br>
+  <input type="text" name="Ad" required style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;"><br>
 
-        <label>E-posta:</label>
-        <input type="email" name="email" required>
+  <label>Soyad:</label><br>
+  <input type="text" name="Soyad" required style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;"><br>
 
-        <label>Telefon Numarası:</label>
-        <input type="tel" name="telefon">
+  <label>E-posta:</label><br>
+  <input type="email" name="E-posta" required style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;"><br>
 
-        <label>Mektubunuz:</label>
-        <textarea name="mesaj" rows="5" required></textarea>
+  <label>Telefon Numarası:</label><br>
+  <input type="tel" name="Telefon" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;"><br>
 
-        <button type="submit">Gönder</button>
-      </form>
+  <label>Mektubunuz:</label><br>
+  <textarea name="Mesaj" rows="5" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; resize: none;"></textarea><br><br>
+
+  <!-- Gerekirse gizli ayarlar -->
+  <input type="hidden" name="_captcha" value="false">
+  <input type="hidden" name="_subject" value="Yeni İletişim Formu Mesajı">
+  <input type="hidden" name="_next" value="https://teşekkürler-sayfanız.com"> <!-- Opsiyonel yönlendirme -->
+
+  <button type="submit" style="display: block; margin: 0 auto; padding: 12px 25px; background-color: var(--primary); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Gönder</button>
+</form>
+
     </div>
   </main>
 
