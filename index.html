@@ -118,6 +118,7 @@
     h2 {
       color: var(--primary);
       text-align: center;
+      margin-bottom: 30px;
     }
 
     #product-list {
@@ -206,6 +207,63 @@
       font-weight: bold;
     }
 
+    /* İletişim form stili */
+    #contactForm {
+      max-width: 600px;
+      margin: auto;
+      background-color: var(--card-bg);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    #contactForm h2 {
+      color: var(--primary);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    #contactForm label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+    }
+
+    #contactForm input,
+    #contactForm textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      resize: vertical;
+    }
+
+    #contactForm button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background-color: var(--primary);
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #contactForm button:hover {
+      background-color: #149b85;
+    }
+
+    #successMessage {
+      margin-top: 15px;
+      font-weight: bold;
+      text-align: center;
+      display: none;
+    }
+
     footer {
       background-color: var(--footer-bg);
       color: white;
@@ -246,18 +304,24 @@
     <div id="contact" class="section">
       <form id="contactForm" action="https://getform.io/f/bqomyqzb" method="POST">
         <h2>Bize Yazın</h2>
-        <label>Ad:</label><br>
-        <input type="text" name="Ad" required>
-        <label>Soyad:</label><br>
-        <input type="text" name="Soyad" required>
-        <label>E-posta:</label><br>
-        <input type="email" name="E-posta" required>
-        <label>Telefon Numarası:</label><br>
-        <input type="tel" name="Telefon">
-        <label>Mektubunuz:</label><br>
-        <textarea name="Mesaj" rows="5" required></textarea><br>
+
+        <label for="Ad">Ad:</label>
+        <input id="Ad" type="text" name="Ad" required>
+
+        <label for="Soyad">Soyad:</label>
+        <input id="Soyad" type="text" name="Soyad" required>
+
+        <label for="E-posta">E-posta:</label>
+        <input id="E-posta" type="email" name="E-posta" required>
+
+        <label for="Telefon">Telefon Numarası:</label>
+        <input id="Telefon" type="tel" name="Telefon">
+
+        <label for="Mesaj">Mektubunuz:</label>
+        <textarea id="Mesaj" name="Mesaj" rows="5" required></textarea>
+
         <button type="submit">Gönder</button>
-        <p id="successMessage" style="display:none;"></p>
+        <p id="successMessage"></p>
       </form>
     </div>
   </main>
