@@ -281,21 +281,25 @@
         <img src="logo.png" alt="Logo" style="height: 60px;" />
       </div>
       <ul>
-        <li><a id="nav-about" onclick="showSection('about')">Hakkımda</a></li>
-        <li><a id="nav-projects" onclick="showSection('projects')">Ürünlerim</a></li>
-        <li><a id="nav-contact" onclick="showSection('contact')">İletişim</a></li>
+        <li><a id="nav-about" onclick="showSection('about')">Haqqımızda</a></li>
+        <li><a id="nav-projects" onclick="showSection('projects')">Ətirlər</a></li>
+        <li><a id="nav-contact" onclick="showSection('contact')">Əlaqə</a></li>
       </ul>
-      <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">KARANLIK MOD</button>
+      <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">QARANLIQ MOD</button>
     </div>
   </nav>
 
   <main>
     <div id="about" class="section active">
-      <p>Merhaba! Ben Ramin, front-end web geliştirme alanında çalışan tutkulu bir geliştiriciyim...</p>
+      <p>R-Shoppingaz komandası olaraq deluxe keyfiyətdə olan ətirləri sizə təqdim edirik.
+      Zövüqnüzə uyğun olan ətirləri sifariş edə bilərsiniz. Parfümeriya sahəsində təcrübəli mütəxəssislə tərəfindən hazırlanan 
+     qarışımların qalıcılığınza zəmanət verilir. Fransa və Türkiyənin premium ətir dünyasına dəvət edir! Yüksək qalıcılıq, unikal qoxular və sərfəli 
+        seçimlərlə təravətinizi vurğulayın.
+        Zövqünüzü tamamlayan ideal qoxunu bizimlə kəşf edin.</p>
     </div>
 
     <div id="projects" class="section">
-      <h2>Ürünlerim</h2>
+      <!--<h2>Ürünlerim</h2>-->
       <div id="product-list">
         <!-- Dinamik olarak admin panelden gelen ürünler buraya yüklenecek -->
       </div>
@@ -303,7 +307,7 @@
 
     <div id="contact" class="section">
       <form id="contactForm" action="https://getform.io/f/bqomyqzb" method="POST">
-        <h2>Bize Yazın</h2>
+        <h2>Bizə Yazın</h2>
 
         <label for="Ad">Ad:</label>
         <input id="Ad" type="text" name="Ad" required>
@@ -311,16 +315,16 @@
         <label for="Soyad">Soyad:</label>
         <input id="Soyad" type="text" name="Soyad" required>
 
-        <label for="E-posta">E-posta:</label>
+        <label for="E-posta">E-poçt:</label>
         <input id="E-posta" type="email" name="E-posta" required>
 
-        <label for="Telefon">Telefon Numarası:</label>
+        <label for="Telefon">Telefon Nömrəsi:</label>
         <input id="Telefon" type="tel" name="Telefon">
 
-        <label for="Mesaj">Mektubunuz:</label>
+        <label for="Mesaj">Məktubunuz:</label>
         <textarea id="Mesaj" name="Mesaj" rows="5" required></textarea>
 
-        <button type="submit">Gönder</button>
+        <button type="submit">Göndər</button>
         <p id="successMessage"></p>
       </form>
     </div>
@@ -334,13 +338,13 @@
         <h3 id="modalTitle"></h3>
         <p id="modalDescription"></p>
         <p><strong id="modalPrice"></strong></p>
-        <a id="modalWhatsApp" class="whatsapp-btn" target="_blank">WhatsApp’tan Sipariş Ver</a>
+        <a id="modalWhatsApp" class="whatsapp-btn" target="_blank">WhatsApp’dan Sifariş Ver</a>
       </div>
     </div>
   </div>
 
   <footer>
-    <p>© 2025 R-Shoppingaz. Tüm hakları saklıdır.</p>
+    <p>© 2025 R-Shoppingaz. Bütün hüquqlar qorunur.</p>
   </footer>
 
   <script>
@@ -360,7 +364,7 @@
       const body = document.body;
       const button = document.getElementById('themeToggle');
       const isDark = body.classList.toggle('dark');
-      button.textContent = isDark ? 'AÇIK MOD' : 'KARANLIK MOD';
+      button.textContent = isDark ? 'AÇIQ MOD' : 'KARANLIK MOD';
       button.style.color = isDark ? '#ffffff' : '#2c3e50';
     }
 
