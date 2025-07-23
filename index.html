@@ -416,7 +416,7 @@ function openModal(product) {
   const modalPrice = document.getElementById('modalPrice');
 
   modalTitle.textContent = product.name;
-  modalDescription.textContent = product.description;
+  modalDescription.innerHTML = product.description;
 
   let selectedVolume = '30 ml';
   let price = 10;
