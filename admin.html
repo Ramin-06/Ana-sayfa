@@ -225,33 +225,36 @@
 
     // Ürün ekle
     form.addEventListener("submit", (e) => {
-      e.preventDefault();
+  e.preventDefault();
 
-      const code = document.getElementById("productCode").value.trim();
-      const name = document.getElementById("productName").value.trim();
-      const price = document.getElementById("productPrice").value.trim();
-      const description = document.getElementById("productDescription").value.trim();
-if (!code || !name || !price) {
-  alert("Lütfen tüm zorunlu alanları doldurun.");
-  return;      
-      }
+  const code = document.getElementById("productCode").value.trim();
+  const name = document.getElementById("productName").value.trim();
+  const price = document.getElementById("productPrice").value.trim();
+  const description = document.getElementById("productDescription").value.trim();
 
-      const products = getProducts();
+  if (!code || !name || !price) {
+    alert("Lütfen tüm zorunlu alanları doldurun.");
+    return;      
+  }
 
-      products.push({ code, name, price, image, description, ml: selectedMl });
-      localStorage.setItem("products", JSON.stringify(products));
+  const products = getProducts();
 
-      form.reset();
+  // 'image' dəyişəni silindi, çünki təyin edilməyib
+  products.push({ code, name, price, description, ml: selectedMl });
+  localStorage.setItem("products", JSON.stringify(products));
 
-      // Varsayılan ml ve fiyat ayarla
-      selectedMl = "30";
-      selectedPrice = "10";
-      mlButtons.forEach(b => b.classList.remove("selected"));
-      mlButtons[0].classList.add("selected");
-      priceInput.value = selectedPrice;
+  form.reset();
 
-      renderProducts();
-    });
+  // Varsayılan ml və qiyməti yenidən təyin et
+  selectedMl = "30";
+  selectedPrice = "10";
+  mlButtons.forEach(b => b.classList.remove("selected"));
+  mlButtons[0].classList.add("selected");
+  priceInput.value = selectedPrice;
+
+  renderProducts();
+});
+
 
     // Ürün sil
     function deleteProduct(index) {
