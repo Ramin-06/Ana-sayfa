@@ -498,13 +498,34 @@ function openModal(product) {
     });
 
     // Məhsulları yükləyən funksiyası
-    function loadProducts() {
-      const productList = document.getElementById('product-list');
-      productList.innerHTML = '';
-      products.forEach(product => {
-        productList.appendChild(createProductCard(product));
-      });
+    function getStoredProducts() {
+  const stored = localStorage.getItem("products");
+  if (stored) {
+    try {
+      return JSON.parse(stored);
+    } catch {
+      return null;
     }
+  }
+  return null;
+}
+
+function loadProducts() {
+  const productList = document.getElementById('product-list');
+  productList.innerHTML = '';
+
+  const storedProducts = getStoredProducts();
+  const productsToShow = storedProducts && storedProducts.length > 0 ? storedProducts : [
+    { name: "Parfüm 1", price: "45", description: "Parfüm 1 təsviri." },
+    { name: "Parfüm 2", price: "55", description: "Parfüm 2 təsviri." },
+    { name: "Parfüm 3", price: "65", description: "Parfüm 3 təsviri." }
+  ];
+
+  productsToShow.forEach(product => {
+    productList.appendChild(createProductCard(product));
+  });
+}
+
 
     // Form göndərmə və mesaj
     const form = document.getElementById("contactForm");
