@@ -292,18 +292,18 @@
 <body>
   <div class="top-space"></div>
   <nav>
-    <div class="nav-container">
-      <div class="logo">
-        <img src="logo.png" alt="Logo" style="height: 60px;" />
-      </div>
-      <ul>
-        <li><a id="nav-about" onclick="showSection('about')">Haqqımızda</a></li>
-        <li><a id="nav-projects" onclick="showSection('projects')">Ətirlər</a></li>
-        <li><a id="nav-contact" onclick="showSection('contact')">Əlaqə</a></li>
-      </ul>
-      <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">QARANLIQ MOD</button>
+  <div class="nav-container">
+    <div class="logo">
+      <img src="logo.png" alt="Logo" style="height: 60px;" />
     </div>
-  </nav>
+    <ul>
+      <li><a id="nav-about" href="#" onclick="event.preventDefault(); showSection('about')">Haqqımızda</a></li>
+      <li><a id="nav-projects" href="#" onclick="event.preventDefault(); showSection('projects')">Ətirlər</a></li>
+      <li><a id="nav-contact" href="#" onclick="event.preventDefault(); showSection('contact')">Əlaqə</a></li>
+    </ul>
+    <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">QARANLIQ MOD</button>
+  </div>
+</nav>
 
   <main>
     <div id="about" class="section active">
