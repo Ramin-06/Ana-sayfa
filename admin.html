@@ -8,29 +8,52 @@
     body {
       font-family: Arial, sans-serif;
       padding: 40px;
-      background-color: #f4f4f4;
-      color: #333;
+      background-color: #f0f4f8;
+      color: #2c3e50;
     }
 
     h1 {
       color: #1abc9c;
+      margin-bottom: 30px;
     }
 
-    form {
-      background: #fff;
+    .container {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .form-section {
+      flex: 1;
+      min-width: 300px;
+      background: #ffffff;
       padding: 20px;
-      border-radius: 8px;
+      border-radius: 12px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      max-width: 500px;
+    }
+
+    .list-section {
+      flex: 1;
+      min-width: 400px;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
     }
 
     input, textarea {
       width: 100%;
       padding: 10px;
-      margin-top: 10px;
-      margin-bottom: 20px;
+      margin-top: 5px;
+      margin-bottom: 15px;
       border: 1px solid #ccc;
-      border-radius: 4px;
+      border-radius: 6px;
     }
 
     button {
@@ -38,32 +61,137 @@
       background-color: #1abc9c;
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
       cursor: pointer;
+      font-weight: bold;
     }
 
     button:hover {
       background-color: #16a085;
     }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background-color: #1abc9c;
+      color: white;
+    }
+
+    .delete-btn {
+      background-color: #e74c3c;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  <h1>Ürün Ekle</h1>
-  <form id="productForm">
-    <label>Ürün Adı:</label>
-    <input type="text" id="productName" required>
 
-    <label>Fiyat:</label>
-    <input type="text" id="productPrice" required>
+  <h1>Admin Panel</h1>
+  <div class="container">
 
-    <label>Görsel (URL):</label>
-    <input type="text" id="productImage" required>
+    <!-- Ürün Ekleme Formu -->
+    <div class="form-section">
+      <h2>Yeni Ürün Ekle</h2>
+      <form id="productForm">
+        <label>Ürün Adı:</label>
+        <input type="text" id="productName" required>
 
-    <label>Açıklama:</label>
-    <textarea id="productDescription" rows="4"></textarea>
+        <label>Fiyat:</label>
+        <input type="text" id="productPrice" required>
 
-    <button type="submit">Ürünü Ekle</button>
-  </form>
+        <label>Görsel (URL):</label>
+        <input type="text" id="productImage" required>
+
+        <label>Açıklama:</label>
+        <textarea id="productDescription" rows="4"></textarea>
+
+        <button type="submit">Ürünü Kaydet</button>
+      </form>
+    </div>
+
+    <!-- Ürün Listesi -->
+    <div class="list-section">
+      <h2>Mevcut Ürünler</h2>
+      <table id="productTable">
+        <thead>
+          <tr>
+            <th>Ad</th>
+            <th>Fiyat</th>
+            <th>İşlem</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Ürünler burada listelenecek -->
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <script>
+    const form = document.getElementById("productForm");
+    const tableBody = document.querySelector("#productTable tbody");
+
+    // Ürünleri localStorage’dan al
+    function getProducts() {
+      return JSON.parse(localStorage.getItem("products")) || [];
+    }
+
+    // Ürünleri tabloya ekle
+    function renderProducts() {
+      const products = getProducts();
+      tableBody.innerHTML = "";
+
+      products.forEach((product, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${product.name}</td>
+          <td>${product.price}</td>
+          <td><button class="delete-btn" onclick="deleteProduct(${index})">Sil</button></td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Ürün ekle
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const name = document.getElementById("productName").value.trim();
+      const price = document.getElementById("productPrice").value.trim();
+      const image = document.getElementById("productImage").value.trim();
+      const description = document.getElementById("productDescription").value.trim();
+
+      const products = getProducts();
+      products.push({ name, price, image, description });
+      localStorage.setItem("products", JSON.stringify(products));
+
+      form.reset();
+      renderProducts();
+    });
+
+    // Ürün sil
+    function deleteProduct(index) {
+      const products = getProducts();
+      products.splice(index, 1);
+      localStorage.setItem("products", JSON.stringify(products));
+      renderProducts();
+    }
+
+    // Sayfa yüklendiğinde ürünleri listele
+    window.onload = renderProducts;
+  </script>
+
 </body>
 </html>
-
