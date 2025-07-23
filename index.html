@@ -252,6 +252,46 @@
       cursor: pointer;
       user-select: none;
     }
+
+    /* ✅ Modal içi düymələr üçün dizayn */
+.volume-btn {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 8px 16px;
+  margin: 10px 8px 0 0;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.volume-btn:hover {
+  background-color: #149b85;
+  transform: scale(1.05);
+}
+
+.volume-btn.active {
+  background-color: #0e7c68;
+}
+
+#whatsappOrderBtn {
+  background-color: #25D366;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  padding: 12px 20px;
+  margin-top: 20px;
+  transition: background-color 0.3s, transform 0.2s;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+#whatsappOrderBtn:hover {
+  background-color: #1da851;
+  transform: scale(1.03);
+}
   </style>
 </head>
 <body>
