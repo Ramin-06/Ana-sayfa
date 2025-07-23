@@ -120,6 +120,13 @@
       text-align: center;
     }
 
+    #product-list {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      margin-top: 30px;
+    }
+
     .product-card {
       background-color: var(--card-bg);
       border-radius: 12px;
@@ -131,6 +138,12 @@
 
     .product-card:hover {
       transform: scale(1.02);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
     }
 
     .modal {
@@ -152,6 +165,7 @@
       flex-wrap: wrap;
       max-width: 800px;
       border-radius: 12px;
+      gap: 20px;
     }
 
     .modal-content img {
@@ -178,6 +192,7 @@
       font-size: 30px;
       font-weight: bold;
       cursor: pointer;
+      z-index: 1100;
     }
 
     .whatsapp-btn {
@@ -196,6 +211,7 @@
       color: white;
       text-align: center;
       padding: 20px;
+      margin-top: auto;
     }
   </style>
 </head>
@@ -222,26 +238,8 @@
 
     <div id="projects" class="section">
       <h2>Ürünlerim</h2>
-      <div id="product-list" style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); margin-top: 30px;">
-        
-        <!-- Ürün 1 -->
-        <div class="product-card" onclick="openModal('Gül Parfümü', 'Gül esanslı doğal parfüm, ferah bir koku arayanlara özel.', '45 ₼', 'urun1.jpg')">
-          <img src="urun1.jpg" alt="Ürün 1" />
-          <div style="padding: 15px;">
-            <h3>Gül Parfümü</h3>
-            <p style="color: var(--primary); font-weight: bold;">45 ₼</p>
-          </div>
-        </div>
-
-        <!-- Ürün 2 -->
-        <div class="product-card" onclick="openModal('Misk Parfümü', 'Misk aromalı şık ve kalıcı bir seçenek.', '55 ₼', 'urun2.jpg')">
-          <img src="urun2.jpg" alt="Ürün 2" />
-          <div style="padding: 15px;">
-            <h3>Misk Parfümü</h3>
-            <p style="color: var(--primary); font-weight: bold;">55 ₼</p>
-          </div>
-        </div>
-
+      <div id="product-list">
+        <!-- Dinamik olaraq admin paneldən gələn məhsullar buraya yüklənəcək -->
       </div>
     </div>
 
@@ -259,7 +257,7 @@
         <label>Mektubunuz:</label><br>
         <textarea name="Mesaj" rows="5" required></textarea><br>
         <button type="submit">Gönder</button>
-        <p id="successMessage">Mesajınız başarıyla gönderildi.</p>
+        <p id="successMessage" style="display:none;"></p>
       </form>
     </div>
   </main>
@@ -302,12 +300,50 @@
       button.style.color = isDark ? '#ffffff' : '#2c3e50';
     }
 
+    // Dinamik məhsul kartları yaratma funksiyası
+    const productList = document.getElementById('product-list');
+
+    function createProductCard(product) {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+
+      card.innerHTML = `
+        <img src="${product.image}" alt="${product.name}" />
+        <div style="padding: 15px;">
+          <h3>${product.name}</h3>
+          <p style="color: var(--primary); font-weight: bold;">${product.price} ₼</p>
+        </div>
+      `;
+
+      card.addEventListener('click', () => {
+        openModal(product.name, product.description, product.price, product.image);
+      });
+
+      return card;
+    }
+
+    function loadProductsFromStorage() {
+      const products = JSON.parse(localStorage.getItem('products')) || [];
+      productList.innerHTML = '';
+
+      if (products.length === 0) {
+        productList.innerHTML = '<p>Henüz ürün eklenmedi.</p>';
+        return;
+      }
+
+      products.forEach(product => {
+        const card = createProductCard(product);
+        productList.appendChild(card);
+      });
+    }
+
+    // Modal funksiyaları
     function openModal(title, description, price, image) {
       document.getElementById('modalTitle').innerText = title;
       document.getElementById('modalDescription').innerText = description;
-      document.getElementById('modalPrice').innerText = 'Fiyat: ' + price;
+      document.getElementById('modalPrice').innerText = 'Fiyat: ' + price + ' ₼';
       document.getElementById('modalImage').src = image;
-      document.getElementById('modalWhatsApp').href = `https://wa.me/994515817772?text=Merhaba,%20${title}%20ürününü%20sipariş%20vermek%20istiyorum.`;
+      document.getElementById('modalWhatsApp').href = `https://wa.me/994515817772?text=Merhaba,%20${encodeURIComponent(title)}%20ürününü%20sipariş%20vermek%20istiyorum.`;
       document.getElementById('productModal').style.display = 'flex';
     }
 
@@ -315,6 +351,17 @@
       document.getElementById('productModal').style.display = 'none';
     }
 
+    // Modal xaricə kliklənəndə bağlanması
+    document.getElementById('productModal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    // Sayfa yüklənəndə məhsulları yüklə
+    window.addEventListener('load', () => {
+      loadProductsFromStorage();
+    });
+
+    // Kontakt form
     const form = document.getElementById("contactForm");
     const successMessage = document.getElementById("successMessage");
 
@@ -328,11 +375,12 @@
         form.reset();
         successMessage.style.display = "block";
         successMessage.style.color = "green";
+        successMessage.textContent = "Mesajınız başarıyla gönderildi.";
       })
       .catch(() => {
-        successMessage.innerText = "Bir hata oluştu. Lütfen tekrar deneyin.";
         successMessage.style.display = "block";
         successMessage.style.color = "red";
+        successMessage.textContent = "Bir hata oluştu. Lütfen tekrar deneyin.";
       });
     });
   </script>
