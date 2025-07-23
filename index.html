@@ -407,7 +407,7 @@
       return card;
     }
 
-    // Modal açma funksiyası
+    
     // Modal açma funksiyası
 function openModal(product) {
   const modalTitle = document.getElementById('modalTitle');
@@ -417,9 +417,14 @@ function openModal(product) {
   modalTitle.textContent = product.name;
   modalDescription.textContent = product.description;
 
-  // Başlangıç qiyməti 30 ml üçün 10₼
   let selectedVolume = '30 ml';
   let price = 10;
+
+  // Köhnə butonları və sifariş düyməsini sil
+  const oldBtns = document.querySelectorAll('.volume-btn, #whatsappOrderBtn');
+  oldBtns.forEach(el => el.remove());
+
+  modalPrice.textContent = `Qiymət: ${price} ₼`;
 
   // 30 ml və 50 ml düymələri yarat
   const btn30 = document.createElement('button');
@@ -434,14 +439,6 @@ function openModal(product) {
   btn50.className = 'volume-btn';
   btn50.style.padding = '6px 12px';
   btn50.style.cursor = 'pointer';
-  
-  // Modal content içərisinə seçim düymələri və WhatsApp sifariş butonu əlavə et
-  const modalContent = document.querySelector('.modal-content');
-  modalPrice.innerHTML = `Qiymət: ${price} ₼`;
-
-  // Əvvəlki əlavə edilmiş düymələri təmizlə
-  const oldBtns = document.querySelectorAll('.volume-btn, #whatsappOrderBtn');
-  oldBtns.forEach(el => el.remove());
 
   // WhatsApp sifariş düyməsi
   const whatsappBtn = document.createElement('button');
@@ -456,12 +453,7 @@ function openModal(product) {
   whatsappBtn.style.cursor = 'pointer';
   whatsappBtn.style.fontWeight = 'bold';
 
-  // Düymələri modalContent-a əlavə et (qiymətin altına)
-  modalPrice.insertAdjacentElement('afterend', btn30);
-  btn30.insertAdjacentElement('afterend', btn50);
-  btn50.insertAdjacentElement('afterend', whatsappBtn);
-
-  // Düymə klik hadisələri
+  // Buton klikləri
   btn30.onclick = () => {
     selectedVolume = '30 ml';
     price = 10;
@@ -478,16 +470,23 @@ function openModal(product) {
     btn30.classList.remove('active');
   };
 
-  // WhatsApp düyməsi klikində link yarat
+  // WhatsApp düyməsinə link ver
   whatsappBtn.onclick = () => {
-    const phoneNumber = '994501234567'; // Öz nömrəni bura yaz
+    const phoneNumber = '994501234567'; // nömrəni bura yaz
     const message = encodeURIComponent(`Salam, mən "${product.name}" məhsulundan ${selectedVolume} almaq istəyirəm. Qiymət: ${price} ₼.`);
     const url = `https://wa.me/${phoneNumber}?text=${message}`;
     window.open(url, '_blank');
   };
 
+  // Butonları qiymətin ÜSTÜNƏ yerləşdir
+  modalPrice.insertAdjacentElement('beforebegin', btn50);
+  modalPrice.insertAdjacentElement('beforebegin', btn30);
+  modalPrice.insertAdjacentElement('afterend', whatsappBtn);
+
+  // Modalı göstər
   document.getElementById('productModal').classList.add('active');
 }
+
     // Modal bağlama funksiyası
     function closeModal() {
       document.getElementById('productModal').classList.remove('active');
