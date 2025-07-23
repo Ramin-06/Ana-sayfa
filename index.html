@@ -399,6 +399,7 @@
 
   card.innerHTML = `
     <h3>${product.name}</h3>
+    <p style="font-size: 14px; color: gray;">Kod: ${product.code}</p>
     <!--<p style="color: var(--primary); font-weight: bold;">${product.price} ₼</p>-->
     
   `;
@@ -407,10 +408,6 @@
 
   return card;
 }
-
-
-
-
     
     // Modal açma funksiyası
 function openModal(product) {
