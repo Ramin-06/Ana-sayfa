@@ -1,1 +1,69 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    h1 {
+      color: #1abc9c;
+    }
+
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 500px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #1abc9c;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #16a085;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ürün Ekle</h1>
+  <form id="productForm">
+    <label>Ürün Adı:</label>
+    <input type="text" id="productName" required>
+
+    <label>Fiyat:</label>
+    <input type="text" id="productPrice" required>
+
+    <label>Görsel (URL):</label>
+    <input type="text" id="productImage" required>
+
+    <label>Açıklama:</label>
+    <textarea id="productDescription" rows="4"></textarea>
+
+    <button type="submit">Ürünü Ekle</button>
+  </form>
+</body>
+</html>
 
