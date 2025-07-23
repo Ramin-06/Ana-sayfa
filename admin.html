@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Admin Panel</title>
   <style>
     body {
@@ -11,53 +11,38 @@
       background-color: #f0f4f8;
       color: #2c3e50;
     }
-
     h1 {
       color: #1abc9c;
       margin-bottom: 30px;
     }
-
     .container {
       display: flex;
       gap: 40px;
       flex-wrap: wrap;
     }
-
-    .form-section {
+    .form-section, .list-section {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 20px;
       flex: 1;
       min-width: 300px;
-      background: #ffffff;
-      padding: 20px 30px; /* padding içeri çekildi */
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-
-    .list-section {
-      flex: 1;
-      min-width: 400px;
-      background: #ffffff;
-      padding: 20px 30px; /* padding içeri çekildi */
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
     label {
       display: block;
       margin-top: 10px;
       font-weight: bold;
     }
-
     input, textarea {
       width: 100%;
-      padding: 12px 15px; /* padding artırıldı */
+      padding: 12px 15px; /* İçeri çekme için padding artırıldı */
       margin-top: 5px;
       margin-bottom: 15px;
       border: 1px solid #ccc;
       border-radius: 6px;
       box-sizing: border-box;
-      font-size: 16px;
+      font-size: 1rem;
     }
-
     button {
       padding: 10px 20px;
       background-color: #1abc9c;
@@ -66,30 +51,26 @@
       border-radius: 6px;
       cursor: pointer;
       font-weight: bold;
-      font-size: 16px;
-      transition: background-color 0.3s;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
     }
-
     button:hover {
       background-color: #16a085;
     }
-
     table {
       width: 100%;
       border-collapse: collapse;
+      font-size: 1rem;
     }
-
     th, td {
       padding: 12px;
       border: 1px solid #ddd;
       text-align: left;
     }
-
     th {
       background-color: #1abc9c;
       color: white;
     }
-
     .delete-btn {
       background-color: #e74c3c;
       padding: 5px 10px;
@@ -97,26 +78,31 @@
       border-radius: 4px;
       color: white;
       cursor: pointer;
+      font-size: 0.9rem;
+      transition: background-color 0.3s ease;
+    }
+    .delete-btn:hover {
+      background-color: #c0392b;
     }
   </style>
 </head>
 <body>
-
   <h1>Admin Panel</h1>
   <div class="container">
-
-    <!-- Ürün Ekleme Formu -->
     <div class="form-section">
       <h2>Yeni Ürün Ekle</h2>
       <form id="productForm">
         <label>Ürün Adı:</label>
-        <input type="text" id="productName" required>
+        <input type="text" id="productName" required />
 
-        <label>Fiyat (Varsayılan 30ml):</label>
-        <input type="text" id="productPrice" required placeholder="Örnek: 10">
+        <label>Fiyat (30 ml):</label>
+        <input type="number" id="price30" required min="0" />
+
+        <label>Fiyat (50 ml):</label>
+        <input type="number" id="price50" required min="0" />
 
         <label>Görsel (URL):</label>
-        <input type="text" id="productImage" required>
+        <input type="text" id="productImage" required />
 
         <label>Açıklama:</label>
         <textarea id="productDescription" rows="4"></textarea>
@@ -125,35 +111,36 @@
       </form>
     </div>
 
-    <!-- Ürün Listesi -->
     <div class="list-section">
       <h2>Mevcut Ürünler</h2>
       <table id="productTable">
         <thead>
           <tr>
             <th>Ad</th>
-            <th>Fiyat (30ml)</th>
+            <th>Fiyat (30 ml)</th>
+            <th>Fiyat (50 ml)</th>
             <th>İşlem</th>
           </tr>
         </thead>
         <tbody>
-          <!-- Ürünler burada listelenecek -->
+          <!-- Ürünler buraya gelecek -->
         </tbody>
       </table>
     </div>
-
   </div>
 
   <script>
     const form = document.getElementById("productForm");
     const tableBody = document.querySelector("#productTable tbody");
 
-    // Ürünleri localStorage’dan al
     function getProducts() {
       return JSON.parse(localStorage.getItem("products")) || [];
     }
 
-    // Ürünleri tabloya ekle
+    function saveProducts(products) {
+      localStorage.setItem("products", JSON.stringify(products));
+    }
+
     function renderProducts() {
       const products = getProducts();
       tableBody.innerHTML = "";
@@ -162,48 +149,46 @@
         const row = document.createElement("tr");
         row.innerHTML = `
           <td>${product.name}</td>
-          <td>${product.price} ₼</td>
+          <td>${product.price30} ₼</td>
+          <td>${product.price50} ₼</td>
           <td><button class="delete-btn" onclick="deleteProduct(${index})">Sil</button></td>
         `;
         tableBody.appendChild(row);
       });
     }
 
-    // Ürün ekle
-    form.addEventListener("submit", function(e) {
+    function deleteProduct(index) {
+      const products = getProducts();
+      products.splice(index, 1);
+      saveProducts(products);
+      renderProducts();
+    }
+
+    form.addEventListener("submit", (e) => {
       e.preventDefault();
       const name = document.getElementById("productName").value.trim();
-      const price = document.getElementById("productPrice").value.trim();
+      const price30 = document.getElementById("price30").value.trim();
+      const price50 = document.getElementById("price50").value.trim();
       const image = document.getElementById("productImage").value.trim();
       const description = document.getElementById("productDescription").value.trim();
 
-      if (!name || !price || !image) {
+      if(!name || !price30 || !price50 || !image) {
         alert("Lütfen tüm zorunlu alanları doldurun.");
         return;
       }
 
       const products = getProducts();
-      products.push({ name, price, image, description });
-      localStorage.setItem("products", JSON.stringify(products));
-
+      products.push({ name, price30, price50, image, description });
+      saveProducts(products);
       form.reset();
       renderProducts();
       alert("Ürün başarıyla eklendi.");
     });
 
-    // Ürün sil
-    function deleteProduct(index) {
-      if (!confirm("Ürünü silmek istediğinize emin misiniz?")) return;
-
-      const products = getProducts();
-      products.splice(index, 1);
-      localStorage.setItem("products", JSON.stringify(products));
-      renderProducts();
-    }
-
-    // Sayfa yüklendiğinde ürünleri listele
     window.onload = renderProducts;
-  </script>
 
+    // Delete fonksiyonunu global yap
+    window.deleteProduct = deleteProduct;
+  </script>
 </body>
 </html>
