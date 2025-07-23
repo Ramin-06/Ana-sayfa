@@ -125,42 +125,42 @@
   <div class="container">
 
     <div class="form-section">
-      <h2>Yeni Ürün Ekle</h2>
+      <h2>Yeni məhsul əlavə et</h2>
       <form id="productForm">
-        <label>Ürün Kodu:</label>
+        <label>Məhsul kodu:</label>
         <input type="text" id="productCode" required placeholder="Örn: PRD001" />
 
-        <label>Ürün Adı:</label>
+        <label>Məhsul Adı:</label>
         <input type="text" id="productName" required placeholder="Ürün adı" />
 
-        <label>Seçenek (Ml):</label>
+        <label>Ölçü (Ml):</label>
         <div class="ml-buttons">
           <span class="ml-button selected" data-ml="30" data-price="10">30 ml</span>
           <span class="ml-button" data-ml="50" data-price="13">50 ml</span>
         </div>
 
-        <label>Fiyat:</label>
+        <label>Qiymət:</label>
         <input type="text" id="productPrice" required placeholder="Fiyat (örn: 10)" />
 
-        <label>Görsel (URL):</label>
+        <label>Şəkil (URL):</label>
         <input type="text" id="productImage" required placeholder="örneğin: urunlerim/urun1.jpg" />
 
-        <label>Açıklama:</label>
+        <label>Məlumat:</label>
         <textarea id="productDescription" rows="4" placeholder="Ürün açıklaması"></textarea>
 
-        <button type="submit">Ürünü Kaydet</button>
+        <button type="submit">Əlavə et</button>
       </form>
     </div>
 
     <div class="list-section">
-      <h2>Mevcut Ürünler</h2>
+      <h2>Mövcud məhsullar</h2>
       <table id="productTable">
         <thead>
           <tr>
             <th>Kod</th>
             <th>Ad</th>
-            <th>Miktar (ml)</th>
-            <th>Fiyat (₼)</th>
+            <th>Ölçü (ml)</th>
+            <th>Qiymət (₼)</th>
             <th>İşlem</th>
           </tr>
         </thead>
@@ -259,7 +259,7 @@
 
     // Ürün sil
     function deleteProduct(index) {
-      if (confirm("Bu ürünü silmek istediğinize emin misiniz?")) {
+      if (confirm("Məhsul silinəcək! Razısınız?")) {
         const products = getProducts();
         products.splice(index, 1);
         localStorage.setItem("products", JSON.stringify(products));
