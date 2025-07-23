@@ -140,7 +140,8 @@
         </div>
 
         <label>Qiymət:</label>
-        <input type="text" id="productPrice" required placeholder="Fiyat (örn: 10)" />
+<input type="text" id="productPrice" disabled placeholder="Fiyat (örn: 10)" />
+
 
         <label>Şəkil (URL):</label>
         <input type="text" id="productImage" required placeholder="örneğin: urunlerim/urun1.jpg" />
@@ -232,12 +233,10 @@
       const code = document.getElementById("productCode").value.trim();
       const name = document.getElementById("productName").value.trim();
       const price = document.getElementById("productPrice").value.trim();
-      const image = document.getElementById("productImage").value.trim();
       const description = document.getElementById("productDescription").value.trim();
-
-      if (!code || !name || !price || !image) {
-        alert("Lütfen tüm zorunlu alanları doldurun.");
-        return;
+if (!code || !name || !price) {
+  alert("Lütfen tüm zorunlu alanları doldurun.");
+  return;      
       }
 
       const products = getProducts();
