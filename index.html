@@ -421,14 +421,6 @@ function openModal(product) {
   let selectedVolume = '30 ml';
   let price = 10;
 
-  // Modal content içərisinə seçim düymələri və WhatsApp sifariş butonu əlavə et
-  const modalContent = document.querySelector('.modal-content');
-  modalPrice.innerHTML = `Qiymət: ${price} ₼`;
-
-  // Əvvəlki əlavə edilmiş düymələri təmizlə
-  const oldBtns = document.querySelectorAll('.volume-btn, #whatsappOrderBtn');
-  oldBtns.forEach(el => el.remove());
-
   // 30 ml və 50 ml düymələri yarat
   const btn30 = document.createElement('button');
   btn30.textContent = '30 ml';
@@ -442,6 +434,14 @@ function openModal(product) {
   btn50.className = 'volume-btn';
   btn50.style.padding = '6px 12px';
   btn50.style.cursor = 'pointer';
+  
+  // Modal content içərisinə seçim düymələri və WhatsApp sifariş butonu əlavə et
+  const modalContent = document.querySelector('.modal-content');
+  modalPrice.innerHTML = `Qiymət: ${price} ₼`;
+
+  // Əvvəlki əlavə edilmiş düymələri təmizlə
+  const oldBtns = document.querySelectorAll('.volume-btn, #whatsappOrderBtn');
+  oldBtns.forEach(el => el.remove());
 
   // WhatsApp sifariş düyməsi
   const whatsappBtn = document.createElement('button');
