@@ -398,7 +398,7 @@
 
   card.innerHTML = `
     <h3>${product.name}</h3>
-    <p style="color: var(--primary); font-weight: bold;">${product.price} ₼</p>
+    <p style="color: var(--primary); font-weight: bold;">–</p>
   `;
 
   card.addEventListener('click', () => openModal(product));
@@ -418,7 +418,7 @@ function openModal(product) {
   modalDescription.textContent = product.description;
 
   let selectedVolume = '30 ml';
-  let price = -;
+  let price = 10;
 
   // Köhnə butonları və sifariş düyməsini sil
   const oldBtns = document.querySelectorAll('.volume-btn, #whatsappOrderBtn');
