@@ -11,45 +11,40 @@
       background-color: #f0f4f8;
       color: #2c3e50;
     }
-
     h1 {
       color: #1abc9c;
       margin-bottom: 30px;
     }
-
     .container {
       display: flex;
       gap: 40px;
       flex-wrap: wrap;
     }
-
     .form-section {
       flex: 1;
-      min-width: 300px;
-      background: #ffffff;
+      min-width: 320px;
+      background: #fff;
       padding: 20px;
       border-radius: 12px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-
     .list-section {
       flex: 1;
       min-width: 400px;
-      background: #ffffff;
+      background: #fff;
       padding: 20px;
       border-radius: 12px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      overflow-x: auto;
     }
-
     label {
       display: block;
       margin-top: 10px;
       font-weight: bold;
     }
-
     input, textarea {
       width: 100%;
-      padding: 10px 15px; /* İçeri çekildi */
+      padding: 10px 15px;
       margin-top: 5px;
       margin-bottom: 15px;
       border: 1px solid #ccc;
@@ -57,7 +52,6 @@
       font-size: 16px;
       box-sizing: border-box;
     }
-
     button {
       padding: 10px 20px;
       background-color: #1abc9c;
@@ -69,28 +63,46 @@
       font-size: 16px;
       transition: background-color 0.3s ease;
     }
-
     button:hover {
       background-color: #16a085;
     }
-
+    /* ml seçim butonları */
+    .ml-buttons {
+      margin: 10px 0 15px 0;
+    }
+    .ml-button {
+      display: inline-block;
+      padding: 8px 18px;
+      margin-right: 10px;
+      font-weight: bold;
+      border: 2px solid #1abc9c;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: white;
+      color: #1abc9c;
+      transition: all 0.3s ease;
+      user-select: none;
+      font-size: 15px;
+    }
+    .ml-button.selected {
+      background-color: #1abc9c;
+      color: white;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
     }
-
     th, td {
       padding: 12px;
       border: 1px solid #ddd;
       text-align: left;
       font-size: 16px;
+      white-space: nowrap;
     }
-
     th {
       background-color: #1abc9c;
       color: white;
     }
-
     .delete-btn {
       background-color: #e74c3c;
       padding: 6px 12px;
@@ -102,7 +114,6 @@
       font-size: 14px;
       transition: background-color 0.3s ease;
     }
-
     .delete-btn:hover {
       background-color: #c0392b;
     }
@@ -113,7 +124,6 @@
   <h1>Admin Panel</h1>
   <div class="container">
 
-    <!-- Ürün Ekleme Formu -->
     <div class="form-section">
       <h2>Yeni Ürün Ekle</h2>
       <form id="productForm">
@@ -122,6 +132,12 @@
 
         <label>Ürün Adı:</label>
         <input type="text" id="productName" required placeholder="Ürün adı" />
+
+        <label>Seçenek (Ml):</label>
+        <div class="ml-buttons">
+          <span class="ml-button selected" data-ml="30" data-price="10">30 ml</span>
+          <span class="ml-button" data-ml="50" data-price="13">50 ml</span>
+        </div>
 
         <label>Fiyat:</label>
         <input type="text" id="productPrice" required placeholder="Fiyat (örn: 10)" />
@@ -136,7 +152,6 @@
       </form>
     </div>
 
-    <!-- Ürün Listesi -->
     <div class="list-section">
       <h2>Mevcut Ürünler</h2>
       <table id="productTable">
@@ -144,12 +159,13 @@
           <tr>
             <th>Kod</th>
             <th>Ad</th>
+            <th>Miktar (ml)</th>
             <th>Fiyat (₼)</th>
             <th>İşlem</th>
           </tr>
         </thead>
         <tbody>
-          <!-- Ürünler burada listelenecek -->
+          <!-- Ürünler buraya gelecek -->
         </tbody>
       </table>
     </div>
@@ -160,7 +176,26 @@
     const form = document.getElementById("productForm");
     const tableBody = document.querySelector("#productTable tbody");
 
-    // localStorage'dan ürünleri al
+    const mlButtons = document.querySelectorAll(".ml-button");
+    const priceInput = document.getElementById("productPrice");
+
+    let selectedMl = "30";
+    let selectedPrice = "10";
+
+    // Ml butonları tıklama olayı
+    mlButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        mlButtons.forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+
+        selectedMl = btn.getAttribute("data-ml");
+        selectedPrice = btn.getAttribute("data-price");
+
+        priceInput.value = selectedPrice;
+      });
+    });
+
+    // Localstorage'dan ürünleri al
     function getProducts() {
       return JSON.parse(localStorage.getItem("products")) || [];
     }
@@ -172,7 +207,7 @@
 
       if (products.length === 0) {
         const row = document.createElement("tr");
-        row.innerHTML = `<td colspan="4" style="text-align:center; font-style:italic;">Henüz ürün eklenmedi.</td>`;
+        row.innerHTML = `<td colspan="5" style="text-align:center; font-style: italic;">Henüz ürün eklenmedi.</td>`;
         tableBody.appendChild(row);
         return;
       }
@@ -182,6 +217,7 @@
         row.innerHTML = `
           <td>${product.code}</td>
           <td>${product.name}</td>
+          <td>${product.ml}</td>
           <td>${product.price}</td>
           <td><button class="delete-btn" onclick="deleteProduct(${index})">Sil</button></td>
         `;
@@ -189,8 +225,8 @@
       });
     }
 
-    // Ürün ekleme işlemi
-    form.addEventListener("submit", function(e) {
+    // Ürün ekle
+    form.addEventListener("submit", (e) => {
       e.preventDefault();
 
       const code = document.getElementById("productCode").value.trim();
@@ -206,16 +242,22 @@
 
       const products = getProducts();
 
-      // Kodun tekrarını kontrol etmek istersen burada ekleyebilirsin.
-
-      products.push({ code, name, price, image, description });
+      products.push({ code, name, price, image, description, ml: selectedMl });
       localStorage.setItem("products", JSON.stringify(products));
 
       form.reset();
+
+      // Varsayılan ml ve fiyat ayarla
+      selectedMl = "30";
+      selectedPrice = "10";
+      mlButtons.forEach(b => b.classList.remove("selected"));
+      mlButtons[0].classList.add("selected");
+      priceInput.value = selectedPrice;
+
       renderProducts();
     });
 
-    // Ürün silme işlemi
+    // Ürün sil
     function deleteProduct(index) {
       if (confirm("Bu ürünü silmek istediğinize emin misiniz?")) {
         const products = getProducts();
@@ -225,11 +267,13 @@
       }
     }
 
-    // Sayfa yüklenirken ürünleri göster
-    window.onload = renderProducts;
-
-    // deleteProduct fonksiyonunu global yaptık ki HTML içindeki onclick çalışsın
     window.deleteProduct = deleteProduct;
+
+    // Sayfa yüklendiğinde ürünleri göster
+    window.onload = () => {
+      renderProducts();
+      priceInput.value = selectedPrice;
+    };
   </script>
 
 </body>
