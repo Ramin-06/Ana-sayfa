@@ -445,7 +445,7 @@
 
     function setSelectedMlPrice(price) {
       const modalPrice = document.getElementById('modalPrice');
-      modalPrice.innerText = 'Fiyat: ' + price + ' ₼';
+      modalPrice.innerText = 'Qiymət: ' + price + 'manat';
     }
 
     // Modal açma fonksiyonu
@@ -453,7 +453,7 @@
       document.getElementById('modalTitle').innerText = title;
       document.getElementById('modalDescription').innerText = description;
 
-      document.getElementById('modalWhatsApp').href = `https://wa.me/994515817772?text=Merhaba,%20${encodeURIComponent(title)}%20ürününü%20sipariş%20vermek%20istiyorum.`;
+      document.getElementById('modalWhatsApp').href = `https://wa.me/994515817772?text=Salam,%20${encodeURIComponent(title)}%20məhsulundan%20sifariş%20vermək%20istəyirəm.`;
       document.getElementById('productModal').style.display = 'flex';
 
       const mlButtons = document.querySelectorAll('#ml-options .ml-btn');
