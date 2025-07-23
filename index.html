@@ -2,471 +2,302 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>R-Shoppingaz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Panel</title>
   <style>
-    :root {
-      --bg-color: #f0f4f8;
-      --text-color: #2c3e50;
-      --primary: #1abc9c;
-      --nav-bg: #002147;
-      --nav-text: #ecf0f1;
-      --nav-active: #1abc9c;
-      --card-bg: #ffffff;
-      --footer-bg: #002147;
-      --nav-hover-bg: rgba(255, 255, 255, 0.2);
-    }
-
-    body.dark {
-      --bg-color: #121212;
-      --text-color: #eee;
-      --primary: #0d6efd;
-      --nav-bg: #002147;
-      --nav-text: #ffffff;
-      --nav-active: #0d6efd;
-      --card-bg: #1e1e1e;
-      --footer-bg: #002147;
-      --nav-hover-bg: rgba(255, 255, 255, 0.1);
-    }
-
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      transition: background-color 0.3s, color 0.3s;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+      padding: 40px;
+      background-color: #f0f4f8;
+      color: #2c3e50;
     }
 
-    .top-space {
-      height: 40px;
-      background-color: #fff;
-    }
-
-    nav {
-      background-color: var(--nav-bg);
-      padding: 20px 0;
-    }
-
-    .nav-container {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 0 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-    }
-
-    nav ul li a {
-      color: var(--nav-text);
-      text-decoration: none;
-      font-weight: bold;
-      cursor: pointer;
-      padding: 15px 12px;
-      border-radius: 12px;
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    nav ul li a:hover {
-      background-color: var(--nav-hover-bg);
-    }
-
-    nav ul li a.active {
-      background-color: var(--nav-active);
-      color: #ffffff;
-    }
-
-    .theme-toggle {
-      background: var(--card-bg);
-      color: var(--nav-text);
-      border: 1px solid var(--nav-text);
-      padding: 8px 14px;
-      cursor: pointer;
-      font-weight: bold;
-      border-radius: 8px;
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    .theme-toggle:hover {
-      background-color: var(--primary);
-      color: #fff;
-    }
-
-    main {
-      flex: 1;
-    }
-
-    .section {
-      display: none;
-      padding: 40px 20px;
-      max-width: 1000px;
-      margin: auto;
-    }
-
-    .section.active {
-      display: block;
-    }
-
-    h2 {
-      color: var(--primary);
-      text-align: center;
+    h1 {
+      color: #1abc9c;
       margin-bottom: 30px;
     }
 
-    #product-list {
-      display: grid;
-      gap: 20px;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      margin-top: 30px;
-    }
-
-    .product-card {
-      background-color: var(--card-bg);
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-
-    .product-card:hover {
-      transform: scale(1.02);
-    }
-
-    .product-card img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.6);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .modal-content {
-      background-color: var(--card-bg);
-      padding: 20px;
+    .container {
       display: flex;
+      gap: 40px;
       flex-wrap: wrap;
-      max-width: 800px;
-      border-radius: 12px;
-      gap: 20px;
     }
 
-    .modal-content img {
-      width: 100%;
-      max-width: 300px;
-      border-radius: 8px;
-    }
-
-    .modal-text {
+    .form-section {
       flex: 1;
+      min-width: 320px;
+      background: #ffffff;
       padding: 20px;
-    }
-
-    .modal-text h3 {
-      margin-top: 0;
-      color: var(--primary);
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      color: #fff;
-      font-size: 30px;
-      font-weight: bold;
-      cursor: pointer;
-      z-index: 1100;
-    }
-
-    .whatsapp-btn {
-      background-color: #25D366;
-      color: #fff;
-      padding: 10px 20px;
-      text-decoration: none;
-      border-radius: 8px;
-      display: inline-block;
-      margin-top: 15px;
-      font-weight: bold;
-    }
-
-    /* İletişim form stili */
-    #contactForm {
-      max-width: 600px;
-      margin: auto;
-      background-color: var(--card-bg);
-      padding: 20px;
-      border-radius: 8px;
+      border-radius: 12px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
-    #contactForm h2 {
-      color: var(--primary);
-      margin-bottom: 20px;
-      text-align: center;
+    .list-section {
+      flex: 1;
+      min-width: 400px;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
-    #contactForm label {
-      font-weight: bold;
+    label {
       display: block;
-      margin-top: 15px;
-      margin-bottom: 5px;
-    }
-
-    #contactForm input,
-    #contactForm textarea {
-      width: 100%;
-      padding: 10px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-      resize: vertical;
-    }
-
-    #contactForm button {
-      margin-top: 20px;
-      width: 100%;
-      padding: 12px;
-      background-color: var(--primary);
-      color: white;
+      margin-top: 10px;
       font-weight: bold;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px 15px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #1abc9c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #16a085;
+    }
+
+    /* Ml seçim butonları */
+    .ml-buttons {
+      margin: 10px 0 15px 0;
+    }
+
+    .ml-button {
+      display: inline-block;
+      padding: 8px 18px;
+      margin-right: 10px;
+      font-weight: bold;
+      border: 2px solid #1abc9c;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: white;
+      color: #1abc9c;
+      transition: all 0.3s ease;
+      user-select: none;
+      font-size: 15px;
+    }
+
+    .ml-button.selected {
+      background-color: #1abc9c;
+      color: white;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+      font-size: 16px;
+    }
+
+    th {
+      background-color: #1abc9c;
+      color: white;
+    }
+
+    .delete-btn {
+      background-color: #e74c3c;
+      padding: 6px 12px;
       border: none;
       border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    #contactForm button:hover {
-      background-color: #149b85;
-    }
-
-    #successMessage {
-      margin-top: 15px;
-      font-weight: bold;
-      text-align: center;
-      display: none;
-    }
-
-    footer {
-      background-color: var(--footer-bg);
       color: white;
-      text-align: center;
-      padding: 20px;
-      margin-top: auto;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+    }
+
+    .delete-btn:hover {
+      background-color: #c0392b;
     }
   </style>
 </head>
 <body>
-  <div class="top-space"></div>
-  <nav>
-    <div class="nav-container">
-      <div class="logo">
-        <img src="urunlerim/logo.jpeg" alt="Logo" style="height: 60px;" />
-      </div>
-      <ul>
-        <li><a id="nav-about" onclick="showSection('about')">Hakkımda</a></li>
-        <li><a id="nav-projects" onclick="showSection('projects')">Ürünlerim</a></li>
-        <li><a id="nav-contact" onclick="showSection('contact')">İletişim</a></li>
-      </ul>
-      <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">KARANLIK MOD</button>
-    </div>
-  </nav>
 
-  <main>
-    <div id="about" class="section active">
-      <p>Merhaba! Ben Ramin, front-end web geliştirme alanında çalışan tutkulu bir geliştiriciyim...</p>
-    </div>
+  <h1>Admin Panel</h1>
+  <div class="container">
 
-    <div id="projects" class="section">
-      <h2>Ürünlerim</h2>
-      <div id="product-list">
-        <!-- Dinamik olarak admin panelden gelen ürünler buraya yüklenecek -->
-      </div>
-    </div>
+    <!-- Ürün Ekleme Formu -->
+    <div class="form-section">
+      <h2>Yeni Ürün Ekle</h2>
+      <form id="productForm">
+        <label>Ürün Kodu:</label>
+        <input type="text" id="productCode" required placeholder="Örn: PRD001" />
 
-    <div id="contact" class="section">
-      <form id="contactForm" action="https://getform.io/f/bqomyqzb" method="POST">
-        <h2>Bize Yazın</h2>
+        <label>Ürün Adı:</label>
+        <input type="text" id="productName" required placeholder="Ürün adı" />
 
-        <label for="Ad">Ad:</label>
-        <input id="Ad" type="text" name="Ad" required>
+        <label>Seçenek - Ml:</label>
+        <div class="ml-buttons">
+          <span class="ml-button selected" data-ml="30" data-price="10">30 ml</span>
+          <span class="ml-button" data-ml="50" data-price="13">50 ml</span>
+        </div>
 
-        <label for="Soyad">Soyad:</label>
-        <input id="Soyad" type="text" name="Soyad" required>
+        <label>Fiyat:</label>
+        <input type="text" id="productPrice" required placeholder="Fiyat (örn: 10)" />
 
-        <label for="E-posta">E-posta:</label>
-        <input id="E-posta" type="email" name="E-posta" required>
+        <label>Görsel (URL):</label>
+        <input type="text" id="productImage" required placeholder="örneğin: urunlerim/urun1.jpg" />
 
-        <label for="Telefon">Telefon Numarası:</label>
-        <input id="Telefon" type="tel" name="Telefon">
+        <label>Açıklama:</label>
+        <textarea id="productDescription" rows="4" placeholder="Ürün açıklaması"></textarea>
 
-        <label for="Mesaj">Mektubunuz:</label>
-        <textarea id="Mesaj" name="Mesaj" rows="5" required></textarea>
-
-        <button type="submit">Gönder</button>
-        <p id="successMessage"></p>
+        <button type="submit">Ürünü Kaydet</button>
       </form>
     </div>
-  </main>
 
-  <div id="productModal" class="modal">
-    <span class="close-btn" onclick="closeModal()">&times;</span>
-    <div class="modal-content">
-      <img id="modalImage" src="" alt="Ürün Görseli" />
-      <div class="modal-text">
-        <h3 id="modalTitle"></h3>
-        <p id="modalDescription"></p>
-        <p><strong id="modalPrice"></strong></p>
-        <a id="modalWhatsApp" class="whatsapp-btn" target="_blank">WhatsApp’tan Sipariş Ver</a>
-      </div>
+    <!-- Ürün Listesi -->
+    <div class="list-section">
+      <h2>Mevcut Ürünler</h2>
+      <table id="productTable">
+        <thead>
+          <tr>
+            <th>Kod</th>
+            <th>Ad</th>
+            <th>Seçenek (ml)</th>
+            <th>Fiyat (₼)</th>
+            <th>İşlem</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Ürünler burada listelenecek -->
+        </tbody>
+      </table>
     </div>
+
   </div>
 
-  <footer>
-    <p>© 2025 R-Shoppingaz. Tüm hakları saklıdır.</p>
-  </footer>
-
   <script>
-    function showSection(id) {
-      const sections = document.querySelectorAll('.section');
-      const links = document.querySelectorAll('nav ul li a');
+    const form = document.getElementById("productForm");
+    const tableBody = document.querySelector("#productTable tbody");
 
-      sections.forEach(sec => sec.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
+    // ml butonları
+    const mlButtons = document.querySelectorAll(".ml-button");
+    const priceInput = document.getElementById("productPrice");
 
-      links.forEach(link => link.classList.remove('active'));
-      const activeLink = document.getElementById('nav-' + id);
-      if (activeLink) activeLink.classList.add('active');
-    }
+    // Varsayılan seçili ml ve fiyat
+    let selectedMl = "30";
+    let selectedPrice = "10";
 
-    function toggleTheme() {
-      const body = document.body;
-      const button = document.getElementById('themeToggle');
-      const isDark = body.classList.toggle('dark');
-      button.textContent = isDark ? 'AÇIK MOD' : 'KARANLIK MOD';
-      button.style.color = isDark ? '#ffffff' : '#2c3e50';
-    }
+    // Ml butonlarına tıklama eventi
+    mlButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        // Seçili butonu güncelle
+        mlButtons.forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
 
-    // Ürün kartı oluşturma fonksiyonu
-    const productList = document.getElementById('product-list');
+        // Seçilen ml ve fiyatı al
+        selectedMl = btn.getAttribute("data-ml");
+        selectedPrice = btn.getAttribute("data-price");
 
-    function createProductCard(product) {
-      const card = document.createElement('div');
-      card.className = 'product-card';
-
-      card.innerHTML = `
-        <img src="${product.image}" alt="${product.name}" />
-        <div style="padding: 15px;">
-          <h3>${product.name}</h3>
-          <p style="color: var(--primary); font-weight: bold;">${product.price} ₼</p>
-        </div>
-      `;
-
-      card.addEventListener('click', () => {
-        openModal(product.name, product.description, product.price, product.image);
+        // Fiyat inputunu güncelle
+        priceInput.value = selectedPrice;
       });
+    });
 
-      return card;
+    // localStorage'dan ürünleri al
+    function getProducts() {
+      return JSON.parse(localStorage.getItem("products")) || [];
     }
 
-    // LocalStorage'dan ürünleri yükleme
-    function loadProductsFromStorage() {
-      let products = JSON.parse(localStorage.getItem('products'));
-      if (!products || products.length === 0) {
-        // Eğer ürün yoksa örnek ürünler ekle
-        products = [
-          {
-            name: "Ürün 1",
-            description: "Bu ürün 1 hakkında kısa açıklama.",
-            price: "45",
-            image: encodeURI('urunler/WhatsApp Image 2025-07-18 at 14.17.40+.jpeg')
-          },
-          {
-            name: "Ürün 2",
-            description: "Bu ürün 2 hakkında kısa açıklama.",
-            price: "55",
-            image: encodeURI('urunler/WhatsApp Image 2025-07-18 at 14.17.40+.jpeg')
-          },
-          {
-            name: "Ürün 3",
-            description: "Bu ürün 3 hakkında kısa açıklama.",
-            price: "65",
-            image: encodeURI('urunler/WhatsApp Image 2025-07-18 at 14.17.40+.jpeg')
-          }
-        ];
-        localStorage.setItem('products', JSON.stringify(products));
+    // Ürünleri tabloya yazdır
+    function renderProducts() {
+      const products = getProducts();
+      tableBody.innerHTML = "";
+
+      if (products.length === 0) {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td colspan="5" style="text-align:center; font-style:italic;">Henüz ürün eklenmedi.</td>`;
+        tableBody.appendChild(row);
+        return;
       }
 
-      productList.innerHTML = '';
-      products.forEach(product => {
-        const card = createProductCard(product);
-        productList.appendChild(card);
+      products.forEach((product, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${product.code}</td>
+          <td>${product.name}</td>
+          <td>${product.ml || ''}</td>
+          <td>${product.price}</td>
+          <td><button class="delete-btn" onclick="deleteProduct(${index})">Sil</button></td>
+        `;
+        tableBody.appendChild(row);
       });
     }
 
-    // Modal fonksiyonları
-    function openModal(title, description, price, image) {
-      document.getElementById('modalTitle').innerText = title;
-      document.getElementById('modalDescription').innerText = description;
-      document.getElementById('modalPrice').innerText = 'Fiyat: ' + price + ' ₼';
-      document.getElementById('modalImage').src = image;
-      document.getElementById('modalWhatsApp').href = `https://wa.me/994515817772?text=Merhaba,%20${encodeURIComponent(title)}%20ürününü%20sipariş%20vermek%20istiyorum.`;
-      document.getElementById('productModal').style.display = 'flex';
-    }
-
-    function closeModal() {
-      document.getElementById('productModal').style.display = 'none';
-    }
-
-    // Modal dışına tıklayınca kapat
-    document.getElementById('productModal').addEventListener('click', function(e) {
-      if (e.target === this) closeModal();
-    });
-
-    // Sayfa yüklendiğinde ürünleri yükle
-    window.addEventListener('load', () => {
-      loadProductsFromStorage();
-    });
-
-    // İletişim formu
-    const form = document.getElementById("contactForm");
-    const successMessage = document.getElementById("successMessage");
-
-    form.addEventListener("submit", function (e) {
+    // Ürün ekleme işlemi
+    form.addEventListener("submit", function(e) {
       e.preventDefault();
-      fetch(form.action, {
-        method: "POST",
-        body: new FormData(form)
-      })
-      .then(() => {
-        form.reset();
-        successMessage.style.display = "block";
-        successMessage.style.color = "green";
-        successMessage.textContent = "Mesajınız başarıyla gönderildi.";
-      })
-      .catch(() => {
-        successMessage.style.display = "block";
-        successMessage.style.color = "red";
-        successMessage.textContent = "Bir hata oluştu. Lütfen tekrar deneyin.";
-      });
+
+      const code = document.getElementById("productCode").value.trim();
+      const name = document.getElementById("productName").value.trim();
+      const price = document.getElementById("productPrice").value.trim();
+      const image = document.getElementById("productImage").value.trim();
+      const description = document.getElementById("productDescription").value.trim();
+
+      if (!code || !name || !price || !image) {
+        alert("Lütfen tüm zorunlu alanları doldurun.");
+        return;
+      }
+
+      const products = getProducts();
+
+      products.push({ code, name, price, image, description, ml: selectedMl });
+      localStorage.setItem("products", JSON.stringify(products));
+
+      form.reset();
+
+      // Varsayılan olarak 30 ml seçili olsun, fiyat da 10'a dönsün
+      selectedMl = "30";
+      selectedPrice = "10";
+      mlButtons.forEach(b => b.classList.remove("selected"));
+      mlButtons[0].classList.add("selected");
+      priceInput.value = selectedPrice;
+
+      renderProducts();
     });
+
+    // Ürün silme işlemi
+    function deleteProduct(index) {
+      if (confirm("Bu ürünü silmek istediğinize emin misiniz?")) {
+        const products = getProducts();
+        products.splice(index, 1);
+        localStorage.setItem("products", JSON.stringify(products));
+        renderProducts();
+      }
+    }
+
+    // Sayfa yüklenirken ürünleri göster
+    window.onload = () => {
+      renderProducts();
+      priceInput.value = selectedPrice; // Fiyat inputunu varsayılan yap
+    };
+
+    // deleteProduct fonksiyonunu global yaptık ki HTML içindeki onclick çalışsın
+    window.deleteProduct = deleteProduct;
   </script>
+
 </body>
 </html>
