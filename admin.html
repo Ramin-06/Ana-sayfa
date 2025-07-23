@@ -147,16 +147,22 @@
       font-size: 16px;
       margin-left: 10px;
       transition: background-color 0.3s ease;
+      margin-top: 12px; /* Düğmeler arası ve üst boşluk */
     }
     #cancelEdit:hover {
       background-color: #d35400;
     }
-    /* Quill editör yüksekliği */
+    /* Quill editör yüksekliği ve altında boşluk */
     #editor {
       height: 150px;
       background: white;
       border: 1px solid #ccc;
       border-radius: 6px;
+      margin-bottom: 20px; /* burada boşluk */
+    }
+    /* Submit butonu üst boşluğu */
+    #submitBtn {
+      margin-top: 12px;
     }
     /* Description hücresinde içeriği düzgün göstermek */
     .description-cell {
@@ -206,7 +212,7 @@
             <th>Kod</th>
             <th>Ad</th>
             <th>Ölçü (ml)</th>
-            <th>Qiymət (₼)</th>
+            <th>Qiymət</th>
             <th>Proses</th>
           </tr>
         </thead>
@@ -291,7 +297,7 @@
           <td>${product.code}</td>
           <td>${product.name}</td>
           <td>${product.ml}</td>
-          <td>${product.price} ₼</td>
+          <td>${product.price}</td>
            <td>
             <button class="edit-btn" onclick="editProduct(${index})">Düzəlt</button>
             <button class="delete-btn" onclick="deleteProduct(${index})">Sil</button>
