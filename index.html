@@ -1,36 +1,99 @@
 <!DOCTYPE html>
-<html lang="az">
+<html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>R-Shoppingaz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
   <style>
+    :root {
+      --bg-color: #f0f4f8;
+      --text-color: #2c3e50;
+      --primary: #1abc9c;
+      --nav-bg: #002147;
+      --nav-text: #ecf0f1;
+      --nav-active: #1abc9c;
+      --card-bg: #ffffff;
+      --footer-bg: #002147;
+      --nav-hover-bg: rgba(255, 255, 255, 0.2);
+    }
+    body.dark {
+      --bg-color: #121212;
+      --text-color: #eee;
+      --primary: #0d6efd;
+      --nav-bg: #002147;
+      --nav-text: #ffffff;
+      --nav-active: #0d6efd;
+      --card-bg: #1e1e1e;
+      --footer-bg: #002147;
+      --nav-hover-bg: rgba(255, 255, 255, 0.1);
+    }
     body {
       margin: 0;
-      font-family: 'Montserrat', sans-serif;
-      background: #f8f9fa;
-      color: #333;
+      font-family: 'Montserrat', Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: background-color 0.3s, color 0.3s;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .top-space {
+      height: 40px;
+      background-color: #fff;
     }
     nav {
-      background-color: #002147;
-      padding: 15px 20px;
+      background-color: var(--nav-bg);
+      padding: 20px 0;
+    }
+    .nav-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      color: white;
     }
     nav ul {
       list-style: none;
       display: flex;
       gap: 20px;
-      padding: 0;
       margin: 0;
+      padding: 0;
     }
-    nav li a {
-      color: white;
+    nav ul li a {
+      color: var(--nav-text);
       text-decoration: none;
       font-weight: bold;
       cursor: pointer;
+      padding: 15px 12px;
+      border-radius: 12px;
+      transition: background-color 0.3s, color 0.3s;
+      display: inline-block;
+    }
+    nav ul li a:hover {
+      background-color: var(--nav-hover-bg);
+    }
+    nav ul li a.active {
+      background-color: var(--nav-active);
+      color: #ffffff;
+    }
+    .theme-toggle {
+      background: var(--card-bg);
+      color: var(--nav-text);
+      border: 1px solid var(--nav-text);
+      padding: 8px 14px;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 8px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .theme-toggle:hover {
+      background-color: var(--primary);
+      color: #fff;
+    }
+    main {
+      flex: 1;
     }
     .section {
       display: none;
@@ -42,172 +105,322 @@
       display: block;
     }
     h2 {
+      color: var(--primary);
       text-align: center;
-      color: #1abc9c;
+      margin-bottom: 30px;
+    }
+    #about p {
+      font-size: 18px;
+      line-height: 1.8;
+      color: var(--text-color);
+      background-color: var(--card-bg);
+      padding: 25px 30px;
+      border-radius: 16px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: justify;
+      font-weight: 500;
+      letter-spacing: 0.3px;
     }
     #product-list {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       margin-top: 30px;
     }
     .product-card {
-      background: white;
-      padding: 20px;
+      background-color: var(--card-bg);
       border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       cursor: pointer;
-      transition: 0.3s;
-      text-align: center;
+      transition: transform 0.2s;
+      padding: 15px;
     }
     .product-card:hover {
-      transform: translateY(-5px);
+      transform: scale(1.02);
+    }
+    #contactForm {
+      max-width: 600px;
+      margin: auto;
+      background-color: var(--card-bg);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      color: var(--text-color);
+    }
+    #contactForm h2 {
+      color: var(--primary);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    #contactForm label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+    }
+    #contactForm input,
+    #contactForm textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      resize: vertical;
+      font-family: inherit;
+      font-size: 16px;
+      color: var(--text-color);
+      background-color: var(--bg-color);
+      transition: background-color 0.3s, color 0.3s;
+    }
+    #contactForm input:focus,
+    #contactForm textarea:focus {
+      border-color: var(--primary);
+      outline: none;
+      background-color: var(--card-bg);
+    }
+    #contactForm button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background-color: var(--primary);
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-size: 18px;
+    }
+    #contactForm button:hover {
+      background-color: #149b85;
+    }
+    #successMessage {
+      margin-top: 15px;
+      font-weight: bold;
+      text-align: center;
+      display: none;
+    }
+    footer {
+      background-color: var(--footer-bg);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: auto;
     }
 
-    /* Modal */
+    /* Modal Styles */
     .modal {
       display: none;
       position: fixed;
       top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.6);
       justify-content: center;
       align-items: center;
       z-index: 1000;
     }
+    .modal.active {
+      display: flex;
+    }
     .modal-content {
-      background: white;
-      padding: 30px;
+      background-color: var(--card-bg);
+      padding: 20px 30px;
       border-radius: 12px;
-      max-width: 400px;
-      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      color: var(--text-color);
       position: relative;
-      text-align: center;
+    }
+    .modal-content h3 {
+      margin-top: 0;
+      color: var(--primary);
+    }
+    .modal-content p {
+      margin: 15px 0;
     }
     .close-btn {
       position: absolute;
-      top: 10px;
+      top: 12px;
       right: 15px;
-      font-size: 20px;
-      cursor: pointer;
-    }
-    .size-buttons {
-      margin: 15px 0;
-    }
-    .size-buttons button {
-      padding: 10px 20px;
-      margin: 5px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
+      font-size: 28px;
       font-weight: bold;
-      background-color: #1abc9c;
-      color: white;
-    }
-    .price-display {
-      font-size: 18px;
-      margin: 10px 0;
-    }
-    .whatsapp-btn {
-      background-color: #25D366;
-      color: white;
-      padding: 10px 20px;
-      text-decoration: none;
-      display: inline-block;
-      border-radius: 8px;
-      margin-top: 15px;
-      font-weight: bold;
+      color: var(--text-color);
+      cursor: pointer;
+      user-select: none;
     }
   </style>
 </head>
 <body>
-
-<nav>
-  <div><strong>R-Shoppingaz</strong></div>
-  <ul>
-    <li><a href="#" onclick="showSection('about')">Haqqımızda</a></li>
-    <li><a href="#" onclick="showSection('projects')">Ətirlər</a></li>
-    <li><a href="#" onclick="showSection('contact')">Əlaqə</a></li>
-  </ul>
-</nav>
-
-<main>
-  <div id="about" class="section active">
-    <h2>Haqqımızda</h2>
-    <p style="text-align: justify; max-width:800px; margin:auto; font-size:17px;">
-      R-Shoppingaz komandası olaraq deluxe keyfiyyətdə olan ətirləri sizə təqdim edirik.
-      Zövqünüzə uyğun olan ətirləri sifariş edə bilərsiniz. Parfümeriya sahəsində təcrübəli
-      mütəxəssislər tərəfindən hazırlanan qarışımların qalıcı olmasına zəmanət verilir.
-    </p>
-  </div>
-
-  <div id="projects" class="section">
-    <h2>Ətirlər</h2>
-    <div id="product-list">
-      <div class="product-card" onclick="openModal('Dior Sauvage')">
-        <h3>Dior Sauvage</h3>
+  <div class="top-space"></div>
+  <nav>
+    <div class="nav-container">
+      <div class="logo">
+        <img src="logo.png" alt="Logo" style="height: 60px;" />
       </div>
-      <div class="product-card" onclick="openModal('Bleu de Chanel')">
-        <h3>Bleu de Chanel</h3>
-      </div>
-      <div class="product-card" onclick="openModal('Aventus Creed')">
-        <h3>Aventus Creed</h3>
-      </div>
+      <ul>
+        <li><a id="nav-about" class="active" onclick="showSection('about')">Haqqımızda</a></li>
+        <li><a id="nav-projects" onclick="showSection('projects')">Ətirlər</a></li>
+        <li><a id="nav-contact" onclick="showSection('contact')">Əlaqə</a></li>
+      </ul>
+      <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">QARANLIQ MOD</button>
+    </div>
+  </nav>
+
+  <main>
+    <div id="about" class="section active">
+      <h2>Haqqımızda</h2>
+      <p>
+        R-Shoppingaz komandası olaraq deluxe keyfiyyətdə olan ətirləri sizə təqdim edirik.
+        Zövqünüzə uyğun olan ətirləri sifariş edə bilərsiniz. Parfümeriya sahəsində təcrübəli
+        mütəxəssislər tərəfindən hazırlanan qarışımların qalıcı olmasına zəmanət verilir.
+        Fransa və Türkiyənin premium ətir dünyasına dəvət edirik! Yüksək qalıcılıq, unikal
+        qoxular və sərfəli seçimlərlə təravətinizi vurğulayın. Zövqünüzü tamamlayan ideal
+        qoxunu bizimlə kəşf edin.
+      </p>
+    </div>
+
+    <div id="projects" class="section">
+      <h2>Ətirlər</h2>
+      <div id="product-list"></div>
+    </div>
+
+    <div id="contact" class="section">
+      <form id="contactForm" action="https://getform.io/f/bqomyqzb" method="POST">
+        <h2>Bizə Yazın</h2>
+        <label for="Ad">Ad:</label>
+        <input id="Ad" type="text" name="Ad" required />
+        <label for="Soyad">Soyad:</label>
+        <input id="Soyad" type="text" name="Soyad" required />
+        <label for="E-posta">E-poçt:</label>
+        <input id="E-posta" type="email" name="E-posta" required />
+        <label for="Telefon">Telefon Nömrəsi:</label>
+        <input id="Telefon" type="tel" name="Telefon" />
+        <label for="Mesaj">Məktubunuz:</label>
+        <textarea id="Mesaj" name="Mesaj" rows="5" required></textarea>
+        <button type="submit">Göndər</button>
+        <p id="successMessage"></p>
+      </form>
+    </div>
+  </main>
+
+  <!-- Modal HTML -->
+  <div id="productModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <h3 id="modalTitle"></h3>
+      <p id="modalDescription"></p>
+      <p><strong id="modalPrice"></strong></p>
     </div>
   </div>
 
-  <div id="contact" class="section">
-    <h2>Əlaqə</h2>
-    <p style="text-align:center">WhatsApp: +994501234567<br>Email: info@rshoppingaz.com</p>
-  </div>
-</main>
+  <footer>
+    <p>© 2025 R-Shoppingaz. Bütün hüquqlar qorunur.</p>
+  </footer>
 
-<!-- Modal -->
-<div id="modal" class="modal">
-  <div class="modal-content">
-    <span class="close-btn" onclick="closeModal()">&times;</span>
-    <h3 id="modal-title"></h3>
-    <div class="size-buttons">
-      <button onclick="selectSize('30ml')">30 ml</button>
-      <button onclick="selectSize('50ml')">50 ml</button>
-    </div>
-    <div class="price-display" id="price">Qiymət: -</div>
-    <a id="whatsappLink" class="whatsapp-btn" href="#" target="_blank">WhatsApp ilə sifariş et</a>
-  </div>
-</div>
+  <script>
+    // Naviqasiya bölmələrini göstərmək üçün
+    function showSection(id) {
+      const sections = document.querySelectorAll('.section');
+      const links = document.querySelectorAll('nav ul li a');
 
-<script>
-  let selectedProduct = '';
-  let selectedSize = '';
-  function showSection(id) {
-    document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-  }
+      sections.forEach(sec => sec.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
 
-  function openModal(productName) {
-    selectedProduct = productName;
-    selectedSize = '';
-    document.getElementById('modal-title').textContent = productName;
-    document.getElementById('price').textContent = "Qiymət: -";
-    document.getElementById('whatsappLink').style.display = "none";
-    document.getElementById('modal').style.display = 'flex';
-  }
+      links.forEach(link => link.classList.remove('active'));
+      const activeLink = document.getElementById('nav-' + id);
+      if (activeLink) activeLink.classList.add('active');
+    }
 
-  function closeModal() {
-    document.getElementById('modal').style.display = 'none';
-  }
+    // Qaranlıq / Açıq mod toggle
+    function toggleTheme() {
+      const body = document.body;
+      const button = document.getElementById('themeToggle');
+      const isDark = body.classList.toggle('dark');
+      button.textContent = isDark ? 'AÇIQ MOD' : 'QARANLIQ MOD';
+      button.style.color = isDark ? '#ffffff' : '#2c3e50';
+    }
 
-  function selectSize(size) {
-    selectedSize = size;
-    let price = size === '30ml' ? 10 : 13;
-    document.getElementById('price').textContent = `Qiymət: ${price} AZN`;
-    const message = `${selectedProduct} - ${size}: Bu məhsuldan sifariş etmək istəyirəm.`;
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappNumber = '994501234567'; // <-- Nömrəni buraya yaz
-    document.getElementById('whatsappLink').href = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-    document.getElementById('whatsappLink').style.display = "inline-block";
-  }
-</script>
+    // Məhsullar - nümunə məlumatlar
+    const products = [
+      { name: "Parfüm 1", price: "45", description: "Parfüm 1 təsviri." },
+      { name: "Parfüm 2", price: "55", description: "Parfüm 2 təsviri." },
+      { name: "Parfüm 3", price: "65", description: "Parfüm 3 təsviri." }
+    ];
 
+    // Məhsul kartı yaratma funksiyası
+    function createProductCard(product) {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+
+      card.innerHTML = `
+        <h3>${product.name}</h3>
+        <p style="color: var(--primary); font-weight: bold;">${product.price} ₼</p>
+        <p>${product.description}</p>
+      `;
+
+      card.addEventListener('click', () => openModal(product));
+
+      return card;
+    }
+
+    // Modal açma funksiyası
+    function openModal(product) {
+      document.getElementById('modalTitle').textContent = product.name;
+      document.getElementById('modalDescription').textContent = product.description;
+      document.getElementById('modalPrice').textContent = 'Qiymət: ' + product.price + ' ₼';
+      document.getElementById('productModal').classList.add('active');
+    }
+
+    // Modal bağlama funksiyası
+    function closeModal() {
+      document.getElementById('productModal').classList.remove('active');
+    }
+
+    // Modal xaricinə klikləyəndə bağla
+    document.getElementById('productModal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeModal();
+    });
+
+    // Məhsulları yükləyən funksiyası
+    function loadProducts() {
+      const productList = document.getElementById('product-list');
+      productList.innerHTML = '';
+      products.forEach(product => {
+        productList.appendChild(createProductCard(product));
+      });
+    }
+
+    // Form göndərmə və mesaj
+    const form = document.getElementById("contactForm");
+    const successMessage = document.getElementById("successMessage");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      fetch(form.action, {
+        method: "POST",
+        body: new FormData(form)
+      })
+      .then(() => {
+        form.reset();
+        successMessage.style.display = "block";
+        successMessage.style.color = "green";
+        successMessage.textContent = "Mesajınız başarıyla gönderildi.";
+      })
+      .catch(() => {
+        successMessage.style.display = "block";
+        successMessage.style.color = "red";
+        successMessage.textContent = "Bir hata oluştu. Lütfen tekrar deneyin.";
+      });
+    });
+
+    // Səhifə yüklənəndə məhsulları yüklə
+    window.addEventListener('DOMContentLoaded', () => {
+      loadProducts();
+    });
+  </script>
 </body>
 </html>
