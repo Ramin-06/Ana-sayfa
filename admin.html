@@ -159,7 +159,7 @@
             <th>Ad</th>
             <th>Ölçü (ml)</th>
             <th>Qiymət (₼)</th>
-            <th>İşlem</th>
+            <th>Proses</th>
           </tr>
         </thead>
         <tbody>
@@ -205,7 +205,7 @@
 
       if (products.length === 0) {
         const row = document.createElement("tr");
-        row.innerHTML = `<td colspan="5" style="text-align:center; font-style: italic;">Henüz ürün eklenmedi.</td>`;
+        row.innerHTML = `<td colspan="5" style="text-align:center; font-style: italic;">Hələ məhsul əlavə edilməyib...</td>`;
         tableBody.appendChild(row);
         return;
       }
