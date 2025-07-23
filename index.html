@@ -393,19 +393,19 @@
 
     // Məhsul kartı yaratma funksiyası
     function createProductCard(product) {
-      const card = document.createElement('div');
-      card.className = 'product-card';
+  const card = document.createElement('div');
+  card.className = 'product-card';
 
-      card.innerHTML = `
-        <h3>${product.name}</h3>
-        <p style="color: var(--primary); font-weight: bold;">${product.price} ₼</p>
-        <p>${product.description}</p>
-      `;
+  card.innerHTML = `
+    <h3>${product.name}</h3>
+    <p style="color: var(--primary); font-weight: bold;">${product.price} ₼</p>
+  `;
 
-      card.addEventListener('click', () => openModal(product));
+  card.addEventListener('click', () => openModal(product));
 
-      return card;
-    }
+  return card;
+}
+
 
     
     // Modal açma funksiyası
