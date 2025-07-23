@@ -117,6 +117,36 @@
     .delete-btn:hover {
       background-color: #c0392b;
     }
+    .edit-btn {
+      background-color: #2980b9;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      margin-right: 5px;
+      transition: background-color 0.3s ease;
+    }
+    .edit-btn:hover {
+      background-color: #1f618d;
+    }
+    #cancelEdit {
+      background-color: #e67e22;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      margin-left: 10px;
+      transition: background-color 0.3s ease;
+    }
+    #cancelEdit:hover {
+      background-color: #d35400;
+    }
   </style>
 </head>
 <body>
@@ -125,7 +155,7 @@
   <div class="container">
 
     <div class="form-section">
-      <h2>Yeni məhsul əlavə et</h2>
+      <h2 id="formTitle">Yeni məhsul əlavə et</h2>
       <form id="productForm">
         <label>Məhsul kodu:</label>
         <input type="text" id="productCode" required placeholder="P0001" />
@@ -140,13 +170,13 @@
         </div>
 
         <label>Qiymət:</label>
-<input type="text" id="productPrice" disabled placeholder="Qiymət" />
-
+        <input type="text" id="productPrice" disabled placeholder="Qiymət" />
 
         <label>Məlumat:</label>
         <textarea id="productDescription" rows="4" placeholder="Məhsul açıqlaması"></textarea>
 
-        <button type="submit">Əlavə et</button>
+        <button type="submit" id="submitBtn">Əlavə et</button>
+        <button type="button" id="cancelEdit" style="display:none;">İptal</button>
       </form>
     </div>
 
@@ -177,8 +207,14 @@
     const mlButtons = document.querySelectorAll(".ml-button");
     const priceInput = document.getElementById("productPrice");
 
+    const submitBtn = document.getElementById("submitBtn");
+    const cancelEditBtn = document.getElementById("cancelEdit");
+    const formTitle = document.getElementById("formTitle");
+    const productCodeInput = document.getElementById("productCode");
+
     let selectedMl = "30";
     let selectedPrice = "10";
+    let editIndex = null;  // Düzenleme modundaysa bu index dolacak
 
     // Ml butonları tıklama olayı
     mlButtons.forEach(btn => {
@@ -217,44 +253,44 @@
           <td>${product.name}</td>
           <td>${product.ml}</td>
           <td>${product.price} ₼</td>
-          <td><button class="delete-btn" onclick="deleteProduct(${index})">Sil</button></td>
+          <td>
+            <button class="edit-btn" onclick="editProduct(${index})">Düzəlt</button>
+            <button class="delete-btn" onclick="deleteProduct(${index})">Sil</button>
+          </td>
         `;
         tableBody.appendChild(row);
       });
     }
 
-    // Ürün ekle
+    // Ürün ekle / düzenle işlemi
     form.addEventListener("submit", (e) => {
-  e.preventDefault();
+      e.preventDefault();
 
-  const code = document.getElementById("productCode").value.trim();
-  const name = document.getElementById("productName").value.trim();
-  const price = document.getElementById("productPrice").value.trim();
-  const description = document.getElementById("productDescription").value.trim();
+      const code = productCodeInput.value.trim();
+      const name = document.getElementById("productName").value.trim();
+      const price = priceInput.value.trim();
+      const description = document.getElementById("productDescription").value.trim();
 
-  if (!code || !name || !price) {
-    alert("Lütfen tüm zorunlu alanları doldurun.");
-    return;      
-  }
+      if (!code || !name || !price) {
+        alert("Lütfen tüm zorunlu alanları doldurun.");
+        return;      
+      }
 
-  const products = getProducts();
+      const products = getProducts();
 
-  // 'image' dəyişəni silindi, çünki təyin edilməyib
-  products.push({ code, name, price, description, ml: selectedMl });
-  localStorage.setItem("products", JSON.stringify(products));
+      if (editIndex === null) {
+        // Yeni ürün ekle
+        products.push({ code, name, price, description, ml: selectedMl });
+      } else {
+        // Var olan ürünü güncelle
+        products[editIndex] = { code, name, price, description, ml: selectedMl };
+      }
 
-  form.reset();
+      localStorage.setItem("products", JSON.stringify(products));
 
-  // Varsayılan ml və qiyməti yenidən təyin et
-  selectedMl = "30";
-  selectedPrice = "10";
-  mlButtons.forEach(b => b.classList.remove("selected"));
-  mlButtons[0].classList.add("selected");
-  priceInput.value = selectedPrice;
-
-  renderProducts();
-});
-
+      resetForm();
+      renderProducts();
+    });
 
     // Ürün sil
     function deleteProduct(index) {
@@ -263,10 +299,65 @@
         products.splice(index, 1);
         localStorage.setItem("products", JSON.stringify(products));
         renderProducts();
+
+        if (editIndex === index) {
+          resetForm();
+        }
       }
     }
 
+    // Ürün düzenleme fonksiyonu
+    function editProduct(index) {
+      const products = getProducts();
+      const product = products[index];
+
+      productCodeInput.value = product.code;
+      document.getElementById("productName").value = product.name;
+      document.getElementById("productDescription").value = product.description;
+
+      // Ml seçimini güncelle
+      selectedMl = product.ml;
+      selectedPrice = product.price;
+      priceInput.value = selectedPrice;
+
+      mlButtons.forEach(btn => {
+        btn.classList.toggle("selected", btn.getAttribute("data-ml") === selectedMl);
+      });
+
+      productCodeInput.setAttribute("readonly", "readonly"); // Kodu değiştirme
+
+      submitBtn.textContent = "Düzəlt";
+      cancelEditBtn.style.display = "inline-block";
+      formTitle.textContent = "Məhsulu düzəlt";
+
+      editIndex = index;
+    }
+
+    // Formu sıfırla ve düzenleme modundan çık
+    function resetForm() {
+      form.reset();
+
+      selectedMl = "30";
+      selectedPrice = "10";
+      priceInput.value = selectedPrice;
+      mlButtons.forEach(b => b.classList.remove("selected"));
+      mlButtons[0].classList.add("selected");
+
+      productCodeInput.removeAttribute("readonly");
+      submitBtn.textContent = "Əlavə et";
+      cancelEditBtn.style.display = "none";
+      formTitle.textContent = "Yeni məhsul əlavə et";
+
+      editIndex = null;
+    }
+
+    // İptal butonu işlemi
+    cancelEditBtn.addEventListener("click", () => {
+      resetForm();
+    });
+
     window.deleteProduct = deleteProduct;
+    window.editProduct = editProduct;
 
     // Sayfa yüklendiğinde ürünleri göster
     window.onload = () => {
