@@ -141,24 +141,7 @@
     .product-card:hover {
       transform: scale(1.02);
     }
-    
-    .whatsapp-button {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 8px 16px;
-      background-color: #25D366;
-      color: white;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-      font-family: 'Montserrat', sans-serif;
-      transition: background 0.3s ease;
-    }
-
-    .whatsapp-button:hover {
-      background-color: #1ebe5b;
-    }
-    
+ 
     #contactForm {
       max-width: 600px;
       margin: auto;
@@ -417,11 +400,7 @@
   card.innerHTML = `
     <h3>${product.name}</h3>
     <!--<p style="color: var(--primary); font-weight: bold;">${product.price} ₼</p>-->
-    <a href="https://wa.me/994515817772?text=`Salam, mən "${product.name}" məhsulundan ${selectedVolume} almaq istəyirəm. Qiymət: ${price} ₼.`}" 
-   target="_blank" 
-   class="whatsapp-button">
-   WhatsApp ilə sifariş et
-</a>
+    
   `;
 
   card.addEventListener('click', () => openModal(product));
