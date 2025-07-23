@@ -411,20 +411,24 @@
 
     // Məhsul kartı yaratma funksiyası
     function createProductCard(product) {
-  const card = document.createElement("div");
-  card.className = "product-card";
+  const card = document.createElement('div');
+  card.className = 'product-card';
 
   card.innerHTML = `
     <h3>${product.name}</h3>
-    <a href="https://wa.me/994501234567?text=Salam, bu məhsulu sifariş etmək istəyirəm: ${encodeURIComponent(product.name)}"
-       target="_blank"
-       class="whatsapp-button">
-       WhatsApp ilə sifariş et
-    </a>
+    <!--<p style="color: var(--primary); font-weight: bold;">${product.price} ₼</p>-->
+    <a href="https://wa.me/994501234567?text=Salam, bu məhsulu sifariş etmək istəyirəm: ${encodeURIComponent(product.name)}" 
+   target="_blank" 
+   class="whatsapp-button">
+   WhatsApp ilə sifariş et
+</a>
   `;
+
+  card.addEventListener('click', () => openModal(product));
 
   return card;
 }
+
 
 
 
