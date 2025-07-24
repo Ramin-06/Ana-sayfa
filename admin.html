@@ -1,43 +1,110 @@
 <!DOCTYPE html>
-<html lang="az">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Panel</title>
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
   <style>
-    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-    th { background-color: #f2f2f2; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f5f5f5;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .form-container, .table-container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .action-btn {
+      margin-right: 5px;
+    }
   </style>
 </head>
 <body>
-  <h1>Məhsul Əlavə Et</h1>
-  <form id="productForm">
-    <input type="text" id="kod" placeholder="Məhsul kodu" required /> <br />
-    <input type="text" id="ad" placeholder="Məhsul adı" required /> <br />
-    <select id="olcu">
-      <option value="30ml">30ml</option>
-      <option value="50ml">50ml</option>
-    </select> <br />
-    <input type="number" id="qiymet" placeholder="Qiymət" required /> <br />
-    <textarea id="melumat" placeholder="Məhsul məlumatı" required></textarea> <br />
-    <button type="submit">Əlavə et</button>
-    <button type="button" id="cancelUpdate" style="display:none">Ləğv et</button>
-  </form>
+  <h1>Admin Panel</h1>
+  <div class="form-container">
+    <label for="code">Məhsul Kodu:</label>
+    <input type="text" id="code">
 
-  <table id="productsTable">
-    <thead>
-      <tr>
-        <th>Kod</th><th>Ad</th><th>Ölçü</th><th>Qiymət</th><th>Məlumat</th><th>Əməliyyat</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+    <label for="name">Məhsul Adı:</label>
+    <input type="text" id="name">
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    <label for="size">Ölçü:</label>
+    <select id="size">
+      <option value="30ml">30 ml</option>
+      <option value="50ml">50 ml</option>
+    </select>
 
+    <label for="price">Qiymət:</label>
+    <input type="number" id="price">
+
+    <label for="info">Məlumat:</label>
+    <div id="editor"></div>
+
+    <button id="submitBtn">Əlavə et</button>
+    <button id="cancelBtn" style="display:none; background-color:#f44336;">Ləğv et</button>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Kod</th>
+          <th>Ad</th>
+          <th>Ölçü</th>
+          <th>Qiymət</th>
+          <th>Əməliyyat</th>
+        </tr>
+      </thead>
+      <tbody id="productTable"></tbody>
+    </table>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+  <script>
     const firebaseConfig = {
       apiKey: "YOUR_API_KEY",
       authDomain: "YOUR_AUTH_DOMAIN",
@@ -47,79 +114,98 @@
       appId: "YOUR_APP_ID"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const productsRef = collection(db, "products");
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-    const form = document.getElementById("productForm");
-    const tableBody = document.querySelector("#productsTable tbody");
-    const cancelUpdateBtn = document.getElementById("cancelUpdate");
+    const codeInput = document.getElementById('code');
+    const nameInput = document.getElementById('name');
+    const sizeInput = document.getElementById('size');
+    const priceInput = document.getElementById('price');
+    const submitBtn = document.getElementById('submitBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const tableBody = document.getElementById('productTable');
+    const editor = new Quill('#editor', { theme: 'snow' });
 
     let editId = null;
 
-    const renderTable = async () => {
-      tableBody.innerHTML = "";
-      const snapshot = await getDocs(productsRef);
-      snapshot.forEach(docSnap => {
-        const data = docSnap.data();
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${data.kod}</td>
-          <td>${data.ad}</td>
-          <td>${data.olcu}</td>
-          <td>${data.qiymet}</td>
-          <td>${data.melumat}</td>
+    async function renderTable() {
+      tableBody.innerHTML = '';
+      const querySnapshot = await db.collection('products').get();
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${data.code}</td>
+          <td>${data.name}</td>
+          <td>${data.size}</td>
+          <td>${data.price}</td>
           <td>
-            <button onclick="editProduct('${docSnap.id}', '${data.kod}', '${data.ad}', '${data.olcu}', ${data.qiymet}, \`${data.melumat}\`)" >Düzəliş et</button>
-            <button onclick="deleteProduct('${docSnap.id}')">Sil</button>
+            <button class="action-btn" onclick="editProduct('${doc.id}')">Düzəliş et</button>
+            <button class="action-btn" onclick="deleteProduct('${doc.id}')">Sil</button>
           </td>
         `;
-        tableBody.appendChild(tr);
+        tableBody.appendChild(row);
       });
-    };
+    }
 
-    window.editProduct = (id, kod, ad, olcu, qiymet, melumat) => {
-      document.getElementById("kod").value = kod;
-      document.getElementById("ad").value = ad;
-      document.getElementById("olcu").value = olcu;
-      document.getElementById("qiymet").value = qiymet;
-      document.getElementById("melumat").value = melumat;
-      editId = id;
-      cancelUpdateBtn.style.display = "inline";
-    };
-
-    window.deleteProduct = async (id) => {
-      if (confirm("Məhsulu silmək istədiyinizə əminsiniz?")) {
-        await deleteDoc(doc(db, "products", id));
-        renderTable();
-      }
-    };
-
-    cancelUpdateBtn.addEventListener("click", () => {
-      form.reset();
-      editId = null;
-      cancelUpdateBtn.style.display = "none";
-    });
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const kod = document.getElementById("kod").value.trim();
-      const ad = document.getElementById("ad").value.trim();
-      const olcu = document.getElementById("olcu").value;
-      const qiymet = parseFloat(document.getElementById("qiymet").value);
-      const melumat = document.getElementById("melumat").value.trim();
+    async function addProduct() {
+      const data = {
+        code: codeInput.value,
+        name: nameInput.value,
+        size: sizeInput.value,
+        price: priceInput.value,
+        info: editor.root.innerHTML
+      };
 
       if (editId) {
-        await updateDoc(doc(db, "products", editId), { kod, ad, olcu, qiymet, melumat });
+        await db.collection('products').doc(editId).update(data);
+        submitBtn.textContent = 'Əlavə et';
+        cancelBtn.style.display = 'none';
         editId = null;
-        cancelUpdateBtn.style.display = "none";
       } else {
-        await addDoc(productsRef, { kod, ad, olcu, qiymet, melumat });
+        await db.collection('products').add(data);
       }
 
-      form.reset();
+      clearForm();
       renderTable();
+    }
+
+    function clearForm() {
+      codeInput.value = '';
+      nameInput.value = '';
+      sizeInput.value = '30ml';
+      priceInput.value = '';
+      editor.root.innerHTML = '';
+    }
+
+    async function deleteProduct(id) {
+      await db.collection('products').doc(id).delete();
+      renderTable();
+    }
+
+    window.editProduct = async function(id) {
+      const docRef = await db.collection('products').doc(id).get();
+      const data = docRef.data();
+
+      codeInput.value = data.code;
+      nameInput.value = data.name;
+      sizeInput.value = data.size;
+      priceInput.value = data.price;
+      editor.root.innerHTML = data.info;
+
+      editId = id;
+      submitBtn.textContent = 'Düzəliş et';
+      cancelBtn.style.display = 'inline-block';
+    }
+
+    cancelBtn.addEventListener('click', () => {
+      clearForm();
+      editId = null;
+      submitBtn.textContent = 'Əlavə et';
+      cancelBtn.style.display = 'none';
     });
+
+    submitBtn.addEventListener('click', addProduct);
 
     renderTable();
   </script>
