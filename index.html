@@ -521,6 +521,11 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       loadProducts();
+const closeBtn = document.querySelector('.close-btn');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeModal);
+  }
+      
     });
 
   </script>
