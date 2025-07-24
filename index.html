@@ -49,9 +49,19 @@
       filter: blur(5px);
       transition: filter 0.3s ease;
     }
-    .top-space {
-      height: 40px;
-      background-color: var(--card-bg);
+    .hero-section {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff;
+      text-align: center;
+      padding: 60px 20px;
+      margin-bottom: 20px;
+    }
+    .hero-section p {
+      font-size: 2em;
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
     }
     nav {
       background-color: var(--nav-bg);
@@ -162,6 +172,7 @@
       gap: 20px;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       margin-top: 30px;
+      position: relative;
     }
     .product-card {
       background: linear-gradient(135deg, var(--card-bg), #f8f9fa);
@@ -173,9 +184,10 @@
       padding: 20px;
       position: relative;
       animation: fadeIn 0.5s ease-in-out;
+      perspective: 1000px;
     }
     .product-card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-5px) rotateX(5deg) rotateY(5deg);
       box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
     }
     .product-card h3 {
@@ -188,13 +200,18 @@
       color: var(--text-color);
       margin: 5px 0;
     }
-    .product-card .icon {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      font-size: 24px;
-      color: var(--primary);
-      opacity: 0.3;
+    .loader {
+      display: none;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    .loader.active {
+      display: block;
     }
     #contactForm {
       max-width: 600px;
@@ -315,6 +332,7 @@
       position: relative;
       transform: scale(0.8);
       transition: transform 0.3s ease;
+      background: linear-gradient(135deg, var(--card-bg), #f8f9fa);
     }
     .modal.active .modal-content {
       transform: scale(1);
@@ -372,6 +390,7 @@
       text-align: center;
       position: relative;
       overflow: hidden;
+      animation: pulse 2s infinite;
     }
     #whatsappOrderBtn:hover {
       background: #1da851;
@@ -434,11 +453,41 @@
       color: var(--primary);
       font-size: 16px;
     }
+    .autocomplete-suggestions {
+      position: absolute;
+      top: 100%;
+      left: 20px;
+      right: 20px;
+      background: var(--card-bg);
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 1000;
+      display: none;
+    }
+    .autocomplete-suggestions div {
+      padding: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .autocomplete-suggestions div:hover {
+      background: var(--primary);
+      color: #fff;
+    }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    /* Hamburger menyusu */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
     .hamburger {
       display: none;
       font-size: 24px;
@@ -472,7 +521,7 @@
         align-items: center;
       }
       #product-list {
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
         gap: 15px;
       }
       #contactForm {
@@ -499,6 +548,7 @@
       #about p {
         font-size: 14px;
         padding: 15px;
+        line-height: 1.5;
       }
       .search-container {
         padding: 0 15px;
@@ -510,6 +560,12 @@
       .modal-content {
         width: 95%;
         padding: 15px;
+      }
+      .hero-section {
+        padding: 40px 15px;
+      }
+      .hero-section p {
+        font-size: 1.5em;
       }
     }
     @media (max-width: 480px) {
@@ -538,14 +594,19 @@
       h2 {
         font-size: 1.6em;
       }
+      .hero-section p {
+        font-size: 1.2em;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="top-space blur-background"></div>
+  <div class="hero-section blur-background">
+    <p>Zövqünüzü tamamlayan ideal qoxunu bizimlə kəşf edin</p>
+  </div>
   <nav class="blur-background">
     <div class="nav-container">
-      <div class="hamburger" onclick="toggleMenu()">&#9776;</div>
+      <div class="hamburger" onclick="toggleMenu()">☰</div>
       <ul id="nav-menu">
         <li><a id="nav-about" class="active" onclick="showSection('about')">Haqqımızda</a></li>
         <li><a id="nav-projects" onclick="showSection('projects')">Ətirlər</a></li>
@@ -562,7 +623,7 @@
         R-Shoppingaz komandası olaraq deluxe keyfiyyətdə olan ətirləri sizə təqdim edirik.
         Zövqünüzə uyğun olan ətirləri sifariş edə bilərsiniz. Parfümeriya sahəsində təcrübəli
         mütəxəssislər tərəfindən hazırlanan qarışımların qalıcı olmasına zəmanət verilir.
-        Fransa və Türkiyənin premium ətir dünyasına dəvət edirik! Yüksək qalıcılıq, unikal
+        Francia və Türkiyənin premium ətir dünyasına dəvət edirik! Yüksək qalıcılıq, unikal
         qoxular və sərfəli seçimlərlə təravətinizi vurğulayın. Zövqünüzü tamamlayan ideal
         qoxunu bizimlə kəşf edin.
       </p>
@@ -571,7 +632,9 @@
       <h2>Ətirlər</h2>
       <div class="search-container">
         <input type="text" id="productSearch" placeholder="Ətir axtar..." />
+        <div class="autocomplete-suggestions" id="autocompleteSuggestions"></div>
       </div>
+      <div class="loader" id="loader"></div>
       <div id="product-list"></div>
     </div>
     <div id="contact" class="section">
@@ -680,6 +743,7 @@
     function closeModal() {
       document.getElementById('productModal').classList.remove('active');
       document.body.classList.remove('modal-open');
+      document.getElementById('autocompleteSuggestions').style.display = 'none';
     }
   </script>
   <script type="module">
@@ -702,24 +766,25 @@
       card.innerHTML = `
         <h3>${product.name}</h3>
         <p>Kod: ${product.code || '-'}</p>
-        <p>Qiymət: ${product.ml === '50' ? '13' : '10'} ₼</p>
-        <i class="fas fa-vial icon"></i>
       `;
       card.addEventListener('click', () => openModal(product));
       return card;
     }
     async function loadProducts(searchTerm = '') {
       const productList = document.getElementById('product-list');
+      const loader = document.getElementById('loader');
+      loader.classList.add('active');
       productList.innerHTML = '';
       try {
         const querySnapshot = await getDocs(collection(db, "products"));
+        loader.classList.remove('active');
         if (querySnapshot.empty) {
           productList.innerHTML = '<p style="text-align:center; color: var(--text-color);">Məhsul tapılmadı</p>';
           return;
         }
         allProducts = [];
         querySnapshot.forEach(docSnap => {
-          const product = docSnap.data();
+          const product = { ...docSnap.data(), id: docSnap.id };
           allProducts.push(product);
         });
         const filteredProducts = searchTerm
@@ -740,10 +805,40 @@
       } catch (error) {
         console.error("Məhsullar yüklənərkən xəta:", error);
         productList.innerHTML = '<p style="color:red; text-align:center;">Məhsullar yüklənərkən xəta baş verdi</p>';
+        loader.classList.remove('active');
+      }
+    }
+    function showAutocompleteSuggestions(searchTerm) {
+      const suggestionsDiv = document.getElementById('autocompleteSuggestions');
+      suggestionsDiv.innerHTML = '';
+      if (!searchTerm) {
+        suggestionsDiv.style.display = 'none';
+        return;
+      }
+      const suggestions = allProducts.filter(product =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (product.code && product.code.toLowerCase().includes(searchTerm.toLowerCase()))
+      ).slice(0, 5);
+      if (suggestions.length > 0) {
+        suggestions.forEach(product => {
+          const div = document.createElement('div');
+          div.textContent = product.name;
+          div.addEventListener('click', () => {
+            document.getElementById('productSearch').value = product.name;
+            suggestionsDiv.style.display = 'none';
+            loadProducts(product.name);
+          });
+          suggestionsDiv.appendChild(div);
+        });
+        suggestionsDiv.style.display = 'block';
+      } else {
+        suggestionsDiv.style.display = 'none';
       }
     }
     document.getElementById('productSearch').addEventListener('input', (e) => {
-      loadProducts(e.target.value);
+      const searchTerm = e.target.value;
+      showAutocompleteSuggestions(searchTerm);
+      loadProducts(searchTerm);
     });
     document.getElementById('productModal').addEventListener('click', (e) => {
       if (e.target === e.currentTarget) closeModal();
