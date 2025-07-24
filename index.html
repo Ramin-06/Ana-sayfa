@@ -53,6 +53,11 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 20px;
+    }
+    .logo img {
+      height: 60px;
+      transition: height 0.3s;
     }
     nav ul {
       list-style: none;
@@ -60,6 +65,14 @@
       gap: 20px;
       margin: 0;
       padding: 0;
+      flex-grow: 1;
+      justify-content: flex-start;
+      align-items: center;
+      overflow-x: auto;
+      scrollbar-width: none; /* Firefox */
+    }
+    nav ul::-webkit-scrollbar {
+      display: none; /* Chrome, Safari */
     }
     nav ul li a {
       color: var(--nav-text);
@@ -70,6 +83,7 @@
       border-radius: 12px;
       transition: background-color 0.3s, color 0.3s;
       display: inline-block;
+      white-space: nowrap;
     }
     nav ul li a:hover {
       background-color: var(--nav-hover-bg);
@@ -87,6 +101,12 @@
       font-weight: bold;
       border-radius: 8px;
       transition: background-color 0.3s, color 0.3s;
+      min-width: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      user-select: none;
     }
     .theme-toggle:hover {
       background-color: var(--primary);
@@ -254,7 +274,7 @@
       user-select: none;
     }
 
-    /* ✅ Modal içi düymələr üçün dizayn */
+    /* Modal volume düymələri */
     .volume-btn {
       background-color: var(--primary);
       color: white;
@@ -264,13 +284,12 @@
       padding: 8px 16px;
       margin: 10px 8px 0 0;
       transition: background-color 0.3s, transform 0.2s;
+      cursor: pointer;
     }
-
     .volume-btn:hover {
       background-color: #149b85;
       transform: scale(1.05);
     }
-
     .volume-btn.active {
       background-color: #0e7c68;
     }
@@ -287,8 +306,8 @@
       display: block;
       width: 100%;
       text-align: center;
+      cursor: pointer;
     }
-
     #whatsappOrderBtn:hover {
       background-color: #1da851;
       transform: scale(1.03);
@@ -303,49 +322,39 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
-    /* --- Mobil üçün responsiv dizayn --- */
+    /* Mobil üçün əlavə stil */
     @media (max-width: 600px) {
-      #product-list {
-        grid-template-columns: 1fr !important;
-        gap: 15px;
-      }
-
-      nav ul {
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-
-      nav ul li a {
-        padding: 10px 8px;
-        font-size: 14px;
-      }
-
-      #contactForm input,
-      #contactForm textarea {
-        font-size: 14px;
-      }
-
-      #contactForm button {
-        font-size: 16px;
-        padding: 10px;
-      }
-
-      .product-card h3 {
-        font-size: 18px;
-      }
-
-      #cataloguePdf {
-        height: 60vh;
-      }
-
       .nav-container {
-        flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
         gap: 15px;
-        align-items: flex-start;
+      }
+      .logo img {
+        height: 45px;
+      }
+      nav ul {
+        gap: 8px;
+        overflow-x: auto;
+      }
+      nav ul::-webkit-scrollbar {
+        display: none;
       }
 
+      /* Tema düyməsi mobil üçün simvol (emoji) */
       .theme-toggle {
-        align-self: flex-end;
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        font-size: 24px;
+        color: var(--nav-text);
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: auto;
+        font-weight: normal;
       }
     }
   </style>
@@ -355,7 +364,7 @@
   <nav>
     <div class="nav-container">
       <div class="logo">
-        <img src="logo.png" alt="Logo" style="height: 60px;" />
+        <img src="logo.png" alt="Logo" />
       </div>
       <ul>
         <li><a id="nav-about" class="active" onclick="showSection('about')">Haqqımızda</a></li>
@@ -363,7 +372,7 @@
         <li><a id="nav-contact" onclick="showSection('contact')">Əlaqə</a></li>
         <li><a id="nav-catalogue" onclick="showSection('catalogue')">Kataloq</a></li>
       </ul>
-      <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">QARANLIQ MOD</button>
+      <button id="themeToggle" class="theme-toggle" aria-label="Modu dəyişdir">☀️</button>
     </div>
   </nav>
 
@@ -437,14 +446,40 @@
       if (activeLink) activeLink.classList.add('active');
     }
 
-    // Qaranlıq / Açıq mod toggle
+    // Qaranlıq / Açıq mod toggle və simvol dəyişməsi
     function toggleTheme() {
       const body = document.body;
       const button = document.getElementById('themeToggle');
       const isDark = body.classList.toggle('dark');
-      button.textContent = isDark ? 'AÇIQ MOD' : 'QARANLIQ MOD';
-      button.style.color = isDark ? '#ffffff' : '#2c3e50';
+
+      if (window.innerWidth <= 600) {
+        button.textContent = isDark ? '🌙' : '☀️';
+      } else {
+        button.textContent = isDark ? 'AÇIQ MOD' : 'QARANLIQ MOD';
+      }
     }
+
+    // Pəncərə ölçüsü dəyişəndə düymə içini yenilə
+    window.addEventListener('resize', () => {
+      const button = document.getElementById('themeToggle');
+      const isDark = document.body.classList.contains('dark');
+      if (window.innerWidth <= 600) {
+        button.textContent = isDark ? '🌙' : '☀️';
+      } else {
+        button.textContent = isDark ? 'AÇIQ MOD' : 'QARANLIQ MOD';
+      }
+    });
+
+    // İlk yükləmədə də ikon/tekst düz olsun
+    window.addEventListener('DOMContentLoaded', () => {
+      const button = document.getElementById('themeToggle');
+      const isDark = document.body.classList.contains('dark');
+      if (window.innerWidth <= 600) {
+        button.textContent = isDark ? '🌙' : '☀️';
+      } else {
+        button.textContent = isDark ? 'AÇIQ MOD' : 'QARANLIQ MOD';
+      }
+    });
   </script>
 
   <!-- Firebase SDKs and Firestore integration -->
@@ -467,108 +502,18 @@
     function createProductCard(product) {
       const card = document.createElement('div');
       card.className = 'product-card';
-
       card.innerHTML = `
-        <h3>${product.name}</h3>
-        <p style="font-size: 14px; color: gray;">Kod: ${product.code || '-'}</p>
+        <h3>${product.ad}</h3>
+        <p><strong>Kod:</strong> ${product.kod}</p>
       `;
-
-      card.addEventListener('click', () => openModal(product));
-
+      card.onclick = () => openModal(product);
       return card;
     }
 
-    async function loadProducts() {
-      const productList = document.getElementById('product-list');
-      productList.innerHTML = '';
-
-      try {
-        const querySnapshot = await getDocs(collection(db, "products"));
-        if (querySnapshot.empty) {
-          productList.innerHTML = '<p style="text-align:center;">Məhsul tapılmadı</p>';
-          return;
-        }
-
-        querySnapshot.forEach(docSnap => {
-          const product = docSnap.data();
-          productList.appendChild(createProductCard(product));
-        });
-      } catch (error) {
-        console.error("Məhsullar yüklənərkən xəta:", error);
-        productList.innerHTML = '<p style="color:red; text-align:center;">Məhsullar yüklənərkən xəta baş verdi</p>';
-      }
-    }
-
-    // Modal funksiyaları
-
     function openModal(product) {
-      const modalTitle = document.getElementById('modalTitle');
-      const modalDescription = document.getElementById('modalDescription');
-      const modalPrice = document.getElementById('modalPrice');
-
-      modalTitle.textContent = product.name;
-      modalDescription.innerHTML = product.description || '';
-
-      let selectedVolume = '30 ml';
-      let price = 10;
-
-      const oldBtns = document.querySelectorAll('.volume-btn, #whatsappOrderBtn');
-      oldBtns.forEach(el => el.remove());
-
-      modalPrice.textContent = `Qiymət: ${price} ₼`;
-
-      const btn30 = document.createElement('button');
-      btn30.textContent = '30 ml';
-      btn30.className = 'volume-btn active';
-      btn30.style.marginRight = '10px';
-      btn30.style.padding = '6px 12px';
-      btn30.style.cursor = 'pointer';
-
-      const btn50 = document.createElement('button');
-      btn50.textContent = '50 ml';
-      btn50.className = 'volume-btn';
-      btn50.style.padding = '6px 12px';
-      btn50.style.cursor = 'pointer';
-
-      const whatsappBtn = document.createElement('button');
-      whatsappBtn.textContent = 'WhatsApp ilə Sifariş Ver';
-      whatsappBtn.id = 'whatsappOrderBtn';
-      whatsappBtn.style.marginTop = '15px';
-      whatsappBtn.style.padding = '10px 15px';
-      whatsappBtn.style.backgroundColor = '#25D366';
-      whatsappBtn.style.color = 'white';
-      whatsappBtn.style.border = 'none';
-      whatsappBtn.style.borderRadius = '8px';
-      whatsappBtn.style.cursor = 'pointer';
-      whatsappBtn.style.fontWeight = 'bold';
-
-      btn30.onclick = () => {
-        selectedVolume = '30 ml';
-        price = 10;
-        modalPrice.textContent = `Qiymət: ${price} ₼`;
-        btn30.classList.add('active');
-        btn50.classList.remove('active');
-      };
-
-      btn50.onclick = () => {
-        selectedVolume = '50 ml';
-        price = 13;
-        modalPrice.textContent = `Qiymət: ${price} ₼`;
-        btn50.classList.add('active');
-        btn30.classList.remove('active');
-      };
-
-      whatsappBtn.onclick = () => {
-        const phoneNumber = '994515817772';
-        const message = encodeURIComponent(`Salam, mən "${product.name}" məhsulundan ${selectedVolume} almaq istəyirəm. Qiymət: ${price} ₼.`);
-        const url = `https://wa.me/${phoneNumber}?text=${message}`;
-        window.open(url, '_blank');
-      };
-
-      modalPrice.insertAdjacentElement('beforebegin', btn50);
-      modalPrice.insertAdjacentElement('beforebegin', btn30);
-      modalPrice.insertAdjacentElement('afterend', whatsappBtn);
-
+      document.getElementById('modalTitle').textContent = product.ad;
+      document.getElementById('modalDescription').textContent = product.melumat || "Məlumat yoxdur";
+      document.getElementById('modalPrice').textContent = product.qiymet ? `Qiymət: ${product.qiymet} AZN` : "";
       document.getElementById('productModal').classList.add('active');
     }
 
@@ -576,16 +521,31 @@
       document.getElementById('productModal').classList.remove('active');
     }
 
-    document.getElementById('productModal').addEventListener('click', (e) => {
-      if (e.target === e.currentTarget) closeModal();
-    });
+    async function loadProducts() {
+      const productList = document.getElementById('product-list');
+      productList.innerHTML = 'Yüklənir...';
+      try {
+        const querySnapshot = await getDocs(collection(db, "products"));
+        productList.innerHTML = '';
+        querySnapshot.forEach(doc => {
+          const product = doc.data();
+          const card = createProductCard(product);
+          productList.appendChild(card);
+        });
+      } catch (error) {
+        productList.innerHTML = 'Xəta baş verdi məhsullar yüklənərkən.';
+        console.error(error);
+      }
+    }
 
+    // Yüklənəndə məhsulları çək
     window.addEventListener('DOMContentLoaded', () => {
       loadProducts();
-      const closeBtn = document.querySelector('.close-btn');
-      if (closeBtn) {
-        closeBtn.addEventListener('click', closeModal);
-      }
+    });
+
+    // Modal bağlamağa esc düyməsi ilə
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
     });
   </script>
 </body>
