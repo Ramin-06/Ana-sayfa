@@ -302,6 +302,52 @@
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
+
+    /* --- Mobil üçün responsiv dizayn --- */
+    @media (max-width: 600px) {
+      #product-list {
+        grid-template-columns: 1fr !important;
+        gap: 15px;
+      }
+
+      nav ul {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      nav ul li a {
+        padding: 10px 8px;
+        font-size: 14px;
+      }
+
+      #contactForm input,
+      #contactForm textarea {
+        font-size: 14px;
+      }
+
+      #contactForm button {
+        font-size: 16px;
+        padding: 10px;
+      }
+
+      .product-card h3 {
+        font-size: 18px;
+      }
+
+      #cataloguePdf {
+        height: 60vh;
+      }
+
+      .nav-container {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+      }
+
+      .theme-toggle {
+        align-self: flex-end;
+      }
+    }
   </style>
 </head>
 <body>
