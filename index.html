@@ -1,359 +1,145 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="az">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>R-Shoppingaz</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --bg-color: #f0f4f8;
-      --text-color: #2c3e50;
-      --primary: #1abc9c;
-      --nav-bg: #002147;
-      --nav-text: #ecf0f1;
-      --nav-active: #1abc9c;
-      --card-bg: #ffffff;
-      --footer-bg: #002147;
-      --nav-hover-bg: rgba(255, 255, 255, 0.2);
-    }
-    body.dark {
-      --bg-color: #121212;
-      --text-color: #eee;
-      --primary: #0d6efd;
-      --nav-bg: #002147;
-      --nav-text: #ffffff;
-      --nav-active: #0d6efd;
-      --card-bg: #1e1e1e;
-      --footer-bg: #002147;
-      --nav-hover-bg: rgba(255, 255, 255, 0.1);
-    }
+    /* Sadə və işıqlı qrafik */
     body {
+      font-family: 'Montserrat', sans-serif;
       margin: 0;
-      font-family: 'Montserrat', Arial, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      transition: background-color 0.3s, color 0.3s;
+      background: #f0f4f8;
+      color: #2c3e50;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
-    }
-    .top-space {
-      height: 40px;
-      background-color: #fff;
     }
     nav {
-      background-color: var(--nav-bg);
-      padding: 20px 0;
-    }
-    .nav-container {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 0 20px;
+      background: #002147;
+      padding: 15px 20px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
     }
     nav ul {
       list-style: none;
+      padding: 0;
+      margin: 0;
       display: flex;
       gap: 20px;
-      margin: 0;
-      padding: 0;
     }
     nav ul li a {
-      color: var(--nav-text);
+      color: #ecf0f1;
       text-decoration: none;
-      font-weight: bold;
+      font-weight: 600;
       cursor: pointer;
-      padding: 15px 12px;
-      border-radius: 12px;
-      transition: background-color 0.3s, color 0.3s;
-      display: inline-block;
+      padding: 8px 15px;
+      border-radius: 10px;
+      transition: background-color 0.3s;
     }
-    nav ul li a:hover {
-      background-color: var(--nav-hover-bg);
-    }
-    nav ul li a.active {
-      background-color: var(--nav-active);
-      color: #ffffff;
-    }
-    .theme-toggle {
-      background: var(--card-bg);
-      color: var(--nav-text);
-      border: 1px solid var(--nav-text);
-      padding: 8px 14px;
-      cursor: pointer;
-      font-weight: bold;
-      border-radius: 8px;
-      transition: background-color 0.3s, color 0.3s;
-    }
-    .theme-toggle:hover {
-      background-color: var(--primary);
+    nav ul li a.active, nav ul li a:hover {
+      background-color: #1abc9c;
       color: #fff;
     }
     main {
-      flex: 1;
+      flex-grow: 1;
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
     }
     .section {
       display: none;
-      padding: 40px 20px;
-      max-width: 1000px;
-      margin: auto;
     }
     .section.active {
       display: block;
     }
     h2 {
-      color: var(--primary);
+      color: #1abc9c;
       text-align: center;
-      margin-bottom: 30px;
     }
-    #about p {
+    /* PDF */
+    #pdf-render {
+      border: 1px solid #ccc;
+      display: block;
+      margin: 20px auto;
+      max-width: 100%;
+      border-radius: 10px;
+    }
+    .pdf-controls {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .pdf-controls button {
+      padding: 10px 20px;
+      margin: 0 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: #1abc9c;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s;
+    }
+    .pdf-controls button:hover {
+      background-color: #149b85;
+    }
+    #pageInfo {
+      font-weight: 600;
       font-size: 18px;
-      line-height: 1.8;
-      color: var(--text-color);
-      background-color: var(--card-bg);
-      padding: 25px 30px;
-      border-radius: 16px;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
-      max-width: 900px;
-      margin: 0 auto;
-      text-align: justify;
-      font-weight: 500;
-      letter-spacing: 0.3px;
+      vertical-align: middle;
+      margin-left: 10px;
     }
+    /* Product List */
     #product-list {
       display: grid;
-      gap: 20px;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 15px;
       margin-top: 30px;
     }
     .product-card {
-      background-color: var(--card-bg);
+      background: white;
       border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      cursor: pointer;
-      transition: transform 0.2s;
       padding: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.15s ease-in-out;
     }
     .product-card:hover {
-      transform: scale(1.02);
-    }
-    #contactForm {
-      max-width: 600px;
-      margin: auto;
-      background-color: var(--card-bg);
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      color: var(--text-color);
-    }
-    #contactForm h2 {
-      color: var(--primary);
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    #contactForm label {
-      font-weight: bold;
-      display: block;
-      margin-top: 15px;
-      margin-bottom: 5px;
-    }
-    #contactForm input,
-    #contactForm textarea {
-      width: 100%;
-      padding: 10px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-      resize: vertical;
-      font-family: inherit;
-      font-size: 16px;
-      color: var(--text-color);
-      background-color: var(--bg-color);
-      transition: background-color 0.3s, color 0.3s;
-    }
-    #contactForm input:focus,
-    #contactForm textarea:focus {
-      border-color: var(--primary);
-      outline: none;
-      background-color: var(--card-bg);
-    }
-    #contactForm button {
-      margin-top: 20px;
-      width: 100%;
-      padding: 12px;
-      background-color: var(--primary);
-      color: white;
-      font-weight: bold;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-      font-size: 18px;
-    }
-    #contactForm button:hover {
-      background-color: #149b85;
-    }
-    #successMessage {
-      margin-top: 15px;
-      font-weight: bold;
-      text-align: center;
-      display: none;
-    }
-    footer {
-      background-color: var(--footer-bg);
-      color: white;
-      text-align: center;
-      padding: 20px;
-      margin-top: auto;
-    }
-    /* Modal Styles */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.6);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    .modal.active {
-      display: flex;
-    }
-    .modal-content {
-      background-color: var(--card-bg);
-      padding: 20px 30px;
-      border-radius: 12px;
-      max-width: 500px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.2);
-      color: var(--text-color);
-      position: relative;
-    }
-    .modal-content h3 {
-      margin-top: 0;
-      color: var(--primary);
-    }
-    .modal-content p {
-      margin: 15px 0;
-    }
-    .close-btn {
-      position: absolute;
-      top: 12px;
-      right: 15px;
-      font-size: 28px;
-      font-weight: bold;
-      color: var(--text-color);
-      cursor: pointer;
-      user-select: none;
-    }
-    /* Modal içi düymələr üçün dizayn */
-    .volume-btn {
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      padding: 8px 16px;
-      margin: 10px 8px 0 0;
-      transition: background-color 0.3s, transform 0.2s;
-    }
-    .volume-btn:hover {
-      background-color: #149b85;
       transform: scale(1.05);
-    }
-    .volume-btn.active {
-      background-color: #0e7c68;
-    }
-    #whatsappOrderBtn {
-      background-color: #25D366;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-weight: bold;
-      padding: 12px 20px;
-      margin-top: 20px;
-      transition: background-color 0.3s, transform 0.2s;
-      display: block;
-      width: 100%;
-      text-align: center;
-    }
-    #whatsappOrderBtn:hover {
-      background-color: #1da851;
-      transform: scale(1.03);
-    }
-    /* PDF viewer üçün */
-    #catalog canvas {
-      display: block;
-      margin: 0 auto;
-      border: 1px solid #ccc;
-      border-radius: 12px;
-      max-width: 100%;
-    }
-    #catalog .pdf-controls {
-      text-align: center;
-      margin-top: 15px;
-    }
-    #catalog button {
-      cursor: pointer;
-      background-color: var(--primary);
-      border: none;
-      padding: 10px 20px;
-      color: white;
-      font-weight: bold;
-      margin: 0 10px;
-      border-radius: 8px;
-      transition: background-color 0.3s;
-    }
-    #catalog button:hover {
-      background-color: #149b85;
-    }
-    #catalog #pageInfo {
-      font-weight: 600;
-      margin-left: 10px;
     }
   </style>
 </head>
 <body>
-  <div class="top-space"></div>
   <nav>
-    <div class="nav-container">
-      <div class="logo">
-        <img src="logo.png" alt="Logo" style="height: 60px;" />
-      </div>
-      <ul>
-        <li><a href="#" id="nav-about" class="active">Haqqımızda</a></li>
-        <li><a href="#" id="nav-projects">Ətirlər</a></li>
-        <li><a href="#" id="nav-catalog">Kataloq</a></li>
-        <li><a href="#" id="nav-contact">Əlaqə</a></li>
-      </ul>
-      <button id="themeToggle" class="theme-toggle">QARANLIQ MOD</button>
-    </div>
+    <div class="logo" style="color:white; font-weight:bold; font-size: 22px;">R-Shoppingaz</div>
+    <ul>
+      <li><a href="#" id="nav-about" class="active">Haqqımızda</a></li>
+      <li><a href="#" id="nav-projects">Ətirlər</a></li>
+      <li><a href="#" id="nav-catalog">Kataloq</a></li>
+      <li><a href="#" id="nav-contact">Əlaqə</a></li>
+    </ul>
   </nav>
 
   <main>
-    <div id="about" class="section active">
+    <section id="about" class="section active">
       <h2>Haqqımızda</h2>
-      <p>
+      <p style="max-width: 700px; margin: auto; text-align: justify;">
         R-Shoppingaz komandası olaraq deluxe keyfiyyətdə olan ətirləri sizə təqdim edirik.
         Zövqünüzə uyğun olan ətirləri sifariş edə bilərsiniz. Parfümeriya sahəsində təcrübəli
         mütəxəssislər tərəfindən hazırlanan qarışımların qalıcı olmasına zəmanət verilir.
-        Fransa və Türkiyənin premium ətir dünyasına dəvət edirik! Yüksək qalıcılıq, unikal
-        qoxular və sərfəli seçimlərlə təravətinizi vurğulayın. Zövqünüzü tamamlayan ideal
-        qoxunu bizimlə kəşf edin.
       </p>
-    </div>
+    </section>
 
-    <div id="projects" class="section">
+    <section id="projects" class="section">
       <h2>Ətirlər</h2>
-      <div id="product-list"></div>
-    </div>
+      <div id="product-list">
+        <!-- Məhsullar buraya yüklənəcək -->
+      </div>
+    </section>
 
-    <div id="catalog" class="section">
+    <section id="catalog" class="section">
       <h2>Kataloq</h2>
       <canvas id="pdf-render"></canvas>
       <div class="pdf-controls">
@@ -361,43 +147,106 @@
         <button id="nextPage">Növbəti</button>
         <span id="pageInfo">Səhifə: <span id="pageNum"></span> / <span id="pageCount"></span></span>
       </div>
-    </div>
+    </section>
 
-    <div id="contact" class="section">
+    <section id="contact" class="section">
+      <h2>Əlaqə</h2>
       <form id="contactForm" action="https://getform.io/f/bqomyqzb" method="POST">
-        <h2>Bizə Yazın</h2>
         <label for="Ad">Ad:</label>
-        <input id="Ad" type="text" name="Ad" required />
+        <input id="Ad" name="Ad" required />
         <label for="Soyad">Soyad:</label>
-        <input id="Soyad" type="text" name="Soyad" required />
+        <input id="Soyad" name="Soyad" required />
         <label for="E-posta">E-poçt:</label>
-        <input id="E-posta" type="email" name="E-posta" required />
-        <label for="Telefon">Telefon Nömrəsi:</label>
-        <input id="Telefon" type="tel" name="Telefon" />
+        <input type="email" id="E-posta" name="E-posta" required />
+        <label for="Telefon">Telefon:</label>
+        <input id="Telefon" name="Telefon" />
         <label for="Mesaj">Məktubunuz:</label>
         <textarea id="Mesaj" name="Mesaj" rows="5" required></textarea>
         <button type="submit">Göndər</button>
-        <p id="successMessage"></p>
+        <p id="successMessage" style="text-align:center; font-weight:bold;"></p>
       </form>
-    </div>
+    </section>
   </main>
 
-  <!-- Modal HTML -->
-  <div id="productModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" onclick="closeModal()">&times;</span>
-      <h3 id="modalTitle"></h3>
-      <p id="modalDescription"></p>
-      <p><strong id="modalPrice"></strong></p>
-    </div>
-  </div>
-
-  <footer>
-    <p>© 2025 R-Shoppingaz. Bütün hüquqlar qorunur.</p>
-  </footer>
-
-  <!-- Scriptlər -->
   <script type="module">
+    // Navbar bölmə dəyişmə funksiyası
+    const sections = ['about', 'projects', 'catalog', 'contact'];
+    sections.forEach(id => {
+      document.getElementById('nav-' + id).addEventListener('click', e => {
+        e.preventDefault();
+        sections.forEach(sec => {
+          document.getElementById(sec).classList.remove('active');
+          document.getElementById('nav-' + sec).classList.remove('active');
+        });
+        document.getElementById(id).classList.add('active');
+        document.getElementById('nav-' + id).classList.add('active');
+      });
+    });
+
+    // PDF.js import (standart CDN)
+    import { getDocument } from "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.9.179/build/pdf.min.js";
+
+    const pdfUrl = 'urunlerim/KATALOQUM.pdf'; // Pdf faylın path
+    const canvas = document.getElementById('pdf-render');
+    const ctx = canvas.getContext('2d');
+    let pdfDoc = null, pageNum = 1, pageCount = 0, pageRendering = false, pageNumPending = null;
+    const scale = 1.2;
+
+    function renderPage(num) {
+      pageRendering = true;
+      pdfDoc.getPage(num).then(page => {
+        const viewport = page.getViewport({ scale });
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        const renderContext = {
+          canvasContext: ctx,
+          viewport: viewport,
+        };
+
+        const renderTask = page.render(renderContext);
+        renderTask.promise.then(() => {
+          pageRendering = false;
+          if(pageNumPending !== null){
+            renderPage(pageNumPending);
+            pageNumPending = null;
+          }
+        });
+        document.getElementById('pageNum').textContent = num;
+      });
+    }
+
+    function queueRenderPage(num){
+      if(pageRendering){
+        pageNumPending = num;
+      } else {
+        renderPage(num);
+      }
+    }
+
+    document.getElementById('prevPage').addEventListener('click', () => {
+      if(pageNum <= 1) return;
+      pageNum--;
+      queueRenderPage(pageNum);
+    });
+
+    document.getElementById('nextPage').addEventListener('click', () => {
+      if(pageNum >= pageCount) return;
+      pageNum++;
+      queueRenderPage(pageNum);
+    });
+
+    getDocument(pdfUrl).promise.then(pdfDoc_ => {
+      pdfDoc = pdfDoc_;
+      pageCount = pdfDoc.numPages;
+      document.getElementById('pageCount').textContent = pageCount;
+      renderPage(pageNum);
+    }).catch(err => {
+      document.getElementById('catalog').innerHTML = `<p style="color:red; text-align:center;">PDF yüklənərkən xəta baş verdi.</p>`;
+      console.error(err);
+    });
+
+    // Firebase import və konfiqurasiya
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -413,241 +262,53 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    function createProductCard(product) {
-      const card = document.createElement('div');
-      card.className = 'product-card';
-
-      card.innerHTML = `
-        <h3>${product.name}</h3>
-        <p style="font-size: 14px; color: gray;">Kod: ${product.code || '-'}</p>
-      `;
-
-      card.addEventListener('click', () => openModal(product));
-
-      return card;
-    }
-
-    async function loadProducts() {
+    async function loadProducts(){
       const productList = document.getElementById('product-list');
-      productList.innerHTML = '';
-
+      productList.innerHTML = '<p style="text-align:center;">Yüklənir...</p>';
       try {
         const querySnapshot = await getDocs(collection(db, "products"));
-        if (querySnapshot.empty) {
-          productList.innerHTML = '<p style="text-align:center;">Məhsul tapılmadı</p>';
+        if(querySnapshot.empty){
+          productList.innerHTML = '<p style="text-align:center;">Məhsul tapılmadı.</p>';
           return;
         }
-
+        productList.innerHTML = '';
         querySnapshot.forEach(docSnap => {
-          const product = docSnap.data();
-          productList.appendChild(createProductCard(product));
+          const data = docSnap.data();
+          const div = document.createElement('div');
+          div.classList.add('product-card');
+          div.textContent = `${data.name || 'Ad yoxdur'} (Kod: ${data.code || '-'})`;
+          productList.appendChild(div);
         });
-      } catch (error) {
-        console.error("Məhsullar yüklənərkən xəta:", error);
-        productList.innerHTML = '<p style="color:red; text-align:center;">Məhsullar yüklənərkən xəta baş verdi</p>';
+      } catch(e) {
+        productList.innerHTML = '<p style="color:red; text-align:center;">Məhsullar yüklənərkən xəta.</p>';
+        console.error(e);
       }
     }
+    loadProducts();
 
-    // Modal funksiyaları
-    function openModal(product) {
-      const modalTitle = document.getElementById('modalTitle');
-      const modalDescription = document.getElementById('modalDescription');
-      const modalPrice = document.getElementById('modalPrice');
-
-      modalTitle.textContent = product.name;
-      modalDescription.innerHTML = product.description || '';
-
-      let selectedVolume = '30 ml';
-      let price = 10;
-
-      // Əvvəlki düymələri təmizlə
-      const oldBtns = document.querySelectorAll('.volume-btn, #whatsappOrderBtn');
-      oldBtns.forEach(el => el.remove());
-
-      modalPrice.textContent = `Qiymət: ${price} ₼`;
-
-      const btn30 = document.createElement('button');
-      btn30.textContent = '30 ml';
-      btn30.className = 'volume-btn active';
-      btn30.style.marginRight = '10px';
-
-      const btn50 = document.createElement('button');
-      btn50.textContent = '50 ml';
-      btn50.className = 'volume-btn';
-
-      btn30.onclick = () => {
-        selectedVolume = '30 ml';
-        price = 10;
-        modalPrice.textContent = `Qiymət: ${price} ₼`;
-        btn30.classList.add('active');
-        btn50.classList.remove('active');
-      };
-
-      btn50.onclick = () => {
-        selectedVolume = '50 ml';
-        price = 13;
-        modalPrice.textContent = `Qiymət: ${price} ₼`;
-        btn50.classList.add('active');
-        btn30.classList.remove('active');
-      };
-
-      const whatsappBtn = document.createElement('button');
-      whatsappBtn.textContent = 'WhatsApp ilə Sifariş Ver';
-      whatsappBtn.id = 'whatsappOrderBtn';
-
-      whatsappBtn.onclick = () => {
-        const phoneNumber = '994550001122';
-        const message = encodeURIComponent(`Salam, mən "${product.name}" (${selectedVolume}) məhsulunu sifariş etmək istəyirəm. Qiymət: ${price}₼.`);
-        const url = `https://wa.me/${phoneNumber}?text=${message}`;
-        window.open(url, '_blank');
-      };
-
-      modalPrice.insertAdjacentElement('afterend', btn30);
-      btn30.insertAdjacentElement('afterend', btn50);
-      btn50.insertAdjacentElement('afterend', whatsappBtn);
-
-      document.getElementById('productModal').classList.add('active');
-    }
-
-    function closeModal() {
-      document.getElementById('productModal').classList.remove('active');
-    }
-
-    // Theme toggle
-    const themeToggle = document.getElementById('themeToggle');
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      themeToggle.textContent = document.body.classList.contains('dark') ? 'İŞIQLI MOD' : 'QARANLIQ MOD';
-    });
-
-    // Navbar klik idarəçisi və bölmə dəyişdirilməsi
-    function showSection(id) {
-      const sections = document.querySelectorAll('.section');
-      const links = document.querySelectorAll('nav ul li a');
-
-      sections.forEach(sec => sec.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-
-      links.forEach(link => link.classList.remove('active'));
-      const activeLink = document.getElementById('nav-' + id);
-      if(activeLink) activeLink.classList.add('active');
-    }
-
-    document.querySelectorAll('nav ul li a').forEach(link => {
-      link.addEventListener('click', e => {
-        e.preventDefault();
-        const id = link.id.replace('nav-', '');
-        showSection(id);
-      });
-    });
-
-    // Contact form success message (submit sonrası)
+    // AJAX ilə form göndərmə
     const contactForm = document.getElementById('contactForm');
     const successMessage = document.getElementById('successMessage');
+
     contactForm.addEventListener('submit', e => {
       e.preventDefault();
       const formData = new FormData(contactForm);
       fetch(contactForm.action, {
         method: 'POST',
         body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
+        headers: { 'Accept': 'application/json' }
       }).then(response => {
-        if(response.ok) {
-          successMessage.style.display = 'block';
+        if(response.ok){
           successMessage.style.color = 'green';
-          successMessage.textContent = 'Məktubunuz uğurla göndərildi.';
+          successMessage.textContent = 'Məktubunuz göndərildi. Təşəkkürlər!';
           contactForm.reset();
         } else {
-          throw new Error('Xəta baş verdi');
+          throw new Error('Xəta');
         }
       }).catch(() => {
-        successMessage.style.display = 'block';
         successMessage.style.color = 'red';
-        successMessage.textContent = 'Məktub göndərilərkən xəta baş verdi.';
+        successMessage.textContent = 'Göndərmə zamanı xəta baş verdi.';
       });
-    });
-
-    // PDF viewer üçün
-    import { getDocument } from "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.9.179/build/pdf.min.js";
-
-    let pdfDoc = null,
-        pageNum = 1,
-        pageCount = 0,
-        pageRendering = false,
-        pageNumPending = null,
-        scale = 1.0,
-        canvas = document.getElementById('pdf-render'),
-        ctx = canvas.getContext('2d');
-
-    function renderPage(num) {
-      pageRendering = true;
-      pdfDoc.getPage(num).then(page => {
-        const viewport = page.getViewport({ scale: scale });
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-
-        const renderContext = {
-          canvasContext: ctx,
-          viewport: viewport
-        };
-
-        const renderTask = page.render(renderContext);
-
-        renderTask.promise.then(() => {
-          pageRendering = false;
-          if (pageNumPending !== null) {
-            renderPage(pageNumPending);
-            pageNumPending = null;
-          }
-        });
-
-        document.getElementById('pageNum').textContent = num;
-      });
-    }
-
-    function queueRenderPage(num) {
-      if (pageRendering) {
-        pageNumPending = num;
-      } else {
-        renderPage(num);
-      }
-    }
-
-    function onPrevPage() {
-      if (pageNum <= 1) return;
-      pageNum--;
-      queueRenderPage(pageNum);
-    }
-
-    function onNextPage() {
-      if (pageNum >= pageCount) return;
-      pageNum++;
-      queueRenderPage(pageNum);
-    }
-
-    document.getElementById('prevPage').addEventListener('click', onPrevPage);
-    document.getElementById('nextPage').addEventListener('click', onNextPage);
-
-    // PDF yüklə
-    getDocument('urunlerim/KATALOQUM.pdf').promise.then(pdfDoc_ => {
-      pdfDoc = pdfDoc_;
-      pageCount = pdfDoc.numPages;
-      document.getElementById('pageCount').textContent = pageCount;
-      renderPage(pageNum);
-    }).catch(err => {
-      const catalogDiv = document.getElementById('catalog');
-      catalogDiv.innerHTML = '<p style="color:red; text-align:center;">PDF faylı yüklənərkən xəta baş verdi.</p>';
-      console.error(err);
-    });
-
-    // Məhsulları yüklə
-    loadProducts();
-
-    // Modalı bağlamaq üçün klaviatura ESC düyməsi
-    document.addEventListener('keydown', e => {
-      if(e.key === 'Escape') closeModal();
     });
   </script>
 </body>
