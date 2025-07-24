@@ -52,7 +52,6 @@
       padding: 20px;
       border-radius: 12px;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-      overflow-x: auto;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     .list-section:hover {
@@ -92,7 +91,7 @@
       font-weight: 600;
       font-size: 14px;
       transition: background 0.3s ease, transform 0.2s ease;
-      min-width: 100px; /* Toxunma üçün kifayət qədər genişlik */
+      min-width: 100px;
     }
     button:hover {
       background: linear-gradient(90deg, #5a4bcb, #8c7ae6);
@@ -102,7 +101,7 @@
       margin: 12px 0;
       display: flex;
       gap: 8px;
-      flex-wrap: wrap; /* Mobil cihazlarda düymələr alt-alta düşə bilər */
+      flex-wrap: wrap;
     }
     .ml-button {
       padding: 8px 16px;
@@ -122,17 +121,18 @@
       color: white;
       border-color: transparent;
     }
+    /* Cədvəl üçün stil */
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 15px;
+      display: table;
     }
     th, td {
       padding: 10px;
       border: 1px solid #dfe6e9;
       text-align: left;
       font-size: 13px;
-      white-space: nowrap;
       vertical-align: middle;
     }
     th {
@@ -220,6 +220,34 @@
     .action-buttons i {
       margin-right: 4px;
     }
+    /* Kart formatı üçün stil */
+    .product-card {
+      background: #f8f9fa;
+      border: 1px solid #dfe6e9;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .product-card p {
+      margin: 0;
+      font-size: 13px;
+      color: #2c3e50;
+    }
+    .product-card .action-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .empty-message {
+      text-align: center;
+      font-style: italic;
+      color: #7f8c8d;
+      font-size: 14px;
+      margin-top: 15px;
+    }
     /* Mobil üçün responsivlik */
     @media (max-width: 768px) {
       body {
@@ -251,36 +279,17 @@
         padding: 6px 12px;
         min-width: 70px;
       }
-      th, td {
-        font-size: 12px;
-        padding: 8px;
-      }
-      .delete-btn, .edit-btn {
-        font-size: 11px;
-        padding: 5px 10px;
-        min-width: 60px;
-      }
       #editor {
         height: 120px;
       }
-      /* Cədvəl üçün responsiv dizayn */
-      table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
+      /* Cədvəli mobil üçün gizlət, kart formatını göstər */
+      #productTable {
+        display: none;
       }
-      thead, tbody, tr {
-        display: table;
-        width: 100%;
-        table-layout: fixed;
-      }
-      th, td {
-        min-width: 80px; /* Minimum sütun eni */
-      }
-      .action-buttons {
+      .product-list {
         display: flex;
-        gap: 5px;
-        flex-wrap: nowrap;
+        flex-direction: column;
+        gap: 10px;
       }
     }
     @media (max-width: 480px) {
@@ -307,17 +316,16 @@
         padding: 5px 10px;
         min-width: 60px;
       }
-      th, td {
-        font-size: 11px;
-        padding: 6px;
-      }
-      .delete-btn, .edit-btn {
-        font-size: 10px;
-        padding: 4px 8px;
-        min-width: 50px;
-      }
       #editor {
         height: 100px;
+      }
+      .product-card p {
+        font-size: 12px;
+      }
+      .delete-btn, .edit-btn {
+        font-size: 11px;
+        padding: 5px 10px;
+        min-width: 60px;
       }
     }
   </style>
@@ -366,9 +374,12 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Məhsullar burada görünəcək -->
+          <!-- Məhsullar burada görünəcək (desktop üçün) -->
         </tbody>
       </table>
+      <div class="product-list">
+        <!-- Məhsullar burada kart formatında görünəcək (mobil üçün) -->
+      </div>
     </div>
 
   </div>
@@ -403,6 +414,7 @@
 
     const form = document.getElementById("productForm");
     const tableBody = document.querySelector("#productTable tbody");
+    const productList = document.querySelector(".product-list");
     const mlButtons = document.querySelectorAll(".ml-button");
     const priceInput = document.getElementById("productPrice");
     const submitBtn = document.getElementById("submitBtn");
@@ -444,19 +456,25 @@
 
     async function loadProducts() {
       tableBody.innerHTML = "";
+      productList.innerHTML = "";
       const querySnapshot = await getDocs(collection(db, "products"));
 
       if (querySnapshot.empty) {
         const row = document.createElement("tr");
         row.innerHTML = `<td colspan="5" style="text-align:center; font-style: italic;">Hələ məhsul əlavə edilməyib...</td>`;
         tableBody.appendChild(row);
+
+        const emptyMessage = document.createElement("div");
+        emptyMessage.className = "empty-message";
+        emptyMessage.textContent = "Hələ məhsul əlavə edilməyib...";
+        productList.appendChild(emptyMessage);
         return;
       }
 
       querySnapshot.forEach(docSnap => {
         const product = docSnap.data();
+        // Cədvəl üçün (desktop)
         const row = document.createElement("tr");
-
         row.innerHTML = `
           <td>${product.code}</td>
           <td>${product.name}</td>
@@ -467,10 +485,25 @@
             <button class="delete-btn" data-id="${docSnap.id}"><i class="fas fa-trash-alt"></i> Sil</button>
           </td>
         `;
-
         tableBody.appendChild(row);
+
+        // Kart formatı üçün (mobil)
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+          <p><strong>Kod:</strong> ${product.code}</p>
+          <p><strong>Ad:</strong> ${product.name}</p>
+          <p><strong>Ölçü:</strong> ${product.ml} ml</p>
+          <p><strong>Qiymət:</strong> ${product.price}</p>
+          <div class="action-buttons">
+            <button class="edit-btn" data-id="${docSnap.id}"><i class="fas fa-edit"></i> Düzəlt</button>
+            <button class="delete-btn" data-id="${docSnap.id}"><i class="fas fa-trash-alt"></i> Sil</button>
+          </div>
+        `;
+        productList.appendChild(card);
       });
 
+      // Düymələrə event əlavə et
       document.querySelectorAll(".edit-btn").forEach(btn => {
         btn.addEventListener("click", () => {
           editProduct(btn.getAttribute("data-id"));
