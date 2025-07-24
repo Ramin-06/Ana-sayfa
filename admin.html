@@ -370,41 +370,43 @@
   }
 
   // Məhsulu redaktə etmək üçün yüklə
-  async function editProduct(docId) {
-    try {
-      const docRef = doc(db, "products", docId);
-      const docSnap = await getDoc(docRef);
+ import { getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-      if (!docSnap.exists()) {
-        alert("Məhsul tapılmadı!");
-        return;
-      }
-      const product = docSnap.data();
+async function editProduct(docId) {
+  try {
+    const docRef = doc(db, "products", docId);
+    const docSnap = await getDoc(docRef);  // düzəliş burada
 
-      productCodeInput.value = product.code;
-      productNameInput.value = product.name;
-      quill.root.innerHTML = product.description;
-
-      selectedMl = product.ml;
-      selectedPrice = product.price;
-      priceInput.value = selectedPrice;
-
-      mlButtons.forEach(btn => {
-        btn.classList.toggle("selected", btn.getAttribute("data-ml") === selectedMl);
-      });
-
-      productCodeInput.setAttribute("readonly", "readonly");
-
-      submitBtn.textContent = "Düzəlt";
-      cancelEditBtn.style.display = "inline-block";
-      formTitle.textContent = "Məhsulu düzəlt";
-
-      editDocId = docId;
-    } catch (error) {
-      alert("Məhsulu yükləmək mümkün olmadı.");
-      console.error(error);
+    if (!docSnap.exists()) {
+      alert("Məhsul tapılmadı!");
+      return;
     }
+    const product = docSnap.data();
+
+    productCodeInput.value = product.code;
+    productNameInput.value = product.name;
+    quill.root.innerHTML = product.description;
+
+    selectedMl = product.ml;
+    selectedPrice = product.price;
+    priceInput.value = selectedPrice;
+
+    mlButtons.forEach(btn => {
+      btn.classList.toggle("selected", btn.getAttribute("data-ml") === selectedMl);
+    });
+
+    productCodeInput.setAttribute("readonly", "readonly");
+    submitBtn.textContent = "Düzəlt";
+    cancelEditBtn.style.display = "inline-block";
+    formTitle.textContent = "Məhsulu düzəlt";
+
+    editDocId = docId;
+  } catch (error) {
+    console.error("Redaktə zamanı xəta: ", error);
+    alert("Məhsulu yükləmək mümkün olmadı.");
   }
+}
+
 
   // Formu sıfırla
   function resetForm() {
