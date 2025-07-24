@@ -87,7 +87,6 @@
       font-weight: bold;
       border-radius: 8px;
       transition: background-color 0.3s, color 0.3s;
-      user-select: none;
     }
     .theme-toggle:hover {
       background-color: var(--primary);
@@ -339,18 +338,14 @@
         height: 60vh;
       }
 
-      /* Navbar: logo ilə theme-toggle eyni sırada, sürüşməsin */
       .nav-container {
-        flex-direction: row !important;
-        align-items: center !important;
-        justify-content: space-between !important;
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
       }
 
-      /* Theme toggle font kiçik və padding azaldılıb */
       .theme-toggle {
-        font-size: 18px !important;
-        padding: 6px 12px !important;
-        width: auto !important;
+        align-self: flex-end;
       }
     }
   </style>
@@ -447,66 +442,132 @@
       const body = document.body;
       const button = document.getElementById('themeToggle');
       const isDark = body.classList.toggle('dark');
+      button.textContent = isDark ? 'AÇIQ MOD' : 'QARANLIQ MOD';
+      button.style.color = isDark ? '#ffffff' : '#2c3e50';
+    }
+  </script>
 
-      // Mobil üçün simvol, masaüstü üçün yazı
-      if (window.innerWidth <= 600) {
-        button.textContent = isDark ? '☀️' : '🌙';  // Dark → Günəş, Light → Ay
-        button.style.color = isDark ? '#ffffff' : '#2c3e50';
-      } else {
-        button.textContent = isDark ? 'AÇIQ MOD' : 'QARANLIQ MOD';
-        button.style.color = isDark ? '#ffffff' : '#2c3e50';
+  <!-- Firebase SDKs and Firestore integration -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCSaiU9DguIk47O8LPZ_Oa6StJgHbPqZ6I",
+      authDomain: "perfume-8b7f7.firebaseapp.com",
+      projectId: "perfume-8b7f7",
+      storageBucket: "perfume-8b7f7.appspot.com",
+      messagingSenderId: "899731999798",
+      appId: "1:899731999798:web:750af78287f56d15d41c97"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    function createProductCard(product) {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+
+      card.innerHTML = 
+        <h3>${product.name}</h3>
+        <p style="font-size: 14px; color: gray;">Kod: ${product.code || '-'}</p>
+      ;
+
+      card.addEventListener('click', () => openModal(product));
+
+      return card;
+    }
+
+    async function loadProducts() {
+      const productList = document.getElementById('product-list');
+      productList.innerHTML = '';
+
+      try {
+        const querySnapshot = await getDocs(collection(db, "products"));
+        if (querySnapshot.empty) {
+          productList.innerHTML = '<p style="text-align:center;">Məhsul tapılmadı</p>';
+          return;
+        }
+
+        querySnapshot.forEach(docSnap => {
+          const product = docSnap.data();
+          productList.appendChild(createProductCard(product));
+        });
+      } catch (error) {
+        console.error("Məhsullar yüklənərkən xəta:", error);
+        productList.innerHTML = '<p style="color:red; text-align:center;">Məhsullar yüklənərkən xəta baş verdi</p>';
       }
     }
 
-    // Pəncərə ölçüsü dəyişəndə toggle düyməsini yenilə
-    window.addEventListener('resize', () => {
-      const body = document.body;
-      const button = document.getElementById('themeToggle');
-      const isDark = body.classList.contains('dark');
-
-      if (window.innerWidth <= 600) {
-        button.textContent = isDark ? '☀️' : '🌙';
-        button.style.color = isDark ? '#ffffff' : '#2c3e50';
-      } else {
-        button.textContent = isDark ? 'AÇIQ MOD' : 'QARANLIQ MOD';
-        button.style.color = isDark ? '#ffffff' : '#2c3e50';
-      }
-    });
-
-    window.addEventListener('DOMContentLoaded', () => {
-      loadProducts();
-
-      // Modal close düyməsi əlavə et
-      const closeBtn = document.querySelector('.close-btn');
-      if (closeBtn) {
-        closeBtn.addEventListener('click', closeModal);
-      }
-
-      // İlk toggle düymə vəziyyətini təyin et
-      const body = document.body;
-      const button = document.getElementById('themeToggle');
-      const isDark = body.classList.contains('dark');
-
-      if (window.innerWidth <= 600) {
-        button.textContent = isDark ? '☀️' : '🌙';
-        button.style.color = isDark ? '#ffffff' : '#2c3e50';
-      } else {
-        button.textContent = isDark ? 'AÇIQ MOD' : 'QARANLIQ MOD';
-        button.style.color = isDark ? '#ffffff' : '#2c3e50';
-      }
-    });
-
-    // Aşağıda Firebase və modal üçün kodlar var...
-
     // Modal funksiyaları
+
     function openModal(product) {
       const modalTitle = document.getElementById('modalTitle');
       const modalDescription = document.getElementById('modalDescription');
       const modalPrice = document.getElementById('modalPrice');
 
       modalTitle.textContent = product.name;
-      modalDescription.innerHTML = product.description || 'Məhsul haqqında məlumat mövcud deyil.';
-      modalPrice.textContent = product.price ? `Qiymət: ${product.price} AZN` : '';
+      modalDescription.innerHTML = product.description || '';
+
+      let selectedVolume = '30 ml';
+      let price = 10;
+
+      const oldBtns = document.querySelectorAll('.volume-btn, #whatsappOrderBtn');
+      oldBtns.forEach(el => el.remove());
+
+      modalPrice.textContent = Qiymət: ${price} ₼;
+
+      const btn30 = document.createElement('button');
+      btn30.textContent = '30 ml';
+      btn30.className = 'volume-btn active';
+      btn30.style.marginRight = '10px';
+      btn30.style.padding = '6px 12px';
+      btn30.style.cursor = 'pointer';
+
+      const btn50 = document.createElement('button');
+      btn50.textContent = '50 ml';
+      btn50.className = 'volume-btn';
+      btn50.style.padding = '6px 12px';
+      btn50.style.cursor = 'pointer';
+
+      const whatsappBtn = document.createElement('button');
+      whatsappBtn.textContent = 'WhatsApp ilə Sifariş Ver';
+      whatsappBtn.id = 'whatsappOrderBtn';
+      whatsappBtn.style.marginTop = '15px';
+      whatsappBtn.style.padding = '10px 15px';
+      whatsappBtn.style.backgroundColor = '#25D366';
+      whatsappBtn.style.color = 'white';
+      whatsappBtn.style.border = 'none';
+      whatsappBtn.style.borderRadius = '8px';
+      whatsappBtn.style.cursor = 'pointer';
+      whatsappBtn.style.fontWeight = 'bold';
+
+      btn30.onclick = () => {
+        selectedVolume = '30 ml';
+        price = 10;
+        modalPrice.textContent = Qiymət: ${price} ₼;
+        btn30.classList.add('active');
+        btn50.classList.remove('active');
+      };
+
+      btn50.onclick = () => {
+        selectedVolume = '50 ml';
+        price = 13;
+        modalPrice.textContent = Qiymət: ${price} ₼;
+        btn50.classList.add('active');
+        btn30.classList.remove('active');
+      };
+
+      whatsappBtn.onclick = () => {
+        const phoneNumber = '994515817772';
+        const message = encodeURIComponent(Salam, mən "${product.name}" məhsulundan ${selectedVolume} almaq istəyirəm. Qiymət: ${price} ₼.);
+        const url = https://wa.me/${phoneNumber}?text=${message};
+        window.open(url, '_blank');
+      };
+
+      modalPrice.insertAdjacentElement('beforebegin', btn50);
+      modalPrice.insertAdjacentElement('beforebegin', btn30);
+      modalPrice.insertAdjacentElement('afterend', whatsappBtn);
 
       document.getElementById('productModal').classList.add('active');
     }
@@ -515,26 +576,17 @@
       document.getElementById('productModal').classList.remove('active');
     }
 
-    // Məhsulların yüklənməsi nümunə funksiyası (məsələn static massiv)
-    function loadProducts() {
-      const products = [
-        { id: 1, name: "Parfüm A", description: "Təzə qoxu, sitrus notları.", price: "30" },
-        { id: 2, name: "Parfüm B", description: "Şirin və zərif aroma.", price: "50" },
-        { id: 3, name: "Parfüm C", description: "Orta notlarda gül və meyvə.", price: "40" }
-      ];
+    document.getElementById('productModal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeModal();
+    });
 
-      const productList = document.getElementById('product-list');
-      productList.innerHTML = '';
-
-      products.forEach(product => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.textContent = product.name;
-        card.onclick = () => openModal(product);
-        productList.appendChild(card);
-      });
-    }
-
+    window.addEventListener('DOMContentLoaded', () => {
+      loadProducts();
+      const closeBtn = document.querySelector('.close-btn');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', closeModal);
+      }
+    });
   </script>
 </body>
 </html>
