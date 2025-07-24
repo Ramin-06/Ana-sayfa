@@ -1,444 +1,419 @@
 <!DOCTYPE html>
-<html lang="az">
+<html lang="tr">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Admin Panel</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Panel</title>
 
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <!-- Quill CSS -->
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 40px;
-            background-color: #f0f4f8;
-            color: #2c3e50;
-        }
-        h1 {
-            color: #1abc9c;
-            margin-bottom: 30px;
-        }
-        .container {
-            display: flex;
-            gap: 40px;
-            flex-wrap: wrap;
-        }
-        .form-section {
-            flex: 1;
-            min-width: 320px;
-            background: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .list-section {
-            flex: 1;
-            min-width: 400px;
-            background: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            overflow-x: auto;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        input {
-            width: 100%;
-            padding: 10px 15px;
-            margin-top: 5px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #1abc9c;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #16a085;
-        }
-        .ml-buttons {
-            margin: 10px 0 15px 0;
-        }
-        .ml-button {
-            display: inline-block;
-            padding: 8px 18px;
-            margin-right: 10px;
-            font-weight: bold;
-            border: 2px solid #1abc9c;
-            border-radius: 8px;
-            cursor: pointer;
-            background-color: white;
-            color: #1abc9c;
-            transition: all 0.3s ease;
-            user-select: none;
-            font-size: 15px;
-        }
-        .ml-button.selected {
-            background-color: #1abc9c;
-            color: white;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: left;
-            font-size: 16px;
-            white-space: nowrap;
-            vertical-align: top;
-        }
-        th {
-            background-color: #1abc9c;
-            color: white;
-        }
-        .delete-btn {
-            background-color: #e74c3c;
-            padding: 6px 12px;
-            border: none;
-            border-radius: 4px;
-            color: white;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
-            transition: background-color 0.3s ease;
-        }
-        .delete-btn:hover {
-            background-color: #c0392b;
-        }
-        .edit-btn {
-            background-color: #2980b9;
-            padding: 6px 12px;
-            border: none;
-            border-radius: 4px;
-            color: white;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
-            margin-right: 5px;
-            transition: background-color 0.3s ease;
-        }
-        .edit-btn:hover {
-            background-color: #1f618d;
-        }
-        #cancelEdit {
-            background-color: #e67e22;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 16px;
-            margin-left: 10px;
-            transition: background-color 0.3s ease;
-            margin-top: 12px;
-        }
-        #cancelEdit:hover {
-            background-color: #d35400;
-        }
-        #editor {
-            height: 150px;
-            background: white;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            margin-bottom: 20px;
-        }
-        #submitBtn {
-            margin-top: 12px;
-        }
-        .description-cell {
-            max-width: 300px;
-            overflow-wrap: break-word;
-            word-break: break-word;
-        }
-    </style>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background-color: #f0f4f8;
+      color: #2c3e50;
+    }
+    h1 {
+      color: #1abc9c;
+      margin-bottom: 30px;
+    }
+    .container {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .form-section {
+      flex: 1;
+      min-width: 320px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .list-section {
+      flex: 1;
+      min-width: 400px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      overflow-x: auto;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 10px 15px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #1abc9c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #16a085;
+    }
+    .ml-buttons {
+      margin: 10px 0 15px 0;
+    }
+    .ml-button {
+      display: inline-block;
+      padding: 8px 18px;
+      margin-right: 10px;
+      font-weight: bold;
+      border: 2px solid #1abc9c;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: white;
+      color: #1abc9c;
+      transition: all 0.3s ease;
+      user-select: none;
+      font-size: 15px;
+    }
+    .ml-button.selected {
+      background-color: #1abc9c;
+      color: white;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+      font-size: 16px;
+      white-space: nowrap;
+      vertical-align: top;
+    }
+    th {
+      background-color: #1abc9c;
+      color: white;
+    }
+    .delete-btn {
+      background-color: #e74c3c;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+    }
+    .delete-btn:hover {
+      background-color: #c0392b;
+    }
+    .edit-btn {
+      background-color: #2980b9;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      margin-right: 5px;
+      transition: background-color 0.3s ease;
+    }
+    .edit-btn:hover {
+      background-color: #1f618d;
+    }
+    #cancelEdit {
+      background-color: #e67e22;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      margin-left: 10px;
+      transition: background-color 0.3s ease;
+      margin-top: 12px; /* Düğmeler arası ve üst boşluk */
+    }
+    #cancelEdit:hover {
+      background-color: #d35400;
+    }
+    /* Quill editör yüksekliği ve altında boşluk */
+    #editor {
+      height: 150px;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 20px; /* burada boşluk */
+    }
+    /* Submit butonu üst boşluğu */
+    #submitBtn {
+      margin-top: 12px;
+    }
+    /* Description hücresinde içeriği düzgün göstermek */
+    .description-cell {
+      max-width: 300px;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+  </style>
 </head>
 <body>
 
-    <h1>Admin Panel</h1>
-    <div class="container">
+  <h1>Admin Panel</h1>
+  <div class="container">
 
-        <div class="form-section">
-            <h2 id="formTitle">Yeni məhsul əlavə et</h2>
-            <form id="productForm">
-                <label for="productCode">Məhsul kodu:</label>
-                <input type="text" id="productCode" name="Kod" required placeholder="P0001" /> 
+    <div class="form-section">
+      <h2 id="formTitle">Yeni məhsul əlavə et</h2>
+      <form id="productForm">
+        <label>Məhsul kodu:</label>
+        <input type="text" id="productCode" required placeholder="P0001" />
 
-                <label for="productName">Məhsul Adı:</label>
-                <input type="text" id="productName" name="Ad" required placeholder="Məhsul adı" /> 
+        <label>Məhsul Adı:</label>
+        <input type="text" id="productName" required placeholder="Məhsul adı" />
 
-                <label>Ölçü (Ml):</label>
-                <div class="ml-buttons">
-                    <span class="ml-button selected" data-ml="30" data-price="10">30 ml</span>
-                    <span class="ml-button" data-ml="50" data-price="13">50 ml</span>
-                </div>
-
-                <label for="productPrice">Qiymət:</label>
-                <input type="text" id="productPrice" name="Qiymət" disabled placeholder="Qiymət" />
-
-                <label>Məlumat:</label>
-                <div id="editor"></div>
-                <input type="hidden" id="productDescription" name="Təsvir"> 
-
-                <button type="submit" id="submitBtn">Əlavə et</button>
-                <button type="button" id="cancelEdit" style="display:none;">Ləğv et</button>
-            </form>
+        <label>Ölçü (Ml):</label>
+        <div class="ml-buttons">
+          <span class="ml-button selected" data-ml="30" data-price="10">30 ml</span>
+          <span class="ml-button" data-ml="50" data-price="13">50 ml</span>
         </div>
 
-        <div class="list-section">
-            <h2>Mövcud məhsullar</h2>
-            <table id="productTable">
-                <thead>
-                    <tr>
-                        <th>Kod</th>
-                        <th>Ad</th>
-                        <th>Ölçü (ml)</th>
-                        <th>Qiymət</th>
-                        <th>Təsvir</th> 
-                        <th>Proses</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    </tbody>
-            </table>
-        </div>
+        <label>Qiymət:</label>
+        <input type="text" id="productPrice" disabled placeholder="Qiymət" />
 
+        <label>Məlumat:</label>
+        <!-- Quill editör için div -->
+        <div id="editor"></div>
+
+        <button type="submit" id="submitBtn">Əlavə et</button>
+        <button type="button" id="cancelEdit" style="display:none;">Ləğv et</button>
+      </form>
     </div>
 
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <div class="list-section">
+      <h2>Mövcud məhsullar</h2>
+      <table id="productTable">
+        <thead>
+          <tr>
+            <th>Kod</th>
+            <th>Ad</th>
+            <th>Ölçü (ml)</th>
+            <th>Qiymət</th>
+            <th>Proses</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Ürünler buraya gelecek -->
+        </tbody>
+      </table>
+    </div>
 
-    <script>
-        // SİZİN GOOGLE APPS SCRIPT WEB APP URL-İNİZ BURADADIR!
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzB8yaDv0Yq-OdeFrE6e7u_byhyXP0_zDo4VSiqbDTSfJrJeI8v0wBaVBq62i9kvEFV/exec'; 
+  </div>
 
-        const form = document.getElementById("productForm");
-        const tableBody = document.querySelector("#productTable tbody");
+  <!-- Quill JS -->
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
-        const mlButtons = document.querySelectorAll(".ml-button");
-        const priceInput = document.getElementById("productPrice");
-        const productDescriptionInput = document.getElementById("productDescription"); 
+  <script>
+    const form = document.getElementById("productForm");
+    const tableBody = document.querySelector("#productTable tbody");
 
-        const submitBtn = document.getElementById("submitBtn");
-        const cancelEditBtn = document.getElementById("cancelEdit");
-        const formTitle = document.getElementById("formTitle");
-        const productCodeInput = document.getElementById("productCode");
-        const productNameInput = document.getElementById("productName");
-        
-        let selectedMl = "30";
-        let selectedPrice = "10";
-        let editingProductCode = null;
+    const mlButtons = document.querySelectorAll(".ml-button");
+    const priceInput = document.getElementById("productPrice");
 
-        const quill = new Quill('#editor', {
-            theme: 'snow',
-            placeholder: 'Məhsul açıqlaması',
-            modules: {
-                toolbar: [
-                    ['bold', 'italic', 'underline'],
-                    [{ 'header': 1 }, { 'header': 2 }],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                    [{ 'size': ['small', false, 'large', 'huge'] }],
-                    [{ 'color': [] }, { 'background': [] }],
-                    ['clean']
-                ]
-            }
-        });
+    const submitBtn = document.getElementById("submitBtn");
+    const cancelEditBtn = document.getElementById("cancelEdit");
+    const formTitle = document.getElementById("formTitle");
+    const productCodeInput = document.getElementById("productCode");
 
-        mlButtons.forEach(btn => {
-            btn.addEventListener("click", () => {
-                mlButtons.forEach(b => b.classList.remove("selected"));
-                btn.classList.add("selected");
+    let selectedMl = "30";
+    let selectedPrice = "10";
+    let editIndex = null;  // Düzenleme modundaysa bu index dolacak
 
-                selectedMl = btn.getAttribute("data-ml");
-                selectedPrice = btn.getAttribute("data-price");
-                priceInput.value = selectedPrice;
-            });
-        });
+    // Quill editörünü oluştur
+    const quill = new Quill('#editor', {
+      theme: 'snow',
+      placeholder: 'Məhsul açıqlaması',
+      modules: {
+        toolbar: [
+          ['bold', 'italic', 'underline'],        // Bold, italic, underline
+          [{ 'header': 1 }, { 'header': 2 }],    // Başlıqlar
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          [{ 'size': ['small', false, 'large', 'huge'] }], // Font ölçüsü
+          [{ 'color': [] }, { 'background': [] }],         // Rənglər
+          ['clean']                                        // Formatları təmizləmək
+        ]
+      }
+    });
 
-        async function getProducts() {
-            try {
-                const response = await fetch(APPS_SCRIPT_URL);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const products = await response.json();
-                return products;
-            } catch (error) {
-                console.error("Məhsullar yüklənərkən xəta baş verdi:", error);
-                alert("Məhsullar yüklənə bilmədi. İnternet bağlantınızı və ya Apps Script URL-inizi yoxlayın.");
-                return [];
-            }
+    // Ml butonları tıklama olayı
+    mlButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        mlButtons.forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+
+        selectedMl = btn.getAttribute("data-ml");
+        selectedPrice = btn.getAttribute("data-price");
+
+        priceInput.value = selectedPrice;
+      });
+    });
+
+    // Localstorage'dan ürünleri al
+    function getProducts() {
+      return JSON.parse(localStorage.getItem("products")) || [];
+    }
+
+    // Ürünleri tabloya yazdır
+    function renderProducts() {
+      const products = getProducts();
+      tableBody.innerHTML = "";
+
+      if (products.length === 0) {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td colspan="6" style="text-align:center; font-style: italic;">Hələ məhsul əlavə edilməyib...</td>`;
+        tableBody.appendChild(row);
+        return;
+      }
+
+      products.forEach((product, index) => {
+        const row = document.createElement("tr");
+
+        // Məlumatı HTML formatında göstəririk, təhlükəsizlik üçün safeləmək olar lazım olsa
+        row.innerHTML = `
+          <td>${product.code}</td>
+          <td>${product.name}</td>
+          <td>${product.ml}</td>
+          <td>${product.price}</td>
+           <td>
+            <button class="edit-btn" onclick="editProduct(${index})">Düzəlt</button>
+            <button class="delete-btn" onclick="deleteProduct(${index})">Sil</button>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Ürün ekle / düzenle işlemi
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const code = productCodeInput.value.trim();
+      const name = document.getElementById("productName").value.trim();
+      // Quill editörün HTML içeriği alınıyor
+      const description = quill.root.innerHTML.trim();
+      const price = priceInput.value.trim();
+
+      if (!code || !name || !price) {
+        alert("Zəruri olan yerləri doldurun.");
+        return;      
+      }
+
+      const products = getProducts();
+
+      if (editIndex === null) {
+        // Yeni ürün ekle
+        products.push({ code, name, price, description, ml: selectedMl });
+      } else {
+        // Var olan ürünü güncelle
+        products[editIndex] = { code, name, price, description, ml: selectedMl };
+      }
+
+      localStorage.setItem("products", JSON.stringify(products));
+
+      resetForm();
+      renderProducts();
+    });
+
+    // Ürün sil
+    function deleteProduct(index) {
+      if (confirm("Məhsul silinəcək! Razısınız?")) {
+        const products = getProducts();
+        products.splice(index, 1);
+        localStorage.setItem("products", JSON.stringify(products));
+        renderProducts();
+
+        if (editIndex === index) {
+          resetForm();
         }
+      }
+    }
 
-        async function renderProducts() {
-            const products = await getProducts();
-            tableBody.innerHTML = "";
+    // Ürün düzenleme fonksiyonu
+    function editProduct(index) {
+      const products = getProducts();
+      const product = products[index];
 
-            if (products.length === 0) {
-                const row = document.createElement("tr");
-                row.innerHTML = `<td colspan="6" style="text-align:center; font-style: italic;">Hələ məhsul əlavə edilməyib...</td>`;
-                tableBody.appendChild(row);
-                return;
-            }
+      productCodeInput.value = product.code;
+      document.getElementById("productName").value = product.name;
+      quill.root.innerHTML = product.description;
 
-            products.forEach((product) => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${product.Kod || ''}</td>
-                    <td>${product.Ad || ''}</td>
-                    <td>${product.Ölçü || ''}</td>
-                    <td>${product.Qiymət || ''}</td>
-                    <td class="description-cell">${product.Təsvir || ''}</td> 
-                    <td>
-                        <button class="edit-btn" onclick="editProduct('${product.Kod}')">Düzəlt</button>
-                        <button class="delete-btn" onclick="deleteProduct('${product.Kod}')">Sil</button>
-                    </td>
-                `;
-                tableBody.appendChild(row);
-            });
-        }
+      // Ml seçimini güncelle
+      selectedMl = product.ml;
+      selectedPrice = product.price;
+      priceInput.value = selectedPrice;
 
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
+      mlButtons.forEach(btn => {
+        btn.classList.toggle("selected", btn.getAttribute("data-ml") === selectedMl);
+      });
 
-            const code = productCodeInput.value.trim();
-            const name = productNameInput.value.trim();
-            const description = quill.root.innerHTML.trim();
-            const price = priceInput.value.trim();
-            const ml = selectedMl;
+      productCodeInput.setAttribute("readonly", "readonly"); // Kodu değiştirme
 
-            productDescriptionInput.value = description;
+      submitBtn.textContent = "Düzəlt";
+      cancelEditBtn.style.display = "inline-block";
+      formTitle.textContent = "Məhsulu düzəlt";
 
-            if (!code || !name || !price || !description) {
-                alert("Zəruri olan yerləri doldurun.");
-                return;
-            }
+      editIndex = index;
+    }
 
-            const productData = {
-                Kod: code,
-                Ad: name,
-                Ölçü: ml,
-                Qiymət: price,
-                Təsvir: description
-            };
-            
-            try {
-                const response = await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(productData)
-                });
+    // Formu sıfırla ve düzenleme modundan çık
+    function resetForm() {
+      form.reset();
 
-                const result = await response.json();
-                if (result.success) {
-                    alert(editingProductCode ? "Məhsul uğurla düzəldildi!" : "Məhsul uğurla əlavə edildi!");
-                    resetForm();
-                    renderProducts();
-                } else {
-                    alert("Əməliyyat zamanı xəta baş verdi: " + result.message);
-                }
-            } catch (error) {
-                console.error("Məlumat göndərilərkən xəta:", error);
-                alert("Məlumat göndərilərkən bir xəta baş verdi. Konsolu yoxlayın.");
-            }
-        });
+      selectedMl = "30";
+      selectedPrice = "10";
+      priceInput.value = selectedPrice;
+      mlButtons.forEach(b => b.classList.remove("selected"));
+      mlButtons[0].classList.add("selected");
 
-        async function deleteProduct(codeToDelete) {
-            if (confirm(`"${codeToDelete}" kodlu məhsulu silmək istədiyinizə əminsiniz?`)) {
-                try {
-                    const response = await fetch(`${APPS_SCRIPT_URL}?action=delete&Kod=${codeToDelete}`, {
-                        method: 'GET'
-                    });
-                    const result = await response.json();
-                    if (result.success) {
-                        alert("Məhsul uğurla silindi!");
-                        renderProducts();
-                        if (editingProductCode === codeToDelete) {
-                            resetForm();
-                        }
-                    } else {
-                        alert("Silmə zamanı xəta baş verdi: " + result.message);
-                    }
-                } catch (error) {
-                    console.error("Məhsul silinərkən xəta:", error);
-                    alert("Məhsul silinərkən bir xəta baş verdi. Konsolu yoxlayın.");
-                }
-            }
-        }
+      productCodeInput.removeAttribute("readonly");
+      submitBtn.textContent = "Əlavə et";
+      cancelEditBtn.style.display = "none";
+      formTitle.textContent = "Yeni məhsul əlavə et";
 
-        async function editProduct(codeToEdit) {
-            const products = await getProducts();
-            const product = products.find(p => p.Kod === codeToEdit);
+      // Quill içeriğini temizle
+      quill.setContents([]);
 
-            if (product) {
-                productCodeInput.value = product.Kod;
-                productNameInput.value = product.Ad;
-                quill.root.innerHTML = product.Təsvir || '';
+      editIndex = null;
+    }
 
-                selectedMl = product.Ölçü;
-                selectedPrice = product.Qiymət;
-                priceInput.value = selectedPrice;
+    // İptal butonu işlemi
+    cancelEditBtn.addEventListener("click", () => {
+      resetForm();
+    });
 
-                mlButtons.forEach(btn => {
-                    btn.classList.toggle("selected", btn.getAttribute("data-ml") === selectedMl);
-                });
+    window.deleteProduct = deleteProduct;
+    window.editProduct = editProduct;
 
-                productCodeInput.setAttribute("readonly", "readonly");
-                submitBtn.textContent = "Düzəlt";
-                cancelEditBtn.style.display = "inline-block";
-                formTitle.textContent = "Məhsulu düzəlt";
-                editingProductCode = codeToEdit;
-            } else {
-                alert("Düzəldiləcək məhsul tapılmadı.");
-            }
-        }
-
-        function resetForm() {
-            form.reset();
-            quill.setContents([]);
-
-            selectedMl = "30";
-            selectedPrice = "10";
-            priceInput.value = selectedPrice;
-            mlButtons.forEach(b => b.classList.remove("selected"));
-            mlButtons[0].classList.add("selected");
-
-            productCodeInput.removeAttribute("readonly");
-            submitBtn.textContent = "Əlavə et";
-            cancelEditBtn.style.display = "none";
-            formTitle.textContent = "Yeni məhsul əlavə et";
-
-            editingProductCode = null;
-        }
-
-        cancelEditBtn.addEventListener("click", () => {
-            resetForm();
-        });
-
-        window.deleteProduct = deleteProduct;
-        window.editProduct = editProduct;
-
-        window.onload = () => {
-            renderProducts();
-            priceInput.value = selectedPrice;
-        };
-    </script>
+    // Sayfa yüklendiğinde ürünleri göster
+    window.onload = () => {
+      renderProducts();
+      priceInput.value = selectedPrice;
+    };
+  </script>
 
 </body>
 </html>
