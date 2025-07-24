@@ -255,44 +255,53 @@
     }
 
     /* ✅ Modal içi düymələr üçün dizayn */
-.volume-btn {
-  background-color: var(--primary);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  padding: 8px 16px;
-  margin: 10px 8px 0 0;
-  transition: background-color 0.3s, transform 0.2s;
-}
+    .volume-btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      padding: 8px 16px;
+      margin: 10px 8px 0 0;
+      transition: background-color 0.3s, transform 0.2s;
+    }
 
-.volume-btn:hover {
-  background-color: #149b85;
-  transform: scale(1.05);
-}
+    .volume-btn:hover {
+      background-color: #149b85;
+      transform: scale(1.05);
+    }
 
-.volume-btn.active {
-  background-color: #0e7c68;
-}
+    .volume-btn.active {
+      background-color: #0e7c68;
+    }
 
-#whatsappOrderBtn {
-  background-color: #25D366;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-weight: bold;
-  padding: 12px 20px;
-  margin-top: 20px;
-  transition: background-color 0.3s, transform 0.2s;
-  display: block;
-  width: 100%;
-  text-align: center;
-}
+    #whatsappOrderBtn {
+      background-color: #25D366;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      padding: 12px 20px;
+      margin-top: 20px;
+      transition: background-color 0.3s, transform 0.2s;
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
 
-#whatsappOrderBtn:hover {
-  background-color: #1da851;
-  transform: scale(1.03);
-}
+    #whatsappOrderBtn:hover {
+      background-color: #1da851;
+      transform: scale(1.03);
+    }
+
+    /* PDF iframe styling */
+    #cataloguePdf {
+      width: 100%;
+      height: 80vh;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
   </style>
 </head>
 <body>
@@ -306,6 +315,7 @@
         <li><a id="nav-about" class="active" onclick="showSection('about')">Haqqımızda</a></li>
         <li><a id="nav-projects" onclick="showSection('projects')">Ətirlər</a></li>
         <li><a id="nav-contact" onclick="showSection('contact')">Əlaqə</a></li>
+        <li><a id="nav-catalogue" onclick="showSection('catalogue')">Kataloq</a></li>
       </ul>
       <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">QARANLIQ MOD</button>
     </div>
@@ -345,6 +355,11 @@
         <button type="submit">Göndər</button>
         <p id="successMessage"></p>
       </form>
+    </div>
+
+    <div id="catalogue" class="section">
+      <h2>Kataloq</h2>
+      <iframe id="cataloguePdf" src="urunlerim/KATALOQUM.pdf" allowfullscreen></iframe>
     </div>
   </main>
 
@@ -521,13 +536,11 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       loadProducts();
-const closeBtn = document.querySelector('.close-btn');
-  if (closeBtn) {
-    closeBtn.addEventListener('click', closeModal);
-  }
-      
+      const closeBtn = document.querySelector('.close-btn');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', closeModal);
+      }
     });
-
   </script>
 </body>
 </html>
