@@ -3,41 +3,234 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Admin Panel - Firestore modular</title>
+  <title>Admin Panel</title>
+
+  <!-- Quill CSS -->
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
   <style>
-    body { font-family: Arial; padding: 20px; }
-    label, input, button { display: block; margin: 10px 0; }
-    table { border-collapse: collapse; width: 100%; }
-    th, td { border: 1px solid #ccc; padding: 8px; }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background-color: #f0f4f8;
+      color: #2c3e50;
+    }
+    h1 {
+      color: #1abc9c;
+      margin-bottom: 30px;
+    }
+    .container {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .form-section {
+      flex: 1;
+      min-width: 320px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .list-section {
+      flex: 1;
+      min-width: 400px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      overflow-x: auto;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 10px 15px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #1abc9c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #16a085;
+    }
+    .ml-buttons {
+      margin: 10px 0 15px 0;
+    }
+    .ml-button {
+      display: inline-block;
+      padding: 8px 18px;
+      margin-right: 10px;
+      font-weight: bold;
+      border: 2px solid #1abc9c;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: white;
+      color: #1abc9c;
+      transition: all 0.3s ease;
+      user-select: none;
+      font-size: 15px;
+    }
+    .ml-button.selected {
+      background-color: #1abc9c;
+      color: white;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+      font-size: 16px;
+      white-space: nowrap;
+      vertical-align: top;
+    }
+    th {
+      background-color: #1abc9c;
+      color: white;
+    }
+    .delete-btn {
+      background-color: #e74c3c;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+    }
+    .delete-btn:hover {
+      background-color: #c0392b;
+    }
+    .edit-btn {
+      background-color: #2980b9;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      margin-right: 5px;
+      transition: background-color 0.3s ease;
+    }
+    .edit-btn:hover {
+      background-color: #1f618d;
+    }
+    #cancelEdit {
+      background-color: #e67e22;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      margin-left: 10px;
+      transition: background-color 0.3s ease;
+      margin-top: 12px; /* Düğmeler arası ve üst boşluk */
+    }
+    #cancelEdit:hover {
+      background-color: #d35400;
+    }
+    /* Quill editör yüksekliği ve altında boşluk */
+    #editor {
+      height: 150px;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 20px; /* burada boşluk */
+    }
+    /* Submit butonu üst boşluğu */
+    #submitBtn {
+      margin-top: 12px;
+    }
+    /* Description hücresinde içeriği düzgün göstermek */
+    .description-cell {
+      max-width: 300px;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
   </style>
 </head>
 <body>
 
   <h1>Admin Panel</h1>
+  <div class="container">
 
-  <form id="productForm">
-    <label>Kod:</label>
-    <input id="code" type="text" required placeholder="P0001" />
-    <label>Ad:</label>
-    <input id="name" type="text" required placeholder="Məhsul adı" />
-    <label>Qiymət:</label>
-    <input id="price" type="number" required placeholder="Qiymət" />
-    <button type="submit">Əlavə et</button>
-  </form>
+    <div class="form-section">
+      <h2 id="formTitle">Yeni məhsul əlavə et</h2>
+      <form id="productForm">
+        <label>Məhsul kodu:</label>
+        <input type="text" id="productCode" required placeholder="P0001" />
 
-  <h2>Məhsullar</h2>
-  <table>
-    <thead><tr><th>Kod</th><th>Ad</th><th>Qiymət</th><th>Sil</th></tr></thead>
-    <tbody id="productsList"></tbody>
-  </table>
+        <label>Məhsul Adı:</label>
+        <input type="text" id="productName" required placeholder="Məhsul adı" />
 
-  <!-- Firebase SDKs -->
+        <label>Ölçü (Ml):</label>
+        <div class="ml-buttons">
+          <span class="ml-button selected" data-ml="30" data-price="10">30 ml</span>
+          <span class="ml-button" data-ml="50" data-price="13">50 ml</span>
+        </div>
+
+        <label>Qiymət:</label>
+        <input type="text" id="productPrice" disabled placeholder="Qiymət" />
+
+        <label>Məlumat:</label>
+        <!-- Quill editör için div -->
+        <div id="editor"></div>
+
+        <button type="submit" id="submitBtn">Əlavə et</button>
+        <button type="button" id="cancelEdit" style="display:none;">Ləğv et</button>
+      </form>
+    </div>
+
+    <div class="list-section">
+      <h2>Mövcud məhsullar</h2>
+      <table id="productTable">
+        <thead>
+          <tr>
+            <th>Kod</th>
+            <th>Ad</th>
+            <th>Ölçü (ml)</th>
+            <th>Qiymət</th>
+            <th>Proses</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Ürünler buraya gelecek -->
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- Quill JS -->
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+  <!-- Firebase ve Firestore SDK-ları -->
   <script type="module">
-    // Importlar (modular Firebase 9+)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
-    import {
-      getFirestore, collection, addDoc, getDocs, deleteDoc, doc
-    } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyB9Kk69OTLmYfAFt69rK2WB5GTeHw1oejk",
@@ -50,57 +243,165 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const productsCol = collection(db, "products");
 
     const form = document.getElementById("productForm");
-    const productsList = document.getElementById("productsList");
+    const tableBody = document.querySelector("#productTable tbody");
+    const productCodeInput = document.getElementById("productCode");
+    const productNameInput = document.getElementById("productName");
+    const productPriceInput = document.getElementById("productPrice");
+    const submitBtn = document.getElementById("submitBtn");
+    const cancelEditBtn = document.getElementById("cancelEdit");
 
-    // Məhsulları ekrana yazdırırıq
-    async function loadProducts() {
-      productsList.innerHTML = "";
+    let selectedMl = "30";
+    let selectedPrice = "10";
+    let editDocId = null;
+
+    // Quill editor
+    const quill = new Quill('#editor', {
+      theme: 'snow',
+      placeholder: 'Məhsul açıqlaması',
+      modules: {
+        toolbar: [
+          ['bold', 'italic', 'underline'],
+          [{ 'header': 1 }, { 'header': 2 }],
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          [{ 'size': ['small', false, 'large', 'huge'] }],
+          [{ 'color': [] }, { 'background': [] }],
+          ['clean']
+        ]
+      }
+    });
+
+    // Ml button-ları event
+    document.querySelectorAll(".ml-button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".ml-button").forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        selectedMl = btn.getAttribute("data-ml");
+        selectedPrice = btn.getAttribute("data-price");
+        productPriceInput.value = selectedPrice;
+      });
+    });
+
+    // Firestore kolleksiyası
+    const productsCol = collection(db, "products");
+
+    // Məhsulları Firestore-dan çək və göstər
+    async function renderProducts() {
+      tableBody.innerHTML = "";
       const snapshot = await getDocs(productsCol);
+
+      if (snapshot.empty) {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td colspan="5" style="text-align:center; font-style: italic;">Hələ məhsul əlavə edilməyib...</td>`;
+        tableBody.appendChild(row);
+        return;
+      }
+
       snapshot.forEach(docSnap => {
-        const p = docSnap.data();
+        const product = docSnap.data();
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>${p.code}</td>
-          <td>${p.name}</td>
-          <td>${p.price}</td>
-          <td><button data-id="${docSnap.id}">Sil</button></td>
+          <td>${product.code}</td>
+          <td>${product.name}</td>
+          <td>${product.ml}</td>
+          <td>${product.price}</td>
+          <td>
+            <button class="edit-btn" data-id="${docSnap.id}">Düzəlt</button>
+            <button class="delete-btn" data-id="${docSnap.id}">Sil</button>
+          </td>
         `;
-        productsList.appendChild(tr);
+        tableBody.appendChild(tr);
       });
-      // Sil düymələrinə dinamik event əlavə edirik
-      productsList.querySelectorAll("button").forEach(btn => {
+
+      // Edit düyməsi
+      tableBody.querySelectorAll(".edit-btn").forEach(btn => {
         btn.onclick = async () => {
           const id = btn.getAttribute("data-id");
-          await deleteDoc(doc(db, "products", id));
-          loadProducts();
+          const docRef = doc(db, "products", id);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            productCodeInput.value = data.code;
+            productNameInput.value = data.name;
+            productPriceInput.value = data.price;
+            quill.root.innerHTML = data.description || "";
+            selectedMl = data.ml;
+            document.querySelectorAll(".ml-button").forEach(b => {
+              b.classList.toggle("selected", b.getAttribute("data-ml") === selectedMl);
+            });
+            productCodeInput.setAttribute("readonly", "readonly");
+            submitBtn.textContent = "Düzəlt";
+            cancelEditBtn.style.display = "inline-block";
+            editDocId = id;
+          }
+        };
+      });
+
+      // Delete düyməsi
+      tableBody.querySelectorAll(".delete-btn").forEach(btn => {
+        btn.onclick = async () => {
+          const id = btn.getAttribute("data-id");
+          if (confirm("Məhsul silinəcək! Razısınız?")) {
+            await deleteDoc(doc(db, "products", id));
+            renderProducts();
+            if (editDocId === id) resetForm();
+          }
         };
       });
     }
 
-    form.addEventListener("submit", async (e) => {
+    // Form submit
+    form.addEventListener("submit", async e => {
       e.preventDefault();
-      const code = form.code.value.trim();
-      const name = form.name.value.trim();
-      const price = form.price.value.trim();
+
+      const code = productCodeInput.value.trim();
+      const name = productNameInput.value.trim();
+      const price = productPriceInput.value.trim();
+      const description = quill.root.innerHTML.trim();
 
       if (!code || !name || !price) {
-        alert("Bütün sahələri doldurun!");
+        alert("Zəruri olan yerləri doldurun.");
         return;
       }
 
-      try {
-        await addDoc(productsCol, { code, name, price });
-        form.reset();
-        loadProducts();
-      } catch (err) {
-        alert("Xəta: " + err.message);
+      if (editDocId) {
+        // Update
+        const docRef = doc(db, "products", editDocId);
+        await updateDoc(docRef, { code, name, price, description, ml: selectedMl });
+        editDocId = null;
+      } else {
+        // Yeni əlavə et
+        await addDoc(productsCol, { code, name, price, description, ml: selectedMl });
       }
+
+      resetForm();
+      renderProducts();
     });
 
-    loadProducts();
+    // Form reset
+    function resetForm() {
+      form.reset();
+      quill.setContents([]);
+      selectedMl = "30";
+      selectedPrice = "10";
+      productPriceInput.value = selectedPrice;
+      document.querySelectorAll(".ml-button").forEach(b => b.classList.remove("selected"));
+      document.querySelector(".ml-button[data-ml='30']").classList.add("selected");
+      productCodeInput.removeAttribute("readonly");
+      submitBtn.textContent = "Əlavə et";
+      cancelEditBtn.style.display = "none";
+      editDocId = null;
+    }
+
+    cancelEditBtn.addEventListener("click", () => {
+      resetForm();
+    });
+
+    window.onload = () => {
+      renderProducts();
+      productPriceInput.value = selectedPrice;
+    };
   </script>
 
 </body>
