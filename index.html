@@ -384,177 +384,145 @@
       button.textContent = isDark ? 'AÇIQ MOD' : 'QARANLIQ MOD';
       button.style.color = isDark ? '#ffffff' : '#2c3e50';
     }
+  </script>
 
-    // Məhsullar - nümunə məlumatlar
-    const products = [
-      { name: "Parfüm 1", price: "45", description: "Parfüm 1 təsviri." },
-      { name: "Parfüm 2", price: "55", description: "Parfüm 2 təsviri." },
-      { name: "Parfüm 3", price: "65", description: "Parfüm 3 təsviri." }
-    ];
+  <!-- Firebase SDKs and Firestore integration -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // Məhsul kartı yaratma funksiyası
+    const firebaseConfig = {
+      apiKey: "AIzaSyCSaiU9DguIk47O8LPZ_Oa6StJgHbPqZ6I",
+      authDomain: "perfume-8b7f7.firebaseapp.com",
+      projectId: "perfume-8b7f7",
+      storageBucket: "perfume-8b7f7.appspot.com",
+      messagingSenderId: "899731999798",
+      appId: "1:899731999798:web:750af78287f56d15d41c97"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
     function createProductCard(product) {
-  const card = document.createElement('div');
-  card.className = 'product-card';
+      const card = document.createElement('div');
+      card.className = 'product-card';
 
-  card.innerHTML = `
-    <h3>${product.name}</h3>
-    <p style="font-size: 14px; color: gray;">Kod: ${product.code}</p>
-    <!--<p style="color: var(--primary); font-weight: bold;">${product.price} ₼</p>-->
-    
-  `;
+      card.innerHTML = `
+        <h3>${product.name}</h3>
+        <p style="font-size: 14px; color: gray;">Kod: ${product.code || '-'}</p>
+      `;
 
-  card.addEventListener('click', () => openModal(product));
+      card.addEventListener('click', () => openModal(product));
 
-  return card;
-}
-    
-    // Modal açma funksiyası
-function openModal(product) {
-  const modalTitle = document.getElementById('modalTitle');
-  const modalDescription = document.getElementById('modalDescription');
-  const modalPrice = document.getElementById('modalPrice');
+      return card;
+    }
 
-  modalTitle.textContent = product.name;
-  modalDescription.innerHTML = product.description;
+    async function loadProducts() {
+      const productList = document.getElementById('product-list');
+      productList.innerHTML = '';
 
-  let selectedVolume = '30 ml';
-  let price = 10;
+      try {
+        const querySnapshot = await getDocs(collection(db, "products"));
+        if (querySnapshot.empty) {
+          productList.innerHTML = '<p style="text-align:center;">Məhsul tapılmadı</p>';
+          return;
+        }
 
-  // Köhnə butonları və sifariş düyməsini sil
-  const oldBtns = document.querySelectorAll('.volume-btn, #whatsappOrderBtn');
-  oldBtns.forEach(el => el.remove());
+        querySnapshot.forEach(docSnap => {
+          const product = docSnap.data();
+          productList.appendChild(createProductCard(product));
+        });
+      } catch (error) {
+        console.error("Məhsullar yüklənərkən xəta:", error);
+        productList.innerHTML = '<p style="color:red; text-align:center;">Məhsullar yüklənərkən xəta baş verdi</p>';
+      }
+    }
 
-  modalPrice.textContent = `Qiymət: ${price} ₼`;
+    // Modal funksiyaları
 
-  // 30 ml və 50 ml düymələri yarat
-  const btn30 = document.createElement('button');
-  btn30.textContent = '30 ml';
-  btn30.className = 'volume-btn active';
-  btn30.style.marginRight = '10px';
-  btn30.style.padding = '6px 12px';
-  btn30.style.cursor = 'pointer';
+    function openModal(product) {
+      const modalTitle = document.getElementById('modalTitle');
+      const modalDescription = document.getElementById('modalDescription');
+      const modalPrice = document.getElementById('modalPrice');
 
-  const btn50 = document.createElement('button');
-  btn50.textContent = '50 ml';
-  btn50.className = 'volume-btn';
-  btn50.style.padding = '6px 12px';
-  btn50.style.cursor = 'pointer';
+      modalTitle.textContent = product.name;
+      modalDescription.innerHTML = product.description || '';
 
-  // WhatsApp sifariş düyməsi
-  const whatsappBtn = document.createElement('button');
-  whatsappBtn.textContent = 'WhatsApp ilə Sifariş Ver';
-  whatsappBtn.id = 'whatsappOrderBtn';
-  whatsappBtn.style.marginTop = '15px';
-  whatsappBtn.style.padding = '10px 15px';
-  whatsappBtn.style.backgroundColor = '#25D366';
-  whatsappBtn.style.color = 'white';
-  whatsappBtn.style.border = 'none';
-  whatsappBtn.style.borderRadius = '8px';
-  whatsappBtn.style.cursor = 'pointer';
-  whatsappBtn.style.fontWeight = 'bold';
+      let selectedVolume = '30 ml';
+      let price = 10;
 
-  // Buton klikləri
-  btn30.onclick = () => {
-    selectedVolume = '30 ml';
-    price = 10;
-    modalPrice.textContent = `Qiymət: ${price} ₼`;
-    btn30.classList.add('active');
-    btn50.classList.remove('active');
-  };
+      const oldBtns = document.querySelectorAll('.volume-btn, #whatsappOrderBtn');
+      oldBtns.forEach(el => el.remove());
 
-  btn50.onclick = () => {
-    selectedVolume = '50 ml';
-    price = 13;
-    modalPrice.textContent = `Qiymət: ${price} ₼`;
-    btn50.classList.add('active');
-    btn30.classList.remove('active');
-  };
+      modalPrice.textContent = `Qiymət: ${price} ₼`;
 
-  // WhatsApp düyməsinə link ver
-  whatsappBtn.onclick = () => {
-    const phoneNumber = '994515817772'; // nömrəni bura yaz
-    const message = encodeURIComponent(`Salam, mən "${product.name}" məhsulundan ${selectedVolume} almaq istəyirəm. Qiymət: ${price} ₼.`);
-    const url = `https://wa.me/${phoneNumber}?text=${message}`;
-    window.open(url, '_blank');
-  };
+      const btn30 = document.createElement('button');
+      btn30.textContent = '30 ml';
+      btn30.className = 'volume-btn active';
+      btn30.style.marginRight = '10px';
+      btn30.style.padding = '6px 12px';
+      btn30.style.cursor = 'pointer';
 
-  // Butonları qiymətin ÜSTÜNƏ yerləşdir
-  modalPrice.insertAdjacentElement('beforebegin', btn50);
-  modalPrice.insertAdjacentElement('beforebegin', btn30);
-  modalPrice.insertAdjacentElement('afterend', whatsappBtn);
+      const btn50 = document.createElement('button');
+      btn50.textContent = '50 ml';
+      btn50.className = 'volume-btn';
+      btn50.style.padding = '6px 12px';
+      btn50.style.cursor = 'pointer';
 
-  // Modalı göstər
-  document.getElementById('productModal').classList.add('active');
-}
+      const whatsappBtn = document.createElement('button');
+      whatsappBtn.textContent = 'WhatsApp ilə Sifariş Ver';
+      whatsappBtn.id = 'whatsappOrderBtn';
+      whatsappBtn.style.marginTop = '15px';
+      whatsappBtn.style.padding = '10px 15px';
+      whatsappBtn.style.backgroundColor = '#25D366';
+      whatsappBtn.style.color = 'white';
+      whatsappBtn.style.border = 'none';
+      whatsappBtn.style.borderRadius = '8px';
+      whatsappBtn.style.cursor = 'pointer';
+      whatsappBtn.style.fontWeight = 'bold';
 
-    // Modal bağlama funksiyası
+      btn30.onclick = () => {
+        selectedVolume = '30 ml';
+        price = 10;
+        modalPrice.textContent = `Qiymət: ${price} ₼`;
+        btn30.classList.add('active');
+        btn50.classList.remove('active');
+      };
+
+      btn50.onclick = () => {
+        selectedVolume = '50 ml';
+        price = 13;
+        modalPrice.textContent = `Qiymət: ${price} ₼`;
+        btn50.classList.add('active');
+        btn30.classList.remove('active');
+      };
+
+      whatsappBtn.onclick = () => {
+        const phoneNumber = '994515817772';
+        const message = encodeURIComponent(`Salam, mən "${product.name}" məhsulundan ${selectedVolume} almaq istəyirəm. Qiymət: ${price} ₼.`);
+        const url = `https://wa.me/${phoneNumber}?text=${message}`;
+        window.open(url, '_blank');
+      };
+
+      modalPrice.insertAdjacentElement('beforebegin', btn50);
+      modalPrice.insertAdjacentElement('beforebegin', btn30);
+      modalPrice.insertAdjacentElement('afterend', whatsappBtn);
+
+      document.getElementById('productModal').classList.add('active');
+    }
+
     function closeModal() {
       document.getElementById('productModal').classList.remove('active');
     }
 
-    // Modal xaricinə klikləyəndə bağla
     document.getElementById('productModal').addEventListener('click', (e) => {
       if (e.target === e.currentTarget) closeModal();
     });
 
-    // Məhsulları yükləyən funksiyası
-    function getStoredProducts() {
-  const stored = localStorage.getItem("products");
-  if (stored) {
-    try {
-      return JSON.parse(stored);
-    } catch {
-      return null;
-    }
-  }
-  return null;
-}
-
-function loadProducts() {
-  const productList = document.getElementById('product-list');
-  productList.innerHTML = '';
-
-  const storedProducts = getStoredProducts();
-  const productsToShow = storedProducts && storedProducts.length > 0 ? storedProducts : [
-    { name: "Parfüm 1", price: "45", description: "Parfüm 1 təsviri." },
-    { name: "Parfüm 2", price: "55", description: "Parfüm 2 təsviri." },
-    { name: "Parfüm 3", price: "65", description: "Parfüm 3 təsviri." }
-  ];
-
-  productsToShow.forEach(product => {
-    productList.appendChild(createProductCard(product));
-  });
-}
-
-
-    // Form göndərmə və mesaj
-    const form = document.getElementById("contactForm");
-    const successMessage = document.getElementById("successMessage");
-
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      fetch(form.action, {
-        method: "POST",
-        body: new FormData(form)
-      })
-      .then(() => {
-        form.reset();
-        successMessage.style.display = "block";
-        successMessage.style.color = "green";
-        successMessage.textContent = "Mesajınız başarıyla gönderildi.";
-      })
-      .catch(() => {
-        successMessage.style.display = "block";
-        successMessage.style.color = "red";
-        successMessage.textContent = "Bir hata oluştu. Lütfen tekrar deneyin.";
-      });
-    });
-
-    // Səhifə yüklənəndə məhsulları yüklə
     window.addEventListener('DOMContentLoaded', () => {
       loadProducts();
     });
+
   </script>
 </body>
 </html>
