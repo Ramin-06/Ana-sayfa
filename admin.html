@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Admin Panel (Firestore ilə)</title>
+  <title>Admin Panel - Firestore ilə</title>
 
   <!-- Quill CSS -->
   <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
@@ -166,7 +166,7 @@
 </head>
 <body>
 
-  <h1>Admin Panel (Firestore ilə)</h1>
+  <h1>Admin Panel</h1>
   <div class="container">
 
     <div class="form-section">
@@ -207,21 +207,23 @@
             <th>Proses</th>
           </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>
+          <!-- Məhsullar bura gələcək -->
+        </tbody>
       </table>
     </div>
 
   </div>
 
-  <!-- Quill JS -->
-  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
-  <!-- Firebase SDK CDN -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
+  <!-- Quill JS -->
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
   <script>
-    // Firebase config
+    // Firebase konfiqurasiyası (sənin məlumatların)
     const firebaseConfig = {
       apiKey: "AIzaSyB9Kk69OTLmYfAFt69rK2WB5GTeHw1oejk",
       authDomain: "etirsayti.firebaseapp.com",
@@ -231,11 +233,26 @@
       appId: "1:15600931485:web:a5c212bfe04fb7556d7a74"
     };
 
-    // Initialize Firebase
+    // Firebase initialize
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // Quill editörünü oluştur
+    const form = document.getElementById("productForm");
+    const tableBody = document.querySelector("#productTable tbody");
+
+    const mlButtons = document.querySelectorAll(".ml-button");
+    const priceInput = document.getElementById("productPrice");
+
+    const submitBtn = document.getElementById("submitBtn");
+    const cancelEditBtn = document.getElementById("cancelEdit");
+    const formTitle = document.getElementById("formTitle");
+    const productCodeInput = document.getElementById("productCode");
+
+    let selectedMl = "30";
+    let selectedPrice = "10";
+    let editDocId = null;  // Düzenleme modundaysa Firestore doc id-si burada olacaq
+
+    // Quill editörü oluştur
     const quill = new Quill('#editor', {
       theme: 'snow',
       placeholder: 'Məhsul açıqlaması',
@@ -251,18 +268,6 @@
       }
     });
 
-    const form = document.getElementById("productForm");
-    const tableBody = document.querySelector("#productTable tbody");
-    const mlButtons = document.querySelectorAll(".ml-button");
-    const priceInput = document.getElementById("productPrice");
-    const submitBtn = document.getElementById("submitBtn");
-    const cancelEditBtn = document.getElementById("cancelEdit");
-    const formTitle = document.getElementById("formTitle");
-    const productCodeInput = document.getElementById("productCode");
-    let selectedMl = "30";
-    let selectedPrice = "10";
-    let editDocId = null; // Düzenleme modunda document ID
-
     // Ml butonları tıklama olayı
     mlButtons.forEach(btn => {
       btn.addEventListener("click", () => {
@@ -276,50 +281,41 @@
       });
     });
 
-    // Firestore'dan ürünleri çek ve tabloya yazdır
-    function renderProducts() {
-      db.collection("products").orderBy("code").get()
-        .then((querySnapshot) => {
-          tableBody.innerHTML = "";
+    // Məhsulları Firestore-dan çəkib cədvələ yazdır
+    async function renderProducts() {
+      tableBody.innerHTML = "";
 
-          if (querySnapshot.empty) {
-            const row = document.createElement("tr");
-            row.innerHTML = `<td colspan="5" style="text-align:center; font-style: italic;">Hələ məhsul əlavə edilməyib...</td>`;
-            tableBody.appendChild(row);
-            return;
-          }
+      try {
+        const snapshot = await db.collection("products").orderBy("code").get();
 
-          querySnapshot.forEach((doc) => {
-            const product = doc.data();
-            const row = document.createElement("tr");
-            row.innerHTML = `
-              <td>${product.code}</td>
-              <td>${product.name}</td>
-              <td>${product.ml}</td>
-              <td>${product.price}</td>
-              <td>
-                <button class="edit-btn" data-id="${doc.id}">Düzəlt</button>
-                <button class="delete-btn" data-id="${doc.id}">Sil</button>
-              </td>
-            `;
-            tableBody.appendChild(row);
-          });
+        if (snapshot.empty) {
+          tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; font-style: italic;">Hələ məhsul əlavə edilməyib...</td></tr>`;
+          return;
+        }
 
-          // Edit və delete düymələrinə event əlavə et
-          document.querySelectorAll(".edit-btn").forEach(btn => {
-            btn.addEventListener("click", () => editProduct(btn.getAttribute("data-id")));
-          });
-          document.querySelectorAll(".delete-btn").forEach(btn => {
-            btn.addEventListener("click", () => deleteProduct(btn.getAttribute("data-id")));
-          });
-        })
-        .catch((error) => {
-          alert("Məhsullar yüklənərkən xəta baş verdi: " + error);
+        snapshot.forEach(doc => {
+          const product = doc.data();
+
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${product.code}</td>
+            <td>${product.name}</td>
+            <td>${product.ml}</td>
+            <td>${product.price}</td>
+            <td>
+              <button class="edit-btn" onclick="editProduct('${doc.id}')">Düzəlt</button>
+              <button class="delete-btn" onclick="deleteProduct('${doc.id}')">Sil</button>
+            </td>
+          `;
+          tableBody.appendChild(row);
         });
+      } catch (error) {
+        tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:red;">Xəta: ${error.message}</td></tr>`;
+      }
     }
 
-    // Yeni məhsul əlavə və ya düzəliş et
-    form.addEventListener("submit", e => {
+    // Məhsul əlavə et / düzəlt
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const code = productCodeInput.value.trim();
@@ -332,84 +328,86 @@
         return;
       }
 
-      const productData = { code, name, description, price, ml: selectedMl };
+      try {
+        if (editDocId === null) {
+          // Yeni məhsul əlavə et
+          await db.collection("products").add({
+            code,
+            name,
+            price,
+            description,
+            ml: selectedMl
+          });
+          alert("Məhsul əlavə edildi!");
+        } else {
+          // Mövcud məhsulu yenilə
+          await db.collection("products").doc(editDocId).update({
+            code,
+            name,
+            price,
+            description,
+            ml: selectedMl
+          });
+          alert("Məhsul yeniləndi!");
+        }
 
-      if (editDocId === null) {
-        // Yeni əlavə
-        db.collection("products").add(productData)
-          .then(() => {
-            alert("Məhsul əlavə edildi.");
-            resetForm();
-            renderProducts();
-          })
-          .catch(error => {
-            alert("Məhsul əlavə edilərkən xəta: " + error);
-          });
-      } else {
-        // Düzəliş et
-        db.collection("products").doc(editDocId).set(productData)
-          .then(() => {
-            alert("Məhsul yeniləndi.");
-            resetForm();
-            renderProducts();
-          })
-          .catch(error => {
-            alert("Məhsul yenilənərkən xəta: " + error);
-          });
+        resetForm();
+        renderProducts();
+      } catch (error) {
+        alert("Xəta baş verdi: " + error.message);
       }
     });
 
     // Məhsulu sil
-    function deleteProduct(docId) {
+    async function deleteProduct(id) {
       if (confirm("Məhsul silinəcək! Razısınız?")) {
-        db.collection("products").doc(docId).delete()
-          .then(() => {
-            alert("Məhsul silindi.");
-            if (editDocId === docId) resetForm();
-            renderProducts();
-          })
-          .catch(error => {
-            alert("Məhsul silinərkən xəta: " + error);
-          });
+        try {
+          await db.collection("products").doc(id).delete();
+          alert("Məhsul silindi!");
+          if (editDocId === id) resetForm();
+          renderProducts();
+        } catch (error) {
+          alert("Xəta baş verdi: " + error.message);
+        }
       }
     }
 
-    // Məhsulu redaktə et (Firestore-dan oxu)
-    function editProduct(docId) {
-      db.collection("products").doc(docId).get()
-        .then(docSnap => {
-          if (!docSnap.exists) {
-            alert("Məhsul tapılmadı!");
-            return;
-          }
-          const product = docSnap.data();
+    // Məhsulu redaktə et
+    async function editProduct(id) {
+      try {
+        const doc = await db.collection("products").doc(id).get();
+        if (!doc.exists) {
+          alert("Məhsul tapılmadı!");
+          return;
+        }
 
-          productCodeInput.value = product.code;
-          document.getElementById("productName").value = product.name;
-          quill.root.innerHTML = product.description;
+        const product = doc.data();
 
-          selectedMl = product.ml;
-          selectedPrice = product.price;
-          priceInput.value = selectedPrice;
+        productCodeInput.value = product.code;
+        document.getElementById("productName").value = product.name;
+        quill.root.innerHTML = product.description;
 
-          mlButtons.forEach(btn => {
-            btn.classList.toggle("selected", btn.getAttribute("data-ml") === selectedMl);
-          });
+        selectedMl = product.ml;
+        selectedPrice = product.price;
+        priceInput.value = selectedPrice;
 
-          productCodeInput.setAttribute("readonly", "readonly");
-
-          submitBtn.textContent = "Düzəlt";
-          cancelEditBtn.style.display = "inline-block";
-          formTitle.textContent = "Məhsulu düzəlt";
-
-          editDocId = docId;
-        })
-        .catch(error => {
-          alert("Məhsul yüklənərkən xəta: " + error);
+        mlButtons.forEach(btn => {
+          btn.classList.toggle("selected", btn.getAttribute("data-ml") === selectedMl);
         });
+
+        productCodeInput.setAttribute("readonly", "readonly");
+
+        submitBtn.textContent = "Düzəlt";
+        cancelEditBtn.style.display = "inline-block";
+        formTitle.textContent = "Məhsulu düzəlt";
+
+        editDocId = id;
+      } catch (error) {
+        alert("Xəta baş verdi: " + error.message);
+      }
     }
 
-    // Formu sıfırla
+    // Formu sıfırla və redaktə rejimindən çıx
     function resetForm() {
       form.reset();
 
@@ -433,7 +431,11 @@
       resetForm();
     });
 
-    // Səhifə yüklənəndə məhsulları göstər
+    // Globallığa çıxartmaq (onclick üçün)
+    window.deleteProduct = deleteProduct;
+    window.editProduct = editProduct;
+
+    // Sayfa yüklənəndə məhsulları göstər
     window.onload = () => {
       renderProducts();
       priceInput.value = selectedPrice;
