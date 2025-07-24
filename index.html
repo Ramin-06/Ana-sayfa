@@ -468,10 +468,10 @@
       const card = document.createElement('div');
       card.className = 'product-card';
 
-      card.innerHTML = 
+      card.innerHTML = `
         <h3>${product.name}</h3>
         <p style="font-size: 14px; color: gray;">Kod: ${product.code || '-'}</p>
-      ;
+      `;
 
       card.addEventListener('click', () => openModal(product));
 
@@ -515,7 +515,7 @@
       const oldBtns = document.querySelectorAll('.volume-btn, #whatsappOrderBtn');
       oldBtns.forEach(el => el.remove());
 
-      modalPrice.textContent = Qiymət: ${price} ₼;
+      modalPrice.textContent = `Qiymət: ${price} ₼`;
 
       const btn30 = document.createElement('button');
       btn30.textContent = '30 ml';
@@ -545,7 +545,7 @@
       btn30.onclick = () => {
         selectedVolume = '30 ml';
         price = 10;
-        modalPrice.textContent = Qiymət: ${price} ₼;
+        modalPrice.textContent = `Qiymət: ${price} ₼`;
         btn30.classList.add('active');
         btn50.classList.remove('active');
       };
@@ -553,15 +553,15 @@
       btn50.onclick = () => {
         selectedVolume = '50 ml';
         price = 13;
-        modalPrice.textContent = Qiymət: ${price} ₼;
+        modalPrice.textContent = `Qiymət: ${price} ₼`;
         btn50.classList.add('active');
         btn30.classList.remove('active');
       };
 
       whatsappBtn.onclick = () => {
         const phoneNumber = '994515817772';
-        const message = encodeURIComponent(Salam, mən "${product.name}" məhsulundan ${selectedVolume} almaq istəyirəm. Qiymət: ${price} ₼.);
-        const url = https://wa.me/${phoneNumber}?text=${message};
+        const message = encodeURIComponent(`Salam, mən "${product.name}" məhsulundan ${selectedVolume} almaq istəyirəm. Qiymət: ${price} ₼.`);
+        const url = `https://wa.me/${phoneNumber}?text=${message}`;
         window.open(url, '_blank');
       };
 
