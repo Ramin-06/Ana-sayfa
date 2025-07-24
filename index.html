@@ -53,7 +53,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: nowrap;
+      position: relative;
     }
     nav ul {
       list-style: none;
@@ -83,20 +83,26 @@
       background: var(--card-bg);
       color: var(--nav-text);
       border: 1px solid var(--nav-text);
+      padding: 8px 14px;
       cursor: pointer;
+      font-weight: bold;
       border-radius: 8px;
-      font-size: 20px;
-      width: 45px;
-      height: 45px;
+      transition: background-color 0.3s, color 0.3s;
       display: flex;
       align-items: center;
-      justify-content: center;
-      padding: 0;
-      transition: background-color 0.3s, color 0.3s;
+      gap: 6px;
+      font-size: 16px;
     }
     .theme-toggle:hover {
       background-color: var(--primary);
       color: #fff;
+    }
+    .theme-toggle .icon {
+      font-size: 18px;
+      user-select: none;
+    }
+    .theme-toggle .text {
+      user-select: none;
     }
     main {
       flex: 1;
@@ -147,7 +153,6 @@
     .product-card:hover {
       transform: scale(1.02);
     }
- 
     #contactForm {
       max-width: 600px;
       margin: auto;
@@ -217,7 +222,6 @@
       padding: 20px;
       margin-top: auto;
     }
-
     /* Modal Styles */
     .modal {
       display: none;
@@ -259,7 +263,6 @@
       cursor: pointer;
       user-select: none;
     }
-
     /* ✅ Modal içi düymələr üçün dizayn */
     .volume-btn {
       background-color: var(--primary);
@@ -271,16 +274,13 @@
       margin: 10px 8px 0 0;
       transition: background-color 0.3s, transform 0.2s;
     }
-
     .volume-btn:hover {
       background-color: #149b85;
       transform: scale(1.05);
     }
-
     .volume-btn.active {
       background-color: #0e7c68;
     }
-
     #whatsappOrderBtn {
       background-color: #25D366;
       color: white;
@@ -294,12 +294,10 @@
       width: 100%;
       text-align: center;
     }
-
     #whatsappOrderBtn:hover {
       background-color: #1da851;
       transform: scale(1.03);
     }
-
     /* PDF iframe styling */
     #cataloguePdf {
       width: 100%;
@@ -308,52 +306,54 @@
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-
     /* --- Mobil üçün responsiv dizayn --- */
     @media (max-width: 600px) {
       #product-list {
         grid-template-columns: 1fr !important;
         gap: 15px;
       }
-
       nav ul {
         flex-wrap: wrap;
         gap: 10px;
       }
-
       nav ul li a {
         padding: 10px 8px;
         font-size: 14px;
       }
-
       #contactForm input,
       #contactForm textarea {
         font-size: 14px;
       }
-
       #contactForm button {
         font-size: 16px;
         padding: 10px;
       }
-
       .product-card h3 {
         font-size: 18px;
       }
-
       #cataloguePdf {
         height: 60vh;
       }
-
       .nav-container {
         flex-direction: row;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
       }
-
+      /* Logo kiçildilir sol tərəfdə */
+      .logo img {
+        height: 40px !important;
+      }
+      /* Tema düyməsi yuxarı sağda, kiçik, simvol + yazı */
       .theme-toggle {
-        font-size: 16px;
-        width: 35px;
-        height: 35px;
+        font-size: 14px;
+        padding: 6px 10px;
+      }
+      /* Yazı gizlənir, yalnız icon göstərilir */
+      .theme-toggle .text {
+        display: none;
+      }
+      .theme-toggle .icon {
+        font-size: 20px;
       }
     }
   </style>
@@ -363,7 +363,7 @@
   <nav>
     <div class="nav-container">
       <div class="logo">
-        <img src="logo.png" alt="Logo" style="height: 60px;" />
+        <img src="logo.png" alt="Logo" />
       </div>
       <ul>
         <li><a id="nav-about" class="active" onclick="showSection('about')">Haqqımızda</a></li>
@@ -371,7 +371,10 @@
         <li><a id="nav-contact" onclick="showSection('contact')">Əlaqə</a></li>
         <li><a id="nav-catalogue" onclick="showSection('catalogue')">Kataloq</a></li>
       </ul>
-      <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">🌙</button>
+      <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">
+        <span class="icon">🌙</span>
+        <span class="text">QARANLIQ MOD</span>
+      </button>
     </div>
   </nav>
 
@@ -449,9 +452,18 @@
     function toggleTheme() {
       const body = document.body;
       const button = document.getElementById('themeToggle');
+      const icon = button.querySelector('.icon');
+      const text = button.querySelector('.text');
+
       const isDark = body.classList.toggle('dark');
-      button.textContent = isDark ? '☀️' : '🌙';
-      button.style.color = isDark ? '#ffffff' : '#2c3e50';
+
+      // Masaüstündə yazı dəyişmir, mobil üçün icon dəyişir
+      if (window.innerWidth <= 600) {
+        icon.textContent = isDark ? '☀️' : '🌙';
+      } else {
+        // Masaüstü üçün yazı dəyişir, icon sabit qalır
+        text.textContent = isDark ? 'AÇIQ MOD' : 'QARANLIQ MOD';
+      }
     }
   </script>
 
@@ -492,33 +504,22 @@
 
       try {
         const querySnapshot = await getDocs(collection(db, "products"));
-        if (querySnapshot.empty) {
-          productList.innerHTML = '<p style="text-align:center;">Məhsul tapılmadı</p>';
-          return;
-        }
-
-        querySnapshot.forEach(docSnap => {
-          const product = docSnap.data();
+        querySnapshot.forEach((doc) => {
+          const product = doc.data();
+          product.id = doc.id;
           productList.appendChild(createProductCard(product));
         });
       } catch (error) {
-        console.error("Məhsullar yüklənərkən xəta:", error);
-        productList.innerHTML = '<p style="color:red; text-align:center;">Məhsullar yüklənərkən xəta baş verdi</p>';
+        productList.innerHTML = '<p>Ətirlər yüklənərkən xəta baş verdi.</p>';
+        console.error(error);
       }
     }
 
-    // Modal funksiyaları
-
     function openModal(product) {
-      const modalTitle = document.getElementById('modalTitle');
-      const modalDescription = document.getElementById('modalDescription');
-      const modalPrice = document.getElementById('modalPrice');
-
-      modalTitle.textContent = product.name || '';
-      modalDescription.textContent = product.description || 'Məlumat mövcud deyil.';
-      modalPrice.textContent = product.price ? `Qiymət: ${product.price} AZN` : 'Qiymət məlum deyil';
-
       const modal = document.getElementById('productModal');
+      document.getElementById('modalTitle').textContent = product.name;
+      document.getElementById('modalDescription').textContent = product.description || 'Məlumat mövcud deyil.';
+      document.getElementById('modalPrice').textContent = product.price ? 'Qiymət: ' + product.price + ' AZN' : '';
       modal.classList.add('active');
     }
 
@@ -526,8 +527,7 @@
       document.getElementById('productModal').classList.remove('active');
     }
 
-    // Sayfa yüklənəndə məhsulları yüklə
-    window.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', () => {
       loadProducts();
     });
   </script>
