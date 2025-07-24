@@ -1,31 +1,35 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="az">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>R-Shoppingaz</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     :root {
-      --bg-color: #f0f4f8;
-      --text-color: #2c3e50;
-      --primary: #1abc9c;
-      --nav-bg: #002147;
-      --nav-text: #ecf0f1;
-      --nav-active: #1abc9c;
+      --bg-color: #f4f7fc;
+      --text-color: #1a2a44;
+      --primary: #6c5ce7;
+      --secondary: #a29bfe;
+      --nav-bg: #1a2a44;
+      --nav-text: #ffffff;
+      --nav-active: #6c5ce7;
       --card-bg: #ffffff;
-      --footer-bg: #002147;
-      --nav-hover-bg: rgba(255, 255, 255, 0.2);
+      --footer-bg: #1a2a44;
+      --nav-hover-bg: rgba(255, 255, 255, 0.15);
+      --shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
     }
     body.dark {
       --bg-color: #121212;
-      --text-color: #eee;
-      --primary: #0d6efd;
-      --nav-bg: #002147;
+      --text-color: #e0e0e0;
+      --primary: #a29bfe;
+      --secondary: #6c5ce7;
+      --nav-bg: #1a2a44;
       --nav-text: #ffffff;
-      --nav-active: #0d6efd;
+      --nav-active: #a29bfe;
       --card-bg: #1e1e1e;
-      --footer-bg: #002147;
+      --footer-bg: #1a2a44;
       --nav-hover-bg: rgba(255, 255, 255, 0.1);
     }
     body {
@@ -47,14 +51,17 @@
     }
     .top-space {
       height: 40px;
-      background-color: #fff;
+      background-color: var(--card-bg);
     }
     nav {
       background-color: var(--nav-bg);
-      padding: 20px 0;
+      padding: 15px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
     .nav-container {
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 0 20px;
       display: flex;
@@ -71,41 +78,58 @@
     nav ul li a {
       color: var(--nav-text);
       text-decoration: none;
-      font-weight: bold;
-      cursor: pointer;
-      padding: 15px 12px;
-      border-radius: 12px;
-      transition: background-color 0.3s, color 0.3s;
-      display: inline-block;
+      font-weight: 600;
+      padding: 12px 15px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
     nav ul li a:hover {
       background-color: var(--nav-hover-bg);
+      transform: translateY(-2px);
     }
     nav ul li a.active {
-      background-color: var(--nav-active);
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
       color: #ffffff;
+    }
+    nav ul li a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--primary);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+    nav ul li a:hover::after {
+      transform: scaleX(1);
     }
     .theme-toggle {
       background: var(--card-bg);
       color: var(--nav-text);
       border: 1px solid var(--nav-text);
-      padding: 8px 14px;
+      padding: 8px 12px;
       cursor: pointer;
-      font-weight: bold;
+      font-weight: 600;
       border-radius: 8px;
-      transition: background-color 0.3s, color 0.3s;
+      transition: all 0.3s ease;
     }
     .theme-toggle:hover {
-      background-color: var(--primary);
+      background: var(--primary);
       color: #fff;
+      transform: scale(1.05);
     }
     main {
       flex: 1;
+      padding: 20px 0;
     }
     .section {
       display: none;
       padding: 40px 20px;
-      max-width: 1000px;
+      max-width: 1200px;
       margin: auto;
     }
     .section.active {
@@ -115,55 +139,78 @@
       color: var(--primary);
       text-align: center;
       margin-bottom: 30px;
+      font-weight: 700;
+      font-size: 2em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
     #about p {
       font-size: 16px;
-      line-height: 1.6;
+      line-height: 1.7;
       color: var(--text-color);
-      background-color: var(--card-bg);
-      padding: 20px 25px;
+      background: var(--card-bg);
+      padding: 25px;
       border-radius: 16px;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+      box-shadow: var(--shadow);
       max-width: 900px;
       margin: 0 auto;
       text-align: justify;
       font-weight: 500;
-      letter-spacing: 0.3px;
     }
     #product-list {
       display: grid;
       gap: 20px;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       margin-top: 30px;
     }
     .product-card {
-      background-color: var(--card-bg);
-      border-radius: 12px;
+      background: linear-gradient(135deg, var(--card-bg), #f8f9fa);
+      border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow);
       cursor: pointer;
-      transition: transform 0.2s;
-      padding: 15px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      padding: 20px;
+      position: relative;
+      animation: fadeIn 0.5s ease-in-out;
     }
     .product-card:hover {
-      transform: scale(1.02);
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+    .product-card h3 {
+      font-size: 1.4em;
+      margin: 0 0 10px;
+      color: var(--primary);
+    }
+    .product-card p {
+      font-size: 14px;
+      color: var(--text-color);
+      margin: 5px 0;
+    }
+    .product-card .icon {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 24px;
+      color: var(--primary);
+      opacity: 0.3;
     }
     #contactForm {
       max-width: 600px;
       margin: auto;
-      background-color: var(--card-bg);
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      background: var(--card-bg);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
       color: var(--text-color);
     }
     #contactForm h2 {
       color: var(--primary);
       margin-bottom: 20px;
-      text-align: center;
     }
     #contactForm label {
-      font-weight: bold;
+      font-weight: 600;
       display: block;
       margin-top: 15px;
       margin-bottom: 5px;
@@ -171,81 +218,115 @@
     #contactForm input,
     #contactForm textarea {
       width: 100%;
-      padding: 10px;
-      border-radius: 4px;
+      padding: 12px;
+      border-radius: 6px;
       border: 1px solid #ccc;
       box-sizing: border-box;
       resize: vertical;
       font-family: inherit;
-      font-size: 16px;
+      font-size: 15px;
       color: var(--text-color);
-      background-color: var(--bg-color);
-      transition: background-color 0.3s, color 0.3s;
+      background: var(--bg-color);
+      transition: border-color 0.3s, background-color 0.3s;
     }
     #contactForm input:focus,
     #contactForm textarea:focus {
       border-color: var(--primary);
       outline: none;
-      background-color: var(--card-bg);
+      background: var(--card-bg);
+      box-shadow: 0 0 6px rgba(108, 92, 231, 0.3);
     }
     #contactForm button {
       margin-top: 20px;
       width: 100%;
       padding: 12px;
-      background-color: var(--primary);
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
       color: white;
-      font-weight: bold;
+      font-weight: 600;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
       cursor: pointer;
-      transition: background-color 0.3s;
-      font-size: 18px;
+      transition: all 0.3s ease;
+      font-size: 16px;
+      position: relative;
+      overflow: hidden;
     }
     #contactForm button:hover {
-      background-color: #149b85;
+      background: linear-gradient(90deg, var(--secondary), var(--primary));
+      transform: translateY(-2px);
+    }
+    #contactForm button::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.5s ease, height 0.5s ease;
+    }
+    #contactForm button:hover::after {
+      width: 200px;
+      height: 200px;
     }
     #successMessage {
       margin-top: 15px;
-      font-weight: bold;
+      font-weight: 600;
       text-align: center;
+      color: var(--primary);
       display: none;
     }
     footer {
-      background-color: var(--footer-bg);
-      color: white;
+      background: var(--footer-bg);
+      color: var(--nav-text);
       text-align: center;
       padding: 20px;
       margin-top: auto;
+      font-size: 14px;
     }
     .modal {
       display: none;
       position: fixed;
-      top: 0; left: 0;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.6);
+      background: rgba(0, 0, 0, 0.7);
       justify-content: center;
       align-items: center;
       z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
     .modal.active {
       display: flex;
+      opacity: 1;
     }
     .modal-content {
-      background-color: var(--card-bg);
-      padding: 20px 30px;
-      border-radius: 12px;
+      background: var(--card-bg);
+      padding: 25px;
+      border-radius: 16px;
       max-width: 500px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      width: 90%;
+      box-shadow: var(--shadow);
       color: var(--text-color);
       position: relative;
+      transform: scale(0.8);
+      transition: transform 0.3s ease;
+    }
+    .modal.active .modal-content {
+      transform: scale(1);
     }
     .modal-content h3 {
       margin-top: 0;
       color: var(--primary);
+      font-size: 1.6em;
     }
     .modal-content p {
       margin: 15px 0;
+      line-height: 1.6;
     }
     .close-btn {
       position: absolute;
@@ -255,117 +336,207 @@
       font-weight: bold;
       color: var(--text-color);
       cursor: pointer;
-      user-select: none;
+      transition: color 0.3s ease;
+    }
+    .close-btn:hover {
+      color: var(--primary);
     }
     .volume-btn {
-      background-color: var(--primary);
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
       color: white;
       border: none;
       border-radius: 8px;
       font-weight: 600;
       padding: 8px 16px;
       margin: 10px 8px 0 0;
-      transition: background-color 0.3s, transform 0.2s;
+      transition: all 0.3s ease;
     }
     .volume-btn:hover {
-      background-color: #149b85;
+      background: linear-gradient(90deg, var(--secondary), var(--primary));
       transform: scale(1.05);
     }
     .volume-btn.active {
-      background-color: #0e7c68;
+      background: linear-gradient(90deg, #5a4bcb, #8c7ae6);
     }
     #whatsappOrderBtn {
-      background-color: #25D366;
+      background: #25D366;
       color: white;
       border: none;
       border-radius: 10px;
-      font-weight: bold;
+      font-weight: 600;
       padding: 12px 20px;
       margin-top: 20px;
-      transition: background-color 0.3s, transform 0.2s;
+      transition: all 0.3s ease;
       display: block;
       width: 100%;
       text-align: center;
+      position: relative;
+      overflow: hidden;
     }
     #whatsappOrderBtn:hover {
-      background-color: #1da851;
-      transform: scale(1.03);
+      background: #1da851;
+      transform: translateY(-2px);
+    }
+    #whatsappOrderBtn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.5s ease, height 0.5s ease;
+    }
+    #whatsappOrderBtn:hover::after {
+      width: 200px;
+      height: 200px;
     }
     #cataloguePdf {
       width: 100%;
       height: 80vh;
       border: none;
       border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow);
     }
     .search-container {
       max-width: 600px;
       margin: 20px auto;
       text-align: center;
       padding: 0 20px;
+      position: relative;
     }
     #productSearch {
       max-width: 100%;
       width: calc(100% - 40px);
-      padding: 10px;
-      border-radius: 4px;
+      padding: 12px 40px 12px 15px;
+      border-radius: 8px;
       border: 1px solid #ccc;
-      font-size: 16px;
+      font-size: 15px;
       color: var(--text-color);
-      background-color: var(--bg-color);
-      transition: border-color 0.3s;
-      box-sizing: border-box;
+      background: var(--card-bg);
+      transition: all 0.3s ease;
     }
     #productSearch:focus {
       border-color: var(--primary);
       outline: none;
-      background-color: var(--card-bg);
+      box-shadow: 0 0 6px rgba(108, 92, 231, 0.3);
     }
-    @media (max-width: 600px) {
-      #product-list {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
+    .search-container::before {
+      content: '\f002';
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+      position: absolute;
+      right: 35px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--primary);
+      font-size: 16px;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Hamburger menyusu */
+    .hamburger {
+      display: none;
+      font-size: 24px;
+      color: var(--nav-text);
+      cursor: pointer;
+    }
+    @media (max-width: 768px) {
+      .hamburger {
+        display: block;
       }
       nav ul {
-        flex-wrap: wrap;
-        gap: 10px;
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background: var(--nav-bg);
+        position: absolute;
+        top: 60px;
+        left: 0;
+        padding: 10px 20px;
+      }
+      nav ul.active {
+        display: flex;
       }
       nav ul li a {
-        padding: 10px 8px;
+        padding: 10px;
         font-size: 14px;
+      }
+      .nav-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+      #product-list {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 15px;
+      }
+      #contactForm {
+        padding: 15px;
       }
       #contactForm input,
       #contactForm textarea {
         font-size: 14px;
+        padding: 10px;
       }
       #contactForm button {
-        font-size: 16px;
+        font-size: 15px;
         padding: 10px;
       }
       .product-card h3 {
-        font-size: 16px;
+        font-size: 1.2em;
+      }
+      .product-card p {
+        font-size: 13px;
       }
       #cataloguePdf {
         height: 60vh;
       }
-      .nav-container {
-        flex-direction: column;
-        gap: 15px;
-        align-items: flex-start;
-      }
-      .theme-toggle {
-        align-self: flex-end;
-      }
       #about p {
         font-size: 14px;
-        line-height: 1.5;
-        padding: 15px 20px;
+        padding: 15px;
       }
       .search-container {
         padding: 0 15px;
       }
       #productSearch {
         width: calc(100% - 30px);
+        font-size: 14px;
+      }
+      .modal-content {
+        width: 95%;
+        padding: 15px;
+      }
+    }
+    @media (max-width: 480px) {
+      #product-list {
+        grid-template-columns: 1fr;
+      }
+      .product-card h3 {
+        font-size: 1.1em;
+      }
+      .product-card p {
+        font-size: 12px;
+      }
+      .modal-content h3 {
+        font-size: 1.4em;
+      }
+      .modal-content p {
+        font-size: 14px;
+      }
+      #contactForm input,
+      #contactForm textarea {
+        font-size: 13px;
+      }
+      #contactForm button {
+        font-size: 14px;
+      }
+      h2 {
+        font-size: 1.6em;
       }
     }
   </style>
@@ -374,7 +545,8 @@
   <div class="top-space blur-background"></div>
   <nav class="blur-background">
     <div class="nav-container">
-      <ul>
+      <div class="hamburger" onclick="toggleMenu()">&#9776;</div>
+      <ul id="nav-menu">
         <li><a id="nav-about" class="active" onclick="showSection('about')">Haqqımızda</a></li>
         <li><a id="nav-projects" onclick="showSection('projects')">Ətirlər</a></li>
         <li><a id="nav-contact" onclick="showSection('contact')">Əlaqə</a></li>
@@ -405,17 +577,17 @@
     <div id="contact" class="section">
       <form id="contactForm" action="https://getform.io/f/bqomyqzb" method="POST">
         <h2>Bizə Yazın</h2>
-        <label for="Ad">Ad:</label>
+        <label for="Ad"><i class="fas fa-user"></i> Ad:</label>
         <input id="Ad" type="text" name="Ad" required />
-        <label for="Soyad">Soyad:</label>
+        <label for="Soyad"><i class="fas fa-user"></i> Soyad:</label>
         <input id="Soyad" type="text" name="Soyad" required />
-        <label for="E-posta">E-poçt:</label>
+        <label for="E-posta"><i class="fas fa-envelope"></i> E-poçt:</label>
         <input id="E-posta" type="email" name="E-posta" required />
-        <label for="Telefon">Telefon Nömrəsi:</label>
+        <label for="Telefon"><i class="fas fa-phone"></i> Telefon Nömrəsi:</label>
         <input id="Telefon" type="tel" name="Telefon" />
-        <label for="Mesaj">Məktubunuz:</label>
+        <label for="Mesaj"><i class="fas fa-comment"></i> Məktubunuz:</label>
         <textarea id="Mesaj" name="Mesaj" rows="5" required></textarea>
-        <button type="submit">Göndər</button>
+        <button type="submit"><i class="fas fa-paper-plane"></i> Göndər</button>
         <p id="successMessage"></p>
       </form>
     </div>
@@ -444,13 +616,19 @@
       links.forEach(link => link.classList.remove('active'));
       const activeLink = document.getElementById('nav-' + id);
       if (activeLink) activeLink.classList.add('active');
+      if (window.innerWidth <= 768) {
+        document.getElementById('nav-menu').classList.remove('active');
+      }
     }
     function toggleTheme() {
       const body = document.body;
       const button = document.getElementById('themeToggle');
       const isDark = body.classList.toggle('dark');
       button.textContent = isDark ? '☀️' : '🌙';
-      button.style.color = isDark ? '#ffffff' : '#2c3e50';
+      button.style.color = isDark ? '#ffffff' : '#1a2a44';
+    }
+    function toggleMenu() {
+      document.getElementById('nav-menu').classList.toggle('active');
     }
     function openModal(product) {
       document.body.classList.add('modal-open');
@@ -458,34 +636,22 @@
       const modalDescription = document.getElementById('modalDescription');
       const modalPrice = document.getElementById('modalPrice');
       modalTitle.textContent = product.name;
-      modalDescription.innerHTML = product.description || '';
+      modalDescription.innerHTML = product.description || 'Təsvir yoxdur';
       let selectedVolume = '30 ml';
-      let price = 10;
+      let price = product.ml === '50' ? 13 : 10;
       const oldBtns = document.querySelectorAll('.volume-btn, #whatsappOrderBtn');
       oldBtns.forEach(el => el.remove());
       modalPrice.textContent = `Qiymət: ${price} ₼`;
       const btn30 = document.createElement('button');
       btn30.textContent = '30 ml';
-      btn30.className = 'volume-btn active';
+      btn30.className = 'volume-btn' + (product.ml === '30' ? ' active' : '');
       btn30.style.marginRight = '10px';
-      btn30.style.padding = '6px 12px';
-      btn30.style.cursor = 'pointer';
       const btn50 = document.createElement('button');
       btn50.textContent = '50 ml';
-      btn50.className = 'volume-btn';
-      btn50.style.padding = '6px 12px';
-      btn50.style.cursor = 'pointer';
+      btn50.className = 'volume-btn' + (product.ml === '50' ? ' active' : '');
       const whatsappBtn = document.createElement('button');
       whatsappBtn.textContent = 'WhatsApp ilə Sifariş Ver';
       whatsappBtn.id = 'whatsappOrderBtn';
-      whatsappBtn.style.marginTop = '15px';
-      whatsappBtn.style.padding = '10px 15px';
-      whatsappBtn.style.backgroundColor = '#25D366';
-      whatsappBtn.style.color = 'white';
-      whatsappBtn.style.border = 'none';
-      whatsappBtn.style.borderRadius = '8px';
-      whatsappBtn.style.cursor = 'pointer';
-      whatsappBtn.style.fontWeight = 'bold';
       btn30.onclick = () => {
         selectedVolume = '30 ml';
         price = 10;
@@ -535,7 +701,9 @@
       card.className = 'product-card';
       card.innerHTML = `
         <h3>${product.name}</h3>
-        <p style="font-size: 14px; color: gray;">Kod: ${product.code || '-'}</p>
+        <p>Kod: ${product.code || '-'}</p>
+        <p>Qiymət: ${product.ml === '50' ? '13' : '10'} ₼</p>
+        <i class="fas fa-vial icon"></i>
       `;
       card.addEventListener('click', () => openModal(product));
       return card;
@@ -546,7 +714,7 @@
       try {
         const querySnapshot = await getDocs(collection(db, "products"));
         if (querySnapshot.empty) {
-          productList.innerHTML = '<p style="text-align:center;">Məhsul tapılmadı</p>';
+          productList.innerHTML = '<p style="text-align:center; color: var(--text-color);">Məhsul tapılmadı</p>';
           return;
         }
         allProducts = [];
@@ -561,11 +729,13 @@
             )
           : allProducts;
         if (filteredProducts.length === 0) {
-          productList.innerHTML = '<p style="text-align:center;">Axtarışa uyğun məhsul tapılmadı</p>';
+          productList.innerHTML = '<p style="text-align:center; color: var(--text-color);">Axtarışa uyğun məhsul tapılmadı</p>';
           return;
         }
-        filteredProducts.forEach(product => {
-          productList.appendChild(createProductCard(product));
+        filteredProducts.forEach((product, index) => {
+          const card = createProductCard(product);
+          card.style.animationDelay = `${index * 0.1}s`;
+          productList.appendChild(card);
         });
       } catch (error) {
         console.error("Məhsullar yüklənərkən xəta:", error);
