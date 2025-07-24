@@ -339,54 +339,40 @@
       }
 
       .nav-container {
-        flex-direction: column;
+        flex-direction: row;
+        flex-wrap: wrap;
         gap: 15px;
-        align-items: center; /* Mərkəzləşdirmək üçün changed */
+        align-items: center;
       }
 
-      /* Logo şəkli gizlənsin, yazı görünsün */
-      .logo img {
-        display: none;
+      /* LOGO DƏYİŞİKLİKLƏRİ */
+      .desktop-logo {
+        display: none !important;
       }
-
-      .logo-text {
-        display: block;
+      .mobile-logo-text {
+        display: inline-block !important;
         font-weight: 700;
         font-size: 24px;
         color: var(--nav-text);
-        font-family: 'Montserrat', sans-serif;
-        text-align: center;
-        width: 100%;
+        user-select: none;
+        margin: 0 auto;
       }
 
-      /* Tema düyməsini simvola çevirmək */
-      #themeToggle {
-        width: 40px;
-        height: 40px;
-        padding: 0;
-        border-radius: 50%;
+      /* THEME TOGGLE DÜYMƏSİ */
+      .theme-toggle {
         font-size: 22px;
-        line-height: 40px;
-        text-align: center;
+        font-weight: normal;
+        padding: 6px 12px;
+        border: none;
         background: transparent;
-        border: 2px solid var(--nav-text);
         color: var(--nav-text);
-      }
-
-      /* Button mətnini gizlətmək üçün */
-      #themeToggle::after {
-        content: "🌙"; /* Başlanğıc simvolu - Ay işarəsi */
-        display: inline-block;
+        cursor: pointer;
+        user-select: none;
       }
     }
 
-    /* Dark modda simvolu dəyişmək */
-    body.dark #themeToggle::after {
-      content: "☀️"; /* Günəş işarəsi */
-    }
-
-    /* Logo yazısı default gizlidir */
-    .logo-text {
+    /* Mobil üçün gizli yazı (defaultda gizli) */
+    .mobile-logo-text {
       display: none;
     }
   </style>
@@ -396,8 +382,8 @@
   <nav>
     <div class="nav-container">
       <div class="logo">
-        <img src="logo.png" alt="Logo" style="height: 60px;" />
-        <div class="logo-text">R-Shoppingaz</div>
+        <span class="mobile-logo-text">R-Shopping</span>
+        <img src="logo.png" alt="Logo" class="desktop-logo" style="height: 60px;" />
       </div>
       <ul>
         <li><a id="nav-about" class="active" onclick="showSection('about')">Haqqımızda</a></li>
@@ -405,7 +391,7 @@
         <li><a id="nav-contact" onclick="showSection('contact')">Əlaqə</a></li>
         <li><a id="nav-catalogue" onclick="showSection('catalogue')">Kataloq</a></li>
       </ul>
-      <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">QARANLIQ MOD</button>
+      <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">🌙</button>
     </div>
   </nav>
 
@@ -479,14 +465,12 @@
       if (activeLink) activeLink.classList.add('active');
     }
 
-    // Qaranlıq / Açıq mod toggle
+    // Qaranlıq / Açıq mod toggle - simvolla
     function toggleTheme() {
       const body = document.body;
       const button = document.getElementById('themeToggle');
       const isDark = body.classList.toggle('dark');
-      // Yazını dəyişmək lazım deyil, simvol CSS ::after ilə göstərilir
-      // button.textContent = isDark ? 'AÇIQ MOD' : 'QARANLIQ MOD';
-      button.style.color = isDark ? '#ffffff' : '#2c3e50';
+      button.textContent = isDark ? '☀️' : '🌙';
     }
   </script>
 
@@ -511,36 +495,56 @@
       const card = document.createElement('div');
       card.className = 'product-card';
 
-      card.innerHTML = `
-        <h3>${product.name}</h3>
-        <p style="color: var(--text-color); font-weight: 600;">${product.code}</p>
-        <p>${product.description}</p>
-        <p><strong>${product.price} AZN</strong></p>
-      `;
+      card.innerHTML = 
+        `<h3>${product.name}</h3>
+        <p style="font-size: 14px; color: gray;">Kod: ${product.code || '-'}</p>`;
+
+      card.addEventListener('click', () => openModal(product));
 
       return card;
     }
 
     async function loadProducts() {
-      const productsContainer = document.getElementById('product-list');
-      productsContainer.innerHTML = 'Yüklənir...';
+      const productList = document.getElementById('product-list');
+      productList.innerHTML = 'Yüklənir...';
 
       try {
         const querySnapshot = await getDocs(collection(db, "products"));
-        productsContainer.innerHTML = '';
+        productList.innerHTML = '';
         querySnapshot.forEach((doc) => {
           const product = doc.data();
           const card = createProductCard(product);
-          productsContainer.appendChild(card);
+          productList.appendChild(card);
         });
-      } catch (error) {
-        productsContainer.innerHTML = 'Məhsullar yüklənərkən səhv baş verdi.';
-        console.error(error);
+      } catch (e) {
+        productList.innerHTML = 'Məhsullar yüklənərkən xəta baş verdi.';
+        console.error(e);
       }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      loadProducts();
+    function openModal(product) {
+      document.getElementById('modalTitle').textContent = product.name;
+      document.getElementById('modalDescription').textContent = product.description || '';
+      document.getElementById('modalPrice').textContent = product.price ? `Qiymət: ${product.price} AZN` : '';
+      document.getElementById('productModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('productModal').classList.remove('active');
+    }
+
+    // Yüklə məhsulları
+    loadProducts();
+
+    // Əlaqə forması uğurlu mesajı
+    const form = document.getElementById('contactForm');
+    const successMessage = document.getElementById('successMessage');
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      // Sadə bir submit nümunəsi
+      successMessage.style.display = 'block';
+      successMessage.textContent = "Məktubunuz göndərildi! Tezliklə sizinlə əlaqə saxlanacaq.";
+      form.reset();
     });
   </script>
 </body>
