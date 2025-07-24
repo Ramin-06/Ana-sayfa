@@ -78,15 +78,32 @@
       background-color: var(--nav-active);
       color: #ffffff;
     }
+
+    /* Logo yalnız şəkil */
+    .logo img {
+      height: 40px;
+      user-select: none;
+      display: block;
+    }
+    /* .logo içində yazı varsa gizlət */
+    .logo {
+      font-size: 0;
+      line-height: 0;
+    }
+
+    /* Mobil üçün logo kiçik */
+    @media (max-width: 600px) {
+      .logo img {
+        height: 30px;
+      }
+    }
+
     .theme-toggle {
       background: var(--card-bg);
       color: var(--nav-text);
       border: 1px solid var(--nav-text);
-      padding: 8px 14px;
       cursor: pointer;
-      font-weight: bold;
-      border-radius: 8px;
-      transition: background-color 0.3s, color 0.3s;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -94,11 +111,21 @@
       user-select: none;
       width: 45px;
       height: 45px;
+      padding: 0;
+      transition: background-color 0.3s, color 0.3s;
     }
     .theme-toggle:hover {
       background-color: var(--primary);
       color: #fff;
     }
+    @media (max-width: 600px) {
+      .theme-toggle {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+      }
+    }
+
     main {
       flex: 1;
     }
@@ -335,26 +362,6 @@
         align-items: flex-start;
         position: relative;
       }
-      .logo img {
-        display: none; /* Mobilda logo gizlədilir */
-      }
-      .logo {
-        width: 100%;
-        text-align: center;
-        font-weight: 700;
-        font-size: 24px;
-        color: var(--nav-text);
-        user-select: none;
-      }
-      /* Tema düyməsi mobilda simvol olaraq */
-      .theme-toggle {
-        width: 45px;
-        height: 45px;
-        padding: 0;
-        font-size: 24px;
-        font-weight: normal;
-        border-radius: 50%;
-      }
     }
   </style>
 </head>
@@ -362,7 +369,9 @@
   <div class="top-space"></div>
   <nav>
     <div class="nav-container">
-      <div class="logo">R-Shopping</div>
+      <div class="logo">
+        <img src="logo.png" alt="R-Shopping Logo" />
+      </div>
       <ul>
         <li><a id="nav-about" class="active" onclick="showSection('about')">Haqqımızda</a></li>
         <li><a id="nav-projects" onclick="showSection('projects')">Ətirlər</a></li>
@@ -448,25 +457,15 @@
       const body = document.body;
       const button = document.getElementById('themeToggle');
       const isDark = body.classList.toggle('dark');
-      // Mobilda simvol dəyişimi üçün:
-      if(window.innerWidth <= 600) {
-        button.textContent = isDark ? '☀️' : '🌙';
-      } else {
-        // Desktop üçün sözlü
-        button.textContent = isDark ? 'AÇIQ MOD' : 'QARANLIQ MOD';
-        button.style.color = isDark ? '#ffffff' : '#2c3e50';
-      }
+
+      button.textContent = isDark ? '☀️' : '🌙';
+      button.style.color = isDark ? '#ffffff' : '#2c3e50';
     }
 
-    // İlk açılışda düymə mətni
     window.addEventListener('DOMContentLoaded', () => {
       const button = document.getElementById('themeToggle');
-      if(window.innerWidth <= 600) {
-        button.textContent = '🌙';
-      } else {
-        button.textContent = 'QARANLIQ MOD';
-        button.style.color = '#2c3e50';
-      }
+      button.textContent = '🌙';
+      button.style.color = '#2c3e50';
     });
   </script>
 
@@ -503,112 +502,45 @@
 
     async function loadProducts() {
       const productList = document.getElementById('product-list');
-      productList.innerHTML = '';
+      productList.innerHTML = 'Yüklənir...';
 
       try {
         const querySnapshot = await getDocs(collection(db, "products"));
-        if (querySnapshot.empty) {
-          productList.innerHTML = '<p style="text-align:center;">Məhsul tapılmadı</p>';
-          return;
-        }
+        productList.innerHTML = '';
 
-        querySnapshot.forEach(docSnap => {
-          const product = docSnap.data();
+        querySnapshot.forEach((doc) => {
+          const product = doc.data();
+          product.id = doc.id;
           productList.appendChild(createProductCard(product));
         });
+
+        if (productList.children.length === 0) {
+          productList.innerHTML = '<p>Məhsul tapılmadı.</p>';
+        }
       } catch (error) {
-        console.error("Məhsullar yüklənərkən xəta:", error);
-        productList.innerHTML = '<p style="color:red; text-align:center;">Məhsullar yüklənərkən xəta baş verdi</p>';
+        productList.innerHTML = `<p>Xəta baş verdi: ${error.message}</p>`;
       }
     }
 
-    // Modal funksiyaları
-
     function openModal(product) {
+      const modal = document.getElementById('productModal');
       const modalTitle = document.getElementById('modalTitle');
       const modalDescription = document.getElementById('modalDescription');
       const modalPrice = document.getElementById('modalPrice');
 
       modalTitle.textContent = product.name;
-      modalDescription.innerHTML = product.description || '';
+      modalDescription.textContent = product.description || "Məhsul haqqında məlumat yoxdur.";
+      modalPrice.textContent = `Qiymət: ${product.price || 'Məlumat yoxdur'} AZN`;
 
-      let selectedVolume = '30 ml';
-      let price = 10;
-
-      const oldBtns = document.querySelectorAll('.volume-btn, #whatsappOrderBtn');
-      oldBtns.forEach(el => el.remove());
-
-      modalPrice.textContent = `Qiymət: ${price} ₼`;
-
-      const btn30 = document.createElement('button');
-      btn30.textContent = '30 ml';
-      btn30.className = 'volume-btn active';
-      btn30.style.marginRight = '10px';
-      btn30.style.padding = '6px 12px';
-      btn30.style.cursor = 'pointer';
-
-      const btn50 = document.createElement('button');
-      btn50.textContent = '50 ml';
-      btn50.className = 'volume-btn';
-      btn50.style.padding = '6px 12px';
-      btn50.style.cursor = 'pointer';
-
-      const whatsappBtn = document.createElement('button');
-      whatsappBtn.textContent = 'WhatsApp ilə Sifariş Ver';
-      whatsappBtn.id = 'whatsappOrderBtn';
-      whatsappBtn.style.marginTop = '15px';
-      whatsappBtn.style.padding = '10px 15px';
-      whatsappBtn.style.backgroundColor = '#25D366';
-      whatsappBtn.style.color = 'white';
-      whatsappBtn.style.border = 'none';
-      whatsappBtn.style.borderRadius = '8px';
-      whatsappBtn.style.cursor = 'pointer';
-      whatsappBtn.style.fontWeight = 'bold';
-
-      btn30.onclick = () => {
-        selectedVolume = '30 ml';
-        price = 10;
-        modalPrice.textContent = `Qiymət: ${price} ₼`;
-        btn30.classList.add('active');
-        btn50.classList.remove('active');
-      };
-
-      btn50.onclick = () => {
-        selectedVolume = '50 ml';
-        price = 13;
-        modalPrice.textContent = `Qiymət: ${price} ₼`;
-        btn50.classList.add('active');
-        btn30.classList.remove('active');
-      };
-
-      whatsappBtn.onclick = () => {
-        const phoneNumber = '994515817772';
-        const message = encodeURIComponent(`Salam, mən "${product.name}" məhsulundan ${selectedVolume} almaq istəyirəm. Qiymət: ${price} ₼.`);
-        const url = `https://wa.me/${phoneNumber}?text=${message}`;
-        window.open(url, '_blank');
-      };
-
-      modalPrice.insertAdjacentElement('beforebegin', btn50);
-      modalPrice.insertAdjacentElement('beforebegin', btn30);
-      modalPrice.insertAdjacentElement('afterend', whatsappBtn);
-
-      document.getElementById('productModal').classList.add('active');
+      modal.classList.add('active');
     }
-
     function closeModal() {
-      document.getElementById('productModal').classList.remove('active');
+      const modal = document.getElementById('productModal');
+      modal.classList.remove('active');
     }
-
-    document.getElementById('productModal').addEventListener('click', (e) => {
-      if (e.target === e.currentTarget) closeModal();
-    });
 
     window.addEventListener('DOMContentLoaded', () => {
       loadProducts();
-      const closeBtn = document.querySelector('.close-btn');
-      if (closeBtn) {
-        closeBtn.addEventListener('click', closeModal);
-      }
     });
   </script>
 </body>
