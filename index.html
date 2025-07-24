@@ -53,11 +53,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 20px;
-    }
-    .logo img {
-      height: 60px;
-      transition: height 0.3s;
     }
     nav ul {
       list-style: none;
@@ -65,14 +60,6 @@
       gap: 20px;
       margin: 0;
       padding: 0;
-      flex-grow: 1;
-      justify-content: flex-start;
-      align-items: center;
-      overflow-x: auto;
-      scrollbar-width: none; /* Firefox */
-    }
-    nav ul::-webkit-scrollbar {
-      display: none; /* Chrome, Safari */
     }
     nav ul li a {
       color: var(--nav-text);
@@ -83,7 +70,6 @@
       border-radius: 12px;
       transition: background-color 0.3s, color 0.3s;
       display: inline-block;
-      white-space: nowrap;
     }
     nav ul li a:hover {
       background-color: var(--nav-hover-bg);
@@ -101,11 +87,6 @@
       font-weight: bold;
       border-radius: 8px;
       transition: background-color 0.3s, color 0.3s;
-      min-width: 100px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
       user-select: none;
     }
     .theme-toggle:hover {
@@ -274,7 +255,7 @@
       user-select: none;
     }
 
-    /* Modal volume düymələri */
+    /* ✅ Modal içi düymələr üçün dizayn */
     .volume-btn {
       background-color: var(--primary);
       color: white;
@@ -284,12 +265,13 @@
       padding: 8px 16px;
       margin: 10px 8px 0 0;
       transition: background-color 0.3s, transform 0.2s;
-      cursor: pointer;
     }
+
     .volume-btn:hover {
       background-color: #149b85;
       transform: scale(1.05);
     }
+
     .volume-btn.active {
       background-color: #0e7c68;
     }
@@ -306,8 +288,8 @@
       display: block;
       width: 100%;
       text-align: center;
-      cursor: pointer;
     }
+
     #whatsappOrderBtn:hover {
       background-color: #1da851;
       transform: scale(1.03);
@@ -322,39 +304,53 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
-    /* Mobil üçün əlavə stil */
+    /* --- Mobil üçün responsiv dizayn --- */
     @media (max-width: 600px) {
-      .nav-container {
-        flex-wrap: nowrap;
-        justify-content: flex-start;
+      #product-list {
+        grid-template-columns: 1fr !important;
         gap: 15px;
       }
-      .logo img {
-        height: 45px;
-      }
+
       nav ul {
-        gap: 8px;
-        overflow-x: auto;
-      }
-      nav ul::-webkit-scrollbar {
-        display: none;
+        flex-wrap: wrap;
+        gap: 10px;
       }
 
-      /* Tema düyməsi mobil üçün simvol (emoji) */
+      nav ul li a {
+        padding: 10px 8px;
+        font-size: 14px;
+      }
+
+      #contactForm input,
+      #contactForm textarea {
+        font-size: 14px;
+      }
+
+      #contactForm button {
+        font-size: 16px;
+        padding: 10px;
+      }
+
+      .product-card h3 {
+        font-size: 18px;
+      }
+
+      #cataloguePdf {
+        height: 60vh;
+      }
+
+      /* Navbar: logo ilə theme-toggle eyni sırada, sürüşməsin */
+      .nav-container {
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+      }
+
+      /* Theme toggle font kiçik və padding azaldılıb */
       .theme-toggle {
-        background: none;
-        border: none;
-        padding: 0;
-        cursor: pointer;
-        font-size: 24px;
-        color: var(--nav-text);
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-width: auto;
-        font-weight: normal;
+        font-size: 18px !important;
+        padding: 6px 12px !important;
+        width: auto !important;
       }
     }
   </style>
@@ -364,7 +360,7 @@
   <nav>
     <div class="nav-container">
       <div class="logo">
-        <img src="logo.png" alt="Logo" />
+        <img src="logo.png" alt="Logo" style="height: 60px;" />
       </div>
       <ul>
         <li><a id="nav-about" class="active" onclick="showSection('about')">Haqqımızda</a></li>
@@ -372,7 +368,7 @@
         <li><a id="nav-contact" onclick="showSection('contact')">Əlaqə</a></li>
         <li><a id="nav-catalogue" onclick="showSection('catalogue')">Kataloq</a></li>
       </ul>
-      <button id="themeToggle" class="theme-toggle" aria-label="Modu dəyişdir">☀️</button>
+      <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">QARANLIQ MOD</button>
     </div>
   </nav>
 
@@ -446,74 +442,72 @@
       if (activeLink) activeLink.classList.add('active');
     }
 
-    // Qaranlıq / Açıq mod toggle və simvol dəyişməsi
+    // Qaranlıq / Açıq mod toggle
     function toggleTheme() {
       const body = document.body;
       const button = document.getElementById('themeToggle');
       const isDark = body.classList.toggle('dark');
 
+      // Mobil üçün simvol, masaüstü üçün yazı
       if (window.innerWidth <= 600) {
-        button.textContent = isDark ? '🌙' : '☀️';
+        button.textContent = isDark ? '☀️' : '🌙';  // Dark → Günəş, Light → Ay
+        button.style.color = isDark ? '#ffffff' : '#2c3e50';
       } else {
         button.textContent = isDark ? 'AÇIQ MOD' : 'QARANLIQ MOD';
+        button.style.color = isDark ? '#ffffff' : '#2c3e50';
       }
     }
 
-    // Pəncərə ölçüsü dəyişəndə düymə içini yenilə
+    // Pəncərə ölçüsü dəyişəndə toggle düyməsini yenilə
     window.addEventListener('resize', () => {
+      const body = document.body;
       const button = document.getElementById('themeToggle');
-      const isDark = document.body.classList.contains('dark');
+      const isDark = body.classList.contains('dark');
+
       if (window.innerWidth <= 600) {
-        button.textContent = isDark ? '🌙' : '☀️';
+        button.textContent = isDark ? '☀️' : '🌙';
+        button.style.color = isDark ? '#ffffff' : '#2c3e50';
       } else {
         button.textContent = isDark ? 'AÇIQ MOD' : 'QARANLIQ MOD';
+        button.style.color = isDark ? '#ffffff' : '#2c3e50';
       }
     });
 
-    // İlk yükləmədə də ikon/tekst düz olsun
     window.addEventListener('DOMContentLoaded', () => {
+      loadProducts();
+
+      // Modal close düyməsi əlavə et
+      const closeBtn = document.querySelector('.close-btn');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', closeModal);
+      }
+
+      // İlk toggle düymə vəziyyətini təyin et
+      const body = document.body;
       const button = document.getElementById('themeToggle');
-      const isDark = document.body.classList.contains('dark');
+      const isDark = body.classList.contains('dark');
+
       if (window.innerWidth <= 600) {
-        button.textContent = isDark ? '🌙' : '☀️';
+        button.textContent = isDark ? '☀️' : '🌙';
+        button.style.color = isDark ? '#ffffff' : '#2c3e50';
       } else {
         button.textContent = isDark ? 'AÇIQ MOD' : 'QARANLIQ MOD';
+        button.style.color = isDark ? '#ffffff' : '#2c3e50';
       }
     });
-  </script>
 
-  <!-- Firebase SDKs and Firestore integration -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    // Aşağıda Firebase və modal üçün kodlar var...
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCSaiU9DguIk47O8LPZ_Oa6StJgHbPqZ6I",
-      authDomain: "perfume-8b7f7.firebaseapp.com",
-      projectId: "perfume-8b7f7",
-      storageBucket: "perfume-8b7f7.appspot.com",
-      messagingSenderId: "899731999798",
-      appId: "1:899731999798:web:750af78287f56d15d41c97"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    function createProductCard(product) {
-      const card = document.createElement('div');
-      card.className = 'product-card';
-      card.innerHTML = `
-        <h3>${product.ad}</h3>
-        <p><strong>Kod:</strong> ${product.kod}</p>
-      `;
-      card.onclick = () => openModal(product);
-      return card;
-    }
-
+    // Modal funksiyaları
     function openModal(product) {
-      document.getElementById('modalTitle').textContent = product.ad;
-      document.getElementById('modalDescription').textContent = product.melumat || "Məlumat yoxdur";
-      document.getElementById('modalPrice').textContent = product.qiymet ? `Qiymət: ${product.qiymet} AZN` : "";
+      const modalTitle = document.getElementById('modalTitle');
+      const modalDescription = document.getElementById('modalDescription');
+      const modalPrice = document.getElementById('modalPrice');
+
+      modalTitle.textContent = product.name;
+      modalDescription.innerHTML = product.description || 'Məhsul haqqında məlumat mövcud deyil.';
+      modalPrice.textContent = product.price ? `Qiymət: ${product.price} AZN` : '';
+
       document.getElementById('productModal').classList.add('active');
     }
 
@@ -521,32 +515,26 @@
       document.getElementById('productModal').classList.remove('active');
     }
 
-    async function loadProducts() {
+    // Məhsulların yüklənməsi nümunə funksiyası (məsələn static massiv)
+    function loadProducts() {
+      const products = [
+        { id: 1, name: "Parfüm A", description: "Təzə qoxu, sitrus notları.", price: "30" },
+        { id: 2, name: "Parfüm B", description: "Şirin və zərif aroma.", price: "50" },
+        { id: 3, name: "Parfüm C", description: "Orta notlarda gül və meyvə.", price: "40" }
+      ];
+
       const productList = document.getElementById('product-list');
-      productList.innerHTML = 'Yüklənir...';
-      try {
-        const querySnapshot = await getDocs(collection(db, "products"));
-        productList.innerHTML = '';
-        querySnapshot.forEach(doc => {
-          const product = doc.data();
-          const card = createProductCard(product);
-          productList.appendChild(card);
-        });
-      } catch (error) {
-        productList.innerHTML = 'Xəta baş verdi məhsullar yüklənərkən.';
-        console.error(error);
-      }
+      productList.innerHTML = '';
+
+      products.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.textContent = product.name;
+        card.onclick = () => openModal(product);
+        productList.appendChild(card);
+      });
     }
 
-    // Yüklənəndə məhsulları çək
-    window.addEventListener('DOMContentLoaded', () => {
-      loadProducts();
-    });
-
-    // Modal bağlamağa esc düyməsi ilə
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeModal();
-    });
   </script>
 </body>
 </html>
