@@ -210,7 +210,6 @@
       padding: 20px;
       margin-top: auto;
     }
-
     /* Modal Styles */
     .modal {
       display: none;
@@ -252,8 +251,7 @@
       cursor: pointer;
       user-select: none;
     }
-
-    /* ✅ Modal içi düymələr üçün dizayn */
+    /* Modal içi düymələr üçün dizayn */
     .volume-btn {
       background-color: var(--primary);
       color: white;
@@ -288,48 +286,35 @@
       background-color: #1da851;
       transform: scale(1.03);
     }
-
-    /* PDF Kataloq Bölməsi */
-    #catalog {
-      max-width: 1000px;
-      margin: auto;
-      padding: 20px;
-      background-color: var(--card-bg);
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    #pdf-controls {
-      text-align: center;
-      margin-bottom: 15px;
-    }
-    #pdf-controls button {
-      padding: 8px 14px;
-      margin: 0 8px;
-      font-weight: 600;
-      border-radius: 6px;
-      border: 1px solid var(--primary);
-      background-color: white;
-      color: var(--primary);
-      cursor: pointer;
-      transition: background-color 0.3s, color 0.3s;
-    }
-    #pdf-controls button:hover {
-      background-color: var(--primary);
-      color: white;
-    }
-    #pdf-render {
-      border: 1px solid #ccc;
-      max-width: 100%;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    /* PDF viewer üçün */
+    #catalog canvas {
       display: block;
       margin: 0 auto;
-      border-radius: 8px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      max-width: 100%;
     }
-    #page-info {
-      margin-top: 8px;
+    #catalog .pdf-controls {
       text-align: center;
+      margin-top: 15px;
+    }
+    #catalog button {
+      cursor: pointer;
+      background-color: var(--primary);
+      border: none;
+      padding: 10px 20px;
+      color: white;
+      font-weight: bold;
+      margin: 0 10px;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+    }
+    #catalog button:hover {
+      background-color: #149b85;
+    }
+    #catalog #pageInfo {
       font-weight: 600;
-      color: var(--text-color);
+      margin-left: 10px;
     }
   </style>
 </head>
@@ -341,12 +326,12 @@
         <img src="logo.png" alt="Logo" style="height: 60px;" />
       </div>
       <ul>
-        <li><a id="nav-about" class="active" onclick="showSection('about')">Haqqımızda</a></li>
-        <li><a id="nav-projects" onclick="showSection('projects')">Ətirlər</a></li>
-        <li><a id="nav-catalog" onclick="showSection('catalog')">Kataloq</a></li>
-        <li><a id="nav-contact" onclick="showSection('contact')">Əlaqə</a></li>
+        <li><a href="#" id="nav-about" class="active">Haqqımızda</a></li>
+        <li><a href="#" id="nav-projects">Ətirlər</a></li>
+        <li><a href="#" id="nav-catalog">Kataloq</a></li>
+        <li><a href="#" id="nav-contact">Əlaqə</a></li>
       </ul>
-      <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">QARANLIQ MOD</button>
+      <button id="themeToggle" class="theme-toggle">QARANLIQ MOD</button>
     </div>
   </nav>
 
@@ -368,16 +353,14 @@
       <div id="product-list"></div>
     </div>
 
-    <!-- Yeni PDF kataloq bölməsi -->
     <div id="catalog" class="section">
       <h2>Kataloq</h2>
-      <div id="pdf-controls">
-        <button id="prevPage">Əvvəlki səhifə</button>
-        <span>Səhifə: <span id="pageNum">0</span> / <span id="pageCount">0</span></span>
-        <button id="nextPage">Növbəti səhifə</button>
+      <canvas id="pdf-render"></canvas>
+      <div class="pdf-controls">
+        <button id="prevPage">Əvvəlki</button>
+        <button id="nextPage">Növbəti</button>
+        <span id="pageInfo">Səhifə: <span id="pageNum"></span> / <span id="pageCount"></span></span>
       </div>
-      <canvas id="pdf-render" width="600" height="800"></canvas>
-      <div id="page-info"></div>
     </div>
 
     <div id="contact" class="section">
@@ -413,9 +396,7 @@
     <p>© 2025 R-Shoppingaz. Bütün hüquqlar qorunur.</p>
   </footer>
 
-  <!-- PDF.js kitabxanası -->
-  <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
-
+  <!-- Scriptlər -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -468,7 +449,6 @@
     }
 
     // Modal funksiyaları
-
     function openModal(product) {
       const modalTitle = document.getElementById('modalTitle');
       const modalDescription = document.getElementById('modalDescription');
@@ -480,6 +460,7 @@
       let selectedVolume = '30 ml';
       let price = 10;
 
+      // Əvvəlki düymələri təmizlə
       const oldBtns = document.querySelectorAll('.volume-btn, #whatsappOrderBtn');
       oldBtns.forEach(el => el.remove());
 
@@ -488,6 +469,7 @@
       const btn30 = document.createElement('button');
       btn30.textContent = '30 ml';
       btn30.className = 'volume-btn active';
+      btn30.style.marginRight = '10px';
 
       const btn50 = document.createElement('button');
       btn50.textContent = '50 ml';
@@ -496,52 +478,33 @@
       btn30.onclick = () => {
         selectedVolume = '30 ml';
         price = 10;
+        modalPrice.textContent = `Qiymət: ${price} ₼`;
         btn30.classList.add('active');
         btn50.classList.remove('active');
-        modalPrice.textContent = `Qiymət: ${price} ₼`;
       };
 
       btn50.onclick = () => {
         selectedVolume = '50 ml';
         price = 13;
+        modalPrice.textContent = `Qiymət: ${price} ₼`;
         btn50.classList.add('active');
         btn30.classList.remove('active');
-        modalPrice.textContent = `Qiymət: ${price} ₼`;
       };
 
-      modalPrice.parentNode.insertBefore(btn30, modalPrice.nextSibling);
-      modalPrice.parentNode.insertBefore(btn50, modalPrice.nextSibling);
+      const whatsappBtn = document.createElement('button');
+      whatsappBtn.textContent = 'WhatsApp ilə Sifariş Ver';
+      whatsappBtn.id = 'whatsappOrderBtn';
 
-      // WhatsApp sifariş düyməsi
-      const orderBtn = document.createElement('a');
-      orderBtn.href = `https://wa.me/994552323252?text=Salam,%20Mən%20${encodeURIComponent(product.name)}%20(${selectedVolume})%20haqqında%20məlumat%20almaq%20istəyirəm.`;
-      orderBtn.target = '_blank';
-      orderBtn.id = 'whatsappOrderBtn';
-      orderBtn.textContent = 'WhatsApp-dan sifariş et';
+      whatsappBtn.onclick = () => {
+        const phoneNumber = '994550001122';
+        const message = encodeURIComponent(`Salam, mən "${product.name}" (${selectedVolume}) məhsulunu sifariş etmək istəyirəm. Qiymət: ${price}₼.`);
+        const url = `https://wa.me/${phoneNumber}?text=${message}`;
+        window.open(url, '_blank');
+      };
 
-      // Həcmi dəyişəndə linki yenilə
-      function updateOrderLink() {
-        orderBtn.href = `https://wa.me/994552323252?text=Salam,%20Mən%20${encodeURIComponent(product.name)}%20(${selectedVolume})%20haqqında%20məlumat%20almaq%20istəyirəm.`;
-      }
-
-      btn30.addEventListener('click', () => {
-        selectedVolume = '30 ml';
-        price = 10;
-        btn30.classList.add('active');
-        btn50.classList.remove('active');
-        modalPrice.textContent = `Qiymət: ${price} ₼`;
-        updateOrderLink();
-      });
-      btn50.addEventListener('click', () => {
-        selectedVolume = '50 ml';
-        price = 13;
-        btn50.classList.add('active');
-        btn30.classList.remove('active');
-        modalPrice.textContent = `Qiymət: ${price} ₼`;
-        updateOrderLink();
-      });
-
-      modalPrice.parentNode.appendChild(orderBtn);
+      modalPrice.insertAdjacentElement('afterend', btn30);
+      btn30.insertAdjacentElement('afterend', btn50);
+      btn50.insertAdjacentElement('afterend', whatsappBtn);
 
       document.getElementById('productModal').classList.add('active');
     }
@@ -550,137 +513,142 @@
       document.getElementById('productModal').classList.remove('active');
     }
 
-    // Tema dəyişdirilməsi
-    function toggleTheme() {
-      const body = document.body;
-      body.classList.toggle('dark');
-      const btn = document.getElementById('themeToggle');
-      if (body.classList.contains('dark')) {
-        btn.textContent = 'İŞIQLI MOD';
-      } else {
-        btn.textContent = 'QARANLIQ MOD';
-      }
-    }
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      themeToggle.textContent = document.body.classList.contains('dark') ? 'İŞIQLI MOD' : 'QARANLIQ MOD';
+    });
 
-    // Naviqasiya və Section göstərmə
+    // Navbar klik idarəçisi və bölmə dəyişdirilməsi
     function showSection(id) {
-      // Bütün sekmeleri gizlət
-      document.querySelectorAll('.section').forEach(sec => {
-        sec.classList.remove('active');
-      });
-      // Aktiv link dəyiş
-      document.querySelectorAll('nav ul li a').forEach(a => {
-        a.classList.remove('active');
-      });
-      // Göstəriləcək sekme aktiv et
-      const section = document.getElementById(id);
-      if(section) section.classList.add('active');
-      // Navbar link aktiv et
+      const sections = document.querySelectorAll('.section');
+      const links = document.querySelectorAll('nav ul li a');
+
+      sections.forEach(sec => sec.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+
+      links.forEach(link => link.classList.remove('active'));
       const activeLink = document.getElementById('nav-' + id);
       if(activeLink) activeLink.classList.add('active');
     }
 
-    // Contact form göndərmə sonrası mesaj göstərmə
-    document.getElementById('contactForm').addEventListener('submit', e => {
-      const msg = document.getElementById('successMessage');
-      msg.style.color = 'green';
-      msg.textContent = 'Müraciətiniz uğurla göndərildi! Tezliklə sizinlə əlaqə saxlanılacaq.';
-      setTimeout(() => {
-        msg.textContent = '';
-      }, 7000);
+    document.querySelectorAll('nav ul li a').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const id = link.id.replace('nav-', '');
+        showSection(id);
+      });
     });
 
-    // PDF.js ilə PDF göstərmə funksiyaları
+    // Contact form success message (submit sonrası)
+    const contactForm = document.getElementById('contactForm');
+    const successMessage = document.getElementById('successMessage');
+    contactForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const formData = new FormData(contactForm);
+      fetch(contactForm.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      }).then(response => {
+        if(response.ok) {
+          successMessage.style.display = 'block';
+          successMessage.style.color = 'green';
+          successMessage.textContent = 'Məktubunuz uğurla göndərildi.';
+          contactForm.reset();
+        } else {
+          throw new Error('Xəta baş verdi');
+        }
+      }).catch(() => {
+        successMessage.style.display = 'block';
+        successMessage.style.color = 'red';
+        successMessage.textContent = 'Məktub göndərilərkən xəta baş verdi.';
+      });
+    });
 
-    const url = 'urunlerim/KATALOQUM.pdf';
+    // PDF viewer üçün
+    import { getDocument } from "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.9.179/build/pdf.min.js";
 
     let pdfDoc = null,
-      pageNum = 1,
-      pageIsRendering = false,
-      pageNumIsPending = null;
+        pageNum = 1,
+        pageCount = 0,
+        pageRendering = false,
+        pageNumPending = null,
+        scale = 1.0,
+        canvas = document.getElementById('pdf-render'),
+        ctx = canvas.getContext('2d');
 
-    const scale = 1.4,
-      canvas = document.getElementById('pdf-render'),
-      ctx = canvas.getContext('2d');
-
-    // Səhifəni render et
-    const renderPage = num => {
-      pageIsRendering = true;
-
-      // PDF səhifəsini al
+    function renderPage(num) {
+      pageRendering = true;
       pdfDoc.getPage(num).then(page => {
-        // Canvas ölçüsünü səhifənin ölçüsünə uyğun et
-        const viewport = page.getViewport({ scale });
+        const viewport = page.getViewport({ scale: scale });
         canvas.height = viewport.height;
         canvas.width = viewport.width;
 
-        const renderCtx = {
+        const renderContext = {
           canvasContext: ctx,
-          viewport
+          viewport: viewport
         };
 
-        page.render(renderCtx).promise.then(() => {
-          pageIsRendering = false;
+        const renderTask = page.render(renderContext);
 
-          if (pageNumIsPending !== null) {
-            renderPage(pageNumIsPending);
-            pageNumIsPending = null;
+        renderTask.promise.then(() => {
+          pageRendering = false;
+          if (pageNumPending !== null) {
+            renderPage(pageNumPending);
+            pageNumPending = null;
           }
         });
 
-        // Səhifə nömrəsini göstər
         document.getElementById('pageNum').textContent = num;
-        document.getElementById('pageCount').textContent = pdfDoc.numPages;
       });
-    };
+    }
 
-    // Render olunmamış səhifə varsa növbəyə qoy
-    const queueRenderPage = num => {
-      if (pageIsRendering) {
-        pageNumIsPending = num;
+    function queueRenderPage(num) {
+      if (pageRendering) {
+        pageNumPending = num;
       } else {
         renderPage(num);
       }
-    };
+    }
 
-    // Əvvəlki səhifə
-    const showPrevPage = () => {
-      if (pageNum <= 1) {
-        return;
-      }
+    function onPrevPage() {
+      if (pageNum <= 1) return;
       pageNum--;
       queueRenderPage(pageNum);
-    };
+    }
 
-    // Növbəti səhifə
-    const showNextPage = () => {
-      if (pageNum >= pdfDoc.numPages) {
-        return;
-      }
+    function onNextPage() {
+      if (pageNum >= pageCount) return;
       pageNum++;
       queueRenderPage(pageNum);
-    };
+    }
 
-    // PDF sənədini yüklə
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';
+    document.getElementById('prevPage').addEventListener('click', onPrevPage);
+    document.getElementById('nextPage').addEventListener('click', onNextPage);
 
-    pdfjsLib.getDocument(url).promise.then(pdfDoc_ => {
+    // PDF yüklə
+    getDocument('urunlerim/KATALOQUM.pdf').promise.then(pdfDoc_ => {
       pdfDoc = pdfDoc_;
-      document.getElementById('pageCount').textContent = pdfDoc.numPages;
-
+      pageCount = pdfDoc.numPages;
+      document.getElementById('pageCount').textContent = pageCount;
       renderPage(pageNum);
     }).catch(err => {
-      const div = document.getElementById('catalog');
-      div.innerHTML = `<p style="color: red; text-align:center;">PDF sənədi yüklənərkən xəta baş verdi: ${err.message}</p>`;
+      const catalogDiv = document.getElementById('catalog');
+      catalogDiv.innerHTML = '<p style="color:red; text-align:center;">PDF faylı yüklənərkən xəta baş verdi.</p>';
+      console.error(err);
     });
 
-    // PDF səhifə düymələri üçün eventlər
-    document.getElementById('prevPage').addEventListener('click', showPrevPage);
-    document.getElementById('nextPage').addEventListener('click', showNextPage);
-
-    // İlk məhsulları yüklə
+    // Məhsulları yüklə
     loadProducts();
 
+    // Modalı bağlamaq üçün klaviatura ESC düyməsi
+    document.addEventListener('keydown', e => {
+      if(e.key === 'Escape') closeModal();
+    });
   </script>
 </body>
 </html>
