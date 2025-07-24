@@ -292,7 +292,7 @@
 
       if (querySnapshot.empty) {
         const row = document.createElement("tr");
-        row.innerHTML = <td colspan="5" style="text-align:center; font-style: italic;">Hələ məhsul əlavə edilməyib...</td>;
+        row.innerHTML = `<td colspan="5" style="text-align:center; font-style: italic;">Hələ məhsul əlavə edilməyib...</td>`;
         tableBody.appendChild(row);
         return;
       }
@@ -301,7 +301,7 @@
         const product = docSnap.data();
         const row = document.createElement("tr");
 
-        row.innerHTML = 
+        row.innerHTML = `
           <td>${product.code}</td>
           <td>${product.name}</td>
           <td>${product.ml}</td>
@@ -310,7 +310,7 @@
             <button class="edit-btn" data-id="${docSnap.id}">Düzəlt</button>
             <button class="delete-btn" data-id="${docSnap.id}">Sil</button>
           </td>
-        ;
+        `;
 
         tableBody.appendChild(row);
       });
@@ -370,43 +370,44 @@
     });
 
     // Məhsulu redaktə et - Firestore sənədini al, formu doldur
-    import { getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    async function editProduct(docId) {
+      try {
+        const docRef = doc(db, "products", docId);
+        const docSnap = await getDocs(docRef);
 
-async function editProduct(docId) {
-  try {
-    const docRef = doc(db, "products", docId);
-    const docSnap = await getDoc(docRef);  // düzəliş burada
+        // getDocs() Firestore kolleksiyaya görədir, burada docSnap data almaq üçün getDoc() olmalıdır
+        // Düzəldirik:
 
-    if (!docSnap.exists()) {
-      alert("Məhsul tapılmadı!");
-      return;
+        const docSnapshot = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js").then(({ getDoc }) => getDoc(docRef));
+        if (!docSnapshot.exists()) {
+          alert("Məhsul tapılmadı!");
+          return;
+        }
+        const product = docSnapshot.data();
+
+        productCodeInput.value = product.code;
+        productNameInput.value = product.name;
+        quill.root.innerHTML = product.description;
+
+        selectedMl = product.ml;
+        selectedPrice = product.price;
+        priceInput.value = selectedPrice;
+
+        mlButtons.forEach(btn => {
+          btn.classList.toggle("selected", btn.getAttribute("data-ml") === selectedMl);
+        });
+
+        productCodeInput.setAttribute("readonly", "readonly");
+        submitBtn.textContent = "Düzəlt";
+        cancelEditBtn.style.display = "inline-block";
+        formTitle.textContent = "Məhsulu düzəlt";
+
+        editDocId = docId;
+      } catch (error) {
+        console.error("Redaktə zamanı xəta: ", error);
+        alert("Məhsulu yükləmək mümkün olmadı.");
+      }
     }
-    const product = docSnap.data();
-
-    productCodeInput.value = product.code;
-    productNameInput.value = product.name;
-    quill.root.innerHTML = product.description;
-
-    selectedMl = product.ml;
-    selectedPrice = product.price;
-    priceInput.value = selectedPrice;
-
-    mlButtons.forEach(btn => {
-      btn.classList.toggle("selected", btn.getAttribute("data-ml") === selectedMl);
-    });
-
-    productCodeInput.setAttribute("readonly", "readonly");
-    submitBtn.textContent = "Düzəlt";
-    cancelEditBtn.style.display = "inline-block";
-    formTitle.textContent = "Məhsulu düzəlt";
-
-    editDocId = docId;
-  } catch (error) {
-    console.error("Redaktə zamanı xəta: ", error);
-    alert("Məhsulu yükləmək mümkün olmadı.");
-  }
-}
-
 
     // Məhsulu sil
     async function deleteProduct(docId) {
