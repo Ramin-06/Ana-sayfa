@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="az">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -38,10 +38,6 @@
       flex-direction: column;
       min-height: 100vh;
     }
-    .top-space {
-      height: 40px;
-      background-color: #fff;
-    }
     nav {
       background-color: var(--nav-bg);
       padding: 20px 0;
@@ -53,6 +49,10 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: relative;
+    }
+    .logo img {
+      height: 60px;
     }
     nav ul {
       list-style: none;
@@ -92,14 +92,59 @@
       background-color: var(--primary);
       color: #fff;
     }
+
+    /* Mobil üçün logo gizlədilir */
+    @media (max-width: 600px) {
+      .logo {
+        display: none !important;
+      }
+      /* Mobil üçün theme-toggle düyməsi yazı yerinə simvol */
+      #themeToggle.theme-toggle {
+        font-weight: normal;
+        font-size: 24px;
+        padding: 0;
+        border: none;
+        background: transparent;
+        color: var(--nav-text);
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+        user-select: none;
+      }
+    }
+    /* Masaüstü üçün theme-toggle əvvəlki yazı stilində qalsın */
+    @media (min-width: 601px) {
+      #themeToggle.theme-toggle {
+        position: static !important;
+        font-size: initial !important;
+        padding: 8px 14px !important;
+        border: 1px solid var(--nav-text) !important;
+        background: var(--card-bg) !important;
+        font-weight: bold !important;
+        width: auto !important;
+        height: auto !important;
+        color: var(--nav-text) !important;
+        display: inline-block !important;
+        line-height: normal !important;
+      }
+    }
+
     main {
       flex: 1;
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
+      width: 100%;
     }
     .section {
       display: none;
-      padding: 40px 20px;
-      max-width: 1000px;
-      margin: auto;
     }
     .section.active {
       display: block;
@@ -109,253 +154,59 @@
       text-align: center;
       margin-bottom: 30px;
     }
-    #about p {
-      font-size: 18px;
-      line-height: 1.8;
-      color: var(--text-color);
-      background-color: var(--card-bg);
-      padding: 25px 30px;
-      border-radius: 16px;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
-      max-width: 900px;
-      margin: 0 auto;
-      text-align: justify;
-      font-weight: 500;
-      letter-spacing: 0.3px;
+
+    /* Axtarış inputu */
+    #searchInput {
+      padding: 8px 14px;
+      width: 300px;
+      max-width: 90%;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      margin: 0 auto 25px auto;
+      display: block;
     }
+    @media (max-width: 600px) {
+      #searchInput {
+        width: 90% !important;
+        font-size: 14px !important;
+      }
+    }
+
+    /* Məhsul kartları */
     #product-list {
       display: grid;
+      grid-template-columns: repeat(auto-fill,minmax(250px,1fr));
       gap: 20px;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      margin-top: 30px;
     }
     .product-card {
       background-color: var(--card-bg);
       border-radius: 12px;
-      overflow: hidden;
+      padding: 15px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       cursor: pointer;
       transition: transform 0.2s;
-      padding: 15px;
     }
     .product-card:hover {
       transform: scale(1.02);
     }
- 
-    #contactForm {
-      max-width: 600px;
-      margin: auto;
-      background-color: var(--card-bg);
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      color: var(--text-color);
-    }
-    #contactForm h2 {
-      color: var(--primary);
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    #contactForm label {
-      font-weight: bold;
-      display: block;
-      margin-top: 15px;
-      margin-bottom: 5px;
-    }
-    #contactForm input,
-    #contactForm textarea {
-      width: 100%;
-      padding: 10px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-      resize: vertical;
-      font-family: inherit;
-      font-size: 16px;
-      color: var(--text-color);
-      background-color: var(--bg-color);
-      transition: background-color 0.3s, color 0.3s;
-    }
-    #contactForm input:focus,
-    #contactForm textarea:focus {
-      border-color: var(--primary);
-      outline: none;
-      background-color: var(--card-bg);
-    }
-    #contactForm button {
-      margin-top: 20px;
-      width: 100%;
-      padding: 12px;
-      background-color: var(--primary);
-      color: white;
-      font-weight: bold;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-      font-size: 18px;
-    }
-    #contactForm button:hover {
-      background-color: #149b85;
-    }
-    #successMessage {
-      margin-top: 15px;
-      font-weight: bold;
-      text-align: center;
-      display: none;
-    }
-    footer {
-      background-color: var(--footer-bg);
-      color: white;
-      text-align: center;
-      padding: 20px;
-      margin-top: auto;
-    }
-
-    /* Modal Styles */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.6);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    .modal.active {
-      display: flex;
-    }
-    .modal-content {
-      background-color: var(--card-bg);
-      padding: 20px 30px;
-      border-radius: 12px;
-      max-width: 500px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.2);
-      color: var(--text-color);
-      position: relative;
-    }
-    .modal-content h3 {
+    .product-card h3 {
       margin-top: 0;
+      margin-bottom: 8px;
       color: var(--primary);
     }
-    .modal-content p {
-      margin: 15px 0;
-    }
-    .close-btn {
-      position: absolute;
-      top: 12px;
-      right: 15px;
-      font-size: 28px;
-      font-weight: bold;
-      color: var(--text-color);
-      cursor: pointer;
-      user-select: none;
-    }
-
-    /* ✅ Modal içi düymələr üçün dizayn */
-    .volume-btn {
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 8px;
+    .product-card p {
+      margin: 0;
       font-weight: 600;
-      padding: 8px 16px;
-      margin: 10px 8px 0 0;
-      transition: background-color 0.3s, transform 0.2s;
-    }
-
-    .volume-btn:hover {
-      background-color: #149b85;
-      transform: scale(1.05);
-    }
-
-    .volume-btn.active {
-      background-color: #0e7c68;
-    }
-
-    #whatsappOrderBtn {
-      background-color: #25D366;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-weight: bold;
-      padding: 12px 20px;
-      margin-top: 20px;
-      transition: background-color 0.3s, transform 0.2s;
-      display: block;
-      width: 100%;
-      text-align: center;
-    }
-
-    #whatsappOrderBtn:hover {
-      background-color: #1da851;
-      transform: scale(1.03);
-    }
-
-    /* PDF iframe styling */
-    #cataloguePdf {
-      width: 100%;
-      height: 80vh;
-      border: none;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-
-    /* --- Mobil üçün responsiv dizayn --- */
-    @media (max-width: 600px) {
-      #product-list {
-        grid-template-columns: 1fr !important;
-        gap: 15px;
-      }
-
-      nav ul {
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-
-      nav ul li a {
-        padding: 10px 8px;
-        font-size: 14px;
-      }
-
-      #contactForm input,
-      #contactForm textarea {
-        font-size: 14px;
-      }
-
-      #contactForm button {
-        font-size: 16px;
-        padding: 10px;
-      }
-
-      .product-card h3 {
-        font-size: 18px;
-      }
-
-      #cataloguePdf {
-        height: 60vh;
-      }
-
-      .nav-container {
-        flex-direction: column;
-        gap: 15px;
-        align-items: flex-start;
-      }
-
-      .theme-toggle {
-        align-self: flex-end;
-      }
+      color: var(--text-color);
     }
   </style>
 </head>
 <body>
-  <div class="top-space"></div>
   <nav>
     <div class="nav-container">
       <div class="logo">
-        <img src="logo.png" alt="Logo" style="height: 60px;" />
+        <img src="logo.png" alt="Logo" />
       </div>
       <ul>
         <li><a id="nav-about" class="active" onclick="showSection('about')">Haqqımızda</a></li>
@@ -368,224 +219,120 @@
   </nav>
 
   <main>
-    <div id="about" class="section active">
+    <section id="about" class="section active">
       <h2>Haqqımızda</h2>
-      <p>
-        R-Shoppingaz komandası olaraq deluxe keyfiyyətdə olan ətirləri sizə təqdim edirik.
-        Zövqünüzə uyğun olan ətirləri sifariş edə bilərsiniz. Parfümeriya sahəsində təcrübəli
-        mütəxəssislər tərəfindən hazırlanan qarışımların qalıcı olmasına zəmanət verilir.
-        Fransa və Türkiyənin premium ətir dünyasına dəvət edirik! Yüksək qalıcılıq, unikal
-        qoxular və sərfəli seçimlərlə təravətinizi vurğulayın. Zövqünüzü tamamlayan ideal
-        qoxunu bizimlə kəşf edin.
-      </p>
-    </div>
+      <p>Burada şirkət haqqında məlumat yerləşəcək...</p>
+    </section>
 
-    <div id="projects" class="section">
+    <section id="projects" class="section">
       <h2>Ətirlər</h2>
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Axtar..."
+        aria-label="Ətirlər arasında axtar"
+      />
       <div id="product-list"></div>
-    </div>
+    </section>
 
-    <div id="contact" class="section">
-      <form id="contactForm" action="https://getform.io/f/bqomyqzb" method="POST">
-        <h2>Bizə Yazın</h2>
-        <label for="Ad">Ad:</label>
-        <input id="Ad" type="text" name="Ad" required />
-        <label for="Soyad">Soyad:</label>
-        <input id="Soyad" type="text" name="Soyad" required />
-        <label for="E-posta">E-poçt:</label>
-        <input id="E-posta" type="email" name="E-posta" required />
-        <label for="Telefon">Telefon Nömrəsi:</label>
-        <input id="Telefon" type="tel" name="Telefon" />
-        <label for="Mesaj">Məktubunuz:</label>
-        <textarea id="Mesaj" name="Mesaj" rows="5" required></textarea>
-        <button type="submit">Göndər</button>
-        <p id="successMessage"></p>
-      </form>
-    </div>
+    <section id="contact" class="section">
+      <h2>Əlaqə</h2>
+      <p>Əlaqə məlumatları burada.</p>
+    </section>
 
-    <div id="catalogue" class="section">
+    <section id="catalogue" class="section">
       <h2>Kataloq</h2>
-      <iframe id="cataloguePdf" src="urunlerim/KATALOQUM.pdf" allowfullscreen></iframe>
-    </div>
+      <p>Kataloq məlumatları burada.</p>
+    </section>
   </main>
 
-  <!-- Modal HTML -->
-  <div id="productModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" onclick="closeModal()">&times;</span>
-      <h3 id="modalTitle"></h3>
-      <p id="modalDescription"></p>
-      <p><strong id="modalPrice"></strong></p>
-    </div>
-  </div>
-
-  <footer>
-    <p>© 2025 R-Shoppingaz. Bütün hüquqlar qorunur.</p>
-  </footer>
-
   <script>
-    // Naviqasiya bölmələrini göstərmək üçün
+    // Naviqasiya bölmələri göstərmə funksiyası
     function showSection(id) {
-      const sections = document.querySelectorAll('.section');
-      const links = document.querySelectorAll('nav ul li a');
-
-      sections.forEach(sec => sec.classList.remove('active'));
+      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
       document.getElementById(id).classList.add('active');
 
-      links.forEach(link => link.classList.remove('active'));
-      const activeLink = document.getElementById('nav-' + id);
-      if (activeLink) activeLink.classList.add('active');
+      document.querySelectorAll('nav ul li a').forEach(link => link.classList.remove('active'));
+      document.getElementById('nav-' + id).classList.add('active');
     }
 
-    // Qaranlıq / Açıq mod toggle
+    // Tema dəyişmə funksiyası
     function toggleTheme() {
       const body = document.body;
       const button = document.getElementById('themeToggle');
       const isDark = body.classList.toggle('dark');
-      button.textContent = isDark ? 'AÇIQ MOD' : 'QARANLIQ MOD';
+
+      if(window.innerWidth <= 600) {
+        button.textContent = isDark ? '☀️' : '🌙';
+      } else {
+        button.textContent = isDark ? 'AÇIQ MOD' : 'QARANLIQ MOD';
+      }
+
       button.style.color = isDark ? '#ffffff' : '#2c3e50';
     }
-  </script>
 
-  <!-- Firebase SDKs and Firestore integration -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyCSaiU9DguIk47O8LPZ_Oa6StJgHbPqZ6I",
-      authDomain: "perfume-8b7f7.firebaseapp.com",
-      projectId: "perfume-8b7f7",
-      storageBucket: "perfume-8b7f7.appspot.com",
-      messagingSenderId: "899731999798",
-      appId: "1:899731999798:web:750af78287f56d15d41c97"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    function createProductCard(product) {
-      const card = document.createElement('div');
-      card.className = 'product-card';
-
-      card.innerHTML = `
-        <h3>${product.name}</h3>
-        <p style="font-size: 14px; color: gray;">Kod: ${product.code || '-'}</p>
-      `;
-
-      card.addEventListener('click', () => openModal(product));
-
-      return card;
-    }
-
-    async function loadProducts() {
-      const productList = document.getElementById('product-list');
-      productList.innerHTML = '';
-
-      try {
-        const querySnapshot = await getDocs(collection(db, "products"));
-        if (querySnapshot.empty) {
-          productList.innerHTML = '<p style="text-align:center;">Məhsul tapılmadı</p>';
-          return;
-        }
-
-        querySnapshot.forEach(docSnap => {
-          const product = docSnap.data();
-          productList.appendChild(createProductCard(product));
-        });
-      } catch (error) {
-        console.error("Məhsullar yüklənərkən xəta:", error);
-        productList.innerHTML = '<p style="color:red; text-align:center;">Məhsullar yüklənərkən xəta baş verdi</p>';
+    // İlkin düymə vəziyyəti
+    window.addEventListener('DOMContentLoaded', () => {
+      const button = document.getElementById('themeToggle');
+      if(window.innerWidth <= 600) {
+        button.textContent = '🌙';
+      } else {
+        button.textContent = 'QARANLIQ MOD';
       }
-    }
 
-    // Modal funksiyaları
-
-    function openModal(product) {
-      const modalTitle = document.getElementById('modalTitle');
-      const modalDescription = document.getElementById('modalDescription');
-      const modalPrice = document.getElementById('modalPrice');
-
-      modalTitle.textContent = product.name;
-      modalDescription.innerHTML = product.description || '';
-
-      let selectedVolume = '30 ml';
-      let price = 10;
-
-      const oldBtns = document.querySelectorAll('.volume-btn, #whatsappOrderBtn');
-      oldBtns.forEach(el => el.remove());
-
-      modalPrice.textContent = `Qiymət: ${price} ₼`;
-
-      const btn30 = document.createElement('button');
-      btn30.textContent = '30 ml';
-      btn30.className = 'volume-btn active';
-      btn30.style.marginRight = '10px';
-      btn30.style.padding = '6px 12px';
-      btn30.style.cursor = 'pointer';
-
-      const btn50 = document.createElement('button');
-      btn50.textContent = '50 ml';
-      btn50.className = 'volume-btn';
-      btn50.style.padding = '6px 12px';
-      btn50.style.cursor = 'pointer';
-
-      const whatsappBtn = document.createElement('button');
-      whatsappBtn.textContent = 'WhatsApp ilə Sifariş Ver';
-      whatsappBtn.id = 'whatsappOrderBtn';
-      whatsappBtn.style.marginTop = '15px';
-      whatsappBtn.style.padding = '10px 15px';
-      whatsappBtn.style.backgroundColor = '#25D366';
-      whatsappBtn.style.color = 'white';
-      whatsappBtn.style.border = 'none';
-      whatsappBtn.style.borderRadius = '8px';
-      whatsappBtn.style.cursor = 'pointer';
-      whatsappBtn.style.fontWeight = 'bold';
-
-      btn30.onclick = () => {
-        selectedVolume = '30 ml';
-        price = 10;
-        modalPrice.textContent = `Qiymət: ${price} ₼`;
-        btn30.classList.add('active');
-        btn50.classList.remove('active');
-      };
-
-      btn50.onclick = () => {
-        selectedVolume = '50 ml';
-        price = 13;
-        modalPrice.textContent = `Qiymət: ${price} ₼`;
-        btn50.classList.add('active');
-        btn30.classList.remove('active');
-      };
-
-      whatsappBtn.onclick = () => {
-        const phoneNumber = '994515817772';
-        const message = encodeURIComponent(`Salam, mən "${product.name}" məhsulundan ${selectedVolume} almaq istəyirəm. Qiymət: ${price} ₼.`);
-        const url = `https://wa.me/${phoneNumber}?text=${message}`;
-        window.open(url, '_blank');
-      };
-
-      modalPrice.insertAdjacentElement('beforebegin', btn50);
-      modalPrice.insertAdjacentElement('beforebegin', btn30);
-      modalPrice.insertAdjacentElement('afterend', whatsappBtn);
-
-      document.getElementById('productModal').classList.add('active');
-    }
-
-    function closeModal() {
-      document.getElementById('productModal').classList.remove('active');
-    }
-
-    document.getElementById('productModal').addEventListener('click', (e) => {
-      if (e.target === e.currentTarget) closeModal();
+      loadProducts();
     });
 
-    window.addEventListener('DOMContentLoaded', () => {
-      loadProducts();
-      const closeBtn = document.querySelector('.close-btn');
-      if (closeBtn) {
-        closeBtn.addEventListener('click', closeModal);
+    window.addEventListener('resize', () => {
+      const button = document.getElementById('themeToggle');
+      const isDark = document.body.classList.contains('dark');
+      if(window.innerWidth <= 600) {
+        button.textContent = isDark ? '☀️' : '🌙';
+      } else {
+        button.textContent = isDark ? 'AÇIQ MOD' : 'QARANLIQ MOD';
       }
+    });
+
+    // Məhsullar nümunəsi (öz Firestore-dan yükləyirsənsə, buranı dəyiş)
+    const products = [
+      { id: 1, name: "Chanel Bleu", code: "CB01" },
+      { id: 2, name: "Dior Sauvage", code: "DS02" },
+      { id: 3, name: "Gucci Bloom", code: "GB03" },
+      { id: 4, name: "Tom Ford Noir", code: "TF04" },
+      { id: 5, name: "Versace Eros", code: "VE05" },
+      { id: 6, name: "Calvin Klein CK One", code: "CK06" },
+      { id: 7, name: "Armani Code", code: "AC07" },
+      { id: 8, name: "Yves Saint Laurent Libre", code: "YSL08" },
+    ];
+
+    // Məhsulları göstərmə funksiyası
+    function renderProducts(list) {
+      const container = document.getElementById('product-list');
+      container.innerHTML = '';
+
+      if(list.length === 0) {
+        container.innerHTML = '<p style="text-align:center;">Axtarışa uyğun məhsul tapılmadı</p>';
+        return;
+      }
+
+      list.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `<h3>${product.name}</h3><p>Kod: ${product.code}</p>`;
+        container.appendChild(card);
+      });
+    }
+
+    // Məhsulları yüklə (burada statik nümunə)
+    function loadProducts() {
+      renderProducts(products);
+    }
+
+    // Axtarış çubuğu üçün event
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const val = e.target.value.trim().toLowerCase();
+      const filtered = products.filter(p => p.name.toLowerCase().includes(val));
+      renderProducts(filtered);
     });
   </script>
 </body>
