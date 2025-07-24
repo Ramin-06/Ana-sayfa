@@ -255,44 +255,44 @@
     }
 
     /* ✅ Modal içi düymələr üçün dizayn */
-    .volume-btn {
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      padding: 8px 16px;
-      margin: 10px 8px 0 0;
-      transition: background-color 0.3s, transform 0.2s;
-    }
+.volume-btn {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 8px 16px;
+  margin: 10px 8px 0 0;
+  transition: background-color 0.3s, transform 0.2s;
+}
 
-    .volume-btn:hover {
-      background-color: #149b85;
-      transform: scale(1.05);
-    }
+.volume-btn:hover {
+  background-color: #149b85;
+  transform: scale(1.05);
+}
 
-    .volume-btn.active {
-      background-color: #0e7c68;
-    }
+.volume-btn.active {
+  background-color: #0e7c68;
+}
 
-    #whatsappOrderBtn {
-      background-color: #25D366;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-weight: bold;
-      padding: 12px 20px;
-      margin-top: 20px;
-      transition: background-color 0.3s, transform 0.2s;
-      display: block;
-      width: 100%;
-      text-align: center;
-    }
+#whatsappOrderBtn {
+  background-color: #25D366;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  padding: 12px 20px;
+  margin-top: 20px;
+  transition: background-color 0.3s, transform 0.2s;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
 
-    #whatsappOrderBtn:hover {
-      background-color: #1da851;
-      transform: scale(1.03);
-    }
+#whatsappOrderBtn:hover {
+  background-color: #1da851;
+  transform: scale(1.03);
+}
   </style>
 </head>
 <body>
@@ -305,7 +305,6 @@
       <ul>
         <li><a id="nav-about" class="active" onclick="showSection('about')">Haqqımızda</a></li>
         <li><a id="nav-projects" onclick="showSection('projects')">Ətirlər</a></li>
-        <li><a id="nav-catalog" onclick="showSection('catalog')">Kataloq</a></li> <!-- Yeni -->
         <li><a id="nav-contact" onclick="showSection('contact')">Əlaqə</a></li>
       </ul>
       <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">QARANLIQ MOD</button>
@@ -328,19 +327,6 @@
     <div id="projects" class="section">
       <h2>Ətirlər</h2>
       <div id="product-list"></div>
-    </div>
-
-    <!-- KATALOQ ÜÇÜN YENİ BÖLMƏ -->
-    <div id="catalog" class="section">
-      <h2>Kataloq</h2>
-      <canvas id="pdf-render" style="border:1px solid #ccc; display:block; margin: 20px auto; max-width: 100%; border-radius: 10px;"></canvas>
-      <div style="text-align:center; margin-bottom:40px;">
-        <button id="prevPage" style="padding:10px 15px; margin-right:10px; cursor:pointer;">Əvvəlki</button>
-        <button id="nextPage" style="padding:10px 15px; cursor:pointer;">Növbəti</button>
-        <span style="font-weight:bold; font-size:18px; margin-left:15px;">
-          Səhifə: <span id="pageNum">0</span> / <span id="pageCount">0</span>
-        </span>
-      </div>
     </div>
 
     <div id="contact" class="section">
@@ -404,7 +390,6 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-    import { getDocument } from "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.9.179/build/pdf.min.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCSaiU9DguIk47O8LPZ_Oa6StJgHbPqZ6I",
@@ -474,42 +459,54 @@
       const btn30 = document.createElement('button');
       btn30.textContent = '30 ml';
       btn30.className = 'volume-btn active';
+      btn30.style.marginRight = '10px';
+      btn30.style.padding = '6px 12px';
+      btn30.style.cursor = 'pointer';
 
       const btn50 = document.createElement('button');
       btn50.textContent = '50 ml';
       btn50.className = 'volume-btn';
-
-      btn30.addEventListener('click', () => {
-        selectedVolume = '30 ml';
-        price = 10;
-        btn30.classList.add('active');
-        btn50.classList.remove('active');
-        modalPrice.textContent = `Qiymət: ${price} ₼`;
-      });
-
-      btn50.addEventListener('click', () => {
-        selectedVolume = '50 ml';
-        price = 13;
-        btn50.classList.add('active');
-        btn30.classList.remove('active');
-        modalPrice.textContent = `Qiymət: ${price} ₼`;
-      });
-
-      modalPrice.insertAdjacentElement('afterend', btn30);
-      btn30.insertAdjacentElement('afterend', btn50);
+      btn50.style.padding = '6px 12px';
+      btn50.style.cursor = 'pointer';
 
       const whatsappBtn = document.createElement('button');
-      whatsappBtn.textContent = 'WhatsApp-dan Sifariş Ver';
+      whatsappBtn.textContent = 'WhatsApp ilə Sifariş Ver';
       whatsappBtn.id = 'whatsappOrderBtn';
+      whatsappBtn.style.marginTop = '15px';
+      whatsappBtn.style.padding = '10px 15px';
+      whatsappBtn.style.backgroundColor = '#25D366';
+      whatsappBtn.style.color = 'white';
+      whatsappBtn.style.border = 'none';
+      whatsappBtn.style.borderRadius = '8px';
+      whatsappBtn.style.cursor = 'pointer';
+      whatsappBtn.style.fontWeight = 'bold';
+
+      btn30.onclick = () => {
+        selectedVolume = '30 ml';
+        price = 10;
+        modalPrice.textContent = `Qiymət: ${price} ₼`;
+        btn30.classList.add('active');
+        btn50.classList.remove('active');
+      };
+
+      btn50.onclick = () => {
+        selectedVolume = '50 ml';
+        price = 13;
+        modalPrice.textContent = `Qiymət: ${price} ₼`;
+        btn50.classList.add('active');
+        btn30.classList.remove('active');
+      };
 
       whatsappBtn.onclick = () => {
-        const text = `Salam! Mən "${product.name}" (${selectedVolume}) haqqında məlumat almaq istəyirəm. Qiymət: ${price} AZN.`;
-        const phone = '994705419584'; // Telefon nömrəsi
-        const url = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+        const phoneNumber = '994515817772';
+        const message = encodeURIComponent(`Salam, mən "${product.name}" məhsulundan ${selectedVolume} almaq istəyirəm. Qiymət: ${price} ₼.`);
+        const url = `https://wa.me/${phoneNumber}?text=${message}`;
         window.open(url, '_blank');
       };
 
-      btn50.insertAdjacentElement('afterend', whatsappBtn);
+      modalPrice.insertAdjacentElement('beforebegin', btn50);
+      modalPrice.insertAdjacentElement('beforebegin', btn30);
+      modalPrice.insertAdjacentElement('afterend', whatsappBtn);
 
       document.getElementById('productModal').classList.add('active');
     }
@@ -518,75 +515,19 @@
       document.getElementById('productModal').classList.remove('active');
     }
 
-    // PDF Kataloq funksiyaları
-
-    const pdfUrl = 'urunlerim/KATALOQUM.pdf';
-    const canvas = document.getElementById('pdf-render');
-    const ctx = canvas.getContext('2d');
-    let pdfDoc = null;
-    let pageNum = 1;
-    let pageCount = 0;
-    let pageRendering = false;
-    let pageNumPending = null;
-    const scale = 1.5;
-
-    function renderPage(num) {
-      pageRendering = true;
-      pdfDoc.getPage(num).then(page => {
-        const viewport = page.getViewport({ scale });
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-
-        const renderContext = {
-          canvasContext: ctx,
-          viewport: viewport,
-        };
-
-        const renderTask = page.render(renderContext);
-        renderTask.promise.then(() => {
-          pageRendering = false;
-          if (pageNumPending !== null) {
-            renderPage(pageNumPending);
-            pageNumPending = null;
-          }
-        });
-
-        document.getElementById('pageNum').textContent = num;
-      });
-    }
-
-    function queueRenderPage(num) {
-      if (pageRendering) {
-        pageNumPending = num;
-      } else {
-        renderPage(num);
-      }
-    }
-
-    document.getElementById('prevPage').addEventListener('click', () => {
-      if (pageNum <= 1) return;
-      pageNum--;
-      queueRenderPage(pageNum);
+    document.getElementById('productModal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeModal();
     });
 
-    document.getElementById('nextPage').addEventListener('click', () => {
-      if (pageNum >= pageCount) return;
-      pageNum++;
-      queueRenderPage(pageNum);
+    window.addEventListener('DOMContentLoaded', () => {
+      loadProducts();
+const closeBtn = document.querySelector('.close-btn');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeModal);
+  }
+      
     });
 
-    getDocument(pdfUrl).promise.then(pdfDoc_ => {
-      pdfDoc = pdfDoc_;
-      pageCount = pdfDoc.numPages;
-      document.getElementById('pageCount').textContent = pageCount;
-      renderPage(pageNum);
-    }).catch(err => {
-      const catalogDiv = document.getElementById('catalog');
-      catalogDiv.innerHTML = '<p style="color:red; text-align:center;">PDF yüklənərkən xəta baş verdi.</p>';
-      console.error(err);
-    });
-
-    loadProducts();
   </script>
 </body>
 </html>
