@@ -194,7 +194,7 @@ font-weight: 500;
 display: grid;
 gap: 20px;
 grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-margin-top: 30px;
+margin-top: 20px;
 position: relative;
 }
 .product-card {
@@ -205,32 +205,28 @@ box-shadow: var(--shadow);
 cursor: pointer;
 transition: transform 0.3s ease, box-shadow 0.3s ease;
 padding: 20px;
-position: relative;
-perspective: 1000px;
+height: 150px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+box-sizing: border-box;
 }
 body.dark .product-card {
 background: linear-gradient(135deg, var(--card-bg), #3a4a5a);
 }
 .product-card:hover {
-transform: translateY(-5px) rotateX(5deg) rotateY(5deg);
+transform: translateY(-5px);
 box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-border: 2px solid transparent;
-border-image: linear-gradient(45deg, var(--primary), var(--secondary)) 1;
-animation: borderSpin 0.6s linear infinite;
 }
 .product-card h3 {
-font-size: 1.4em;
+font-size: 1.2em;
 margin: 0 0 10px;
 color: var(--primary);
-position: relative;
-z-index: 1;
 }
 .product-card p {
 font-size: 14px;
 color: var(--text-color);
 margin: 5px 0;
-position: relative;
-z-index: 1;
 }
 .loader {
 display: none;
@@ -610,47 +606,40 @@ margin-bottom: 40px;
 font-weight: 500;
 }
 .price-table {
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-gap: 30px;
-max-width: 800px;
+max-width: 600px;
 margin: 0 auto;
 margin-top: 40px;
 }
-.price-card {
-background: var(--card-bg);
-border-radius: 12px;
-padding: 20px;
-box-shadow: var(--shadow);
-transition: transform 0.3s ease;
-border: 2px solid transparent;
-text-align: center;
-}
-.price-card:hover {
-transform: translateY(-5px);
-border-image: linear-gradient(45deg, var(--primary), var(--secondary)) 1;
-}
-.price-card h4 {
-color: var(--primary);
-font-size: 1.3em;
-margin: 0 0 15px;
-}
-.price-card p {
-font-size: 1.1em;
-color: var(--text-color);
-margin: 15px 0;
+.price-table table {
 width: 100%;
-box-sizing: border-box;
-padding: 10px;
-border-radius: 6px;
-transition: background 0.3s ease;
+border-collapse: collapse;
+border: 1px solid #ccc;
+background: var(--card-bg);
 }
-.price-card p:hover {
+body.dark .price-table table {
+border: 1px solid #555;
+background: var(--card-bg);
+}
+.price-table th, .price-table td {
+padding: 10px;
+text-align: center;
+border: 1px solid #ccc;
+}
+body.dark .price-table th, body.dark .price-table td {
+border: 1px solid #555;
+}
+.price-table th {
+font-weight: 700;
+color: var(--text-color);
 background: rgba(108, 92, 231, 0.1);
 }
-.price-card .highlight {
-font-weight: 700;
+.price-table td {
+font-size: 1em;
+color: var(--text-color);
+}
+.price-table .highlight {
 color: var(--primary);
+font-weight: 700;
 }
 .satisfaction-table {
 display: grid;
@@ -719,14 +708,6 @@ margin-bottom: 20px;
 text-transform: uppercase;
 letter-spacing: 1px;
 }
-@keyframes borderSpin {
-0% {
-border-image: linear-gradient(45deg, var(--primary), var(--secondary)) 1;
-}
-100% {
-border-image: linear-gradient(405deg, var(--primary), var(--secondary)) 1;
-}
-}
 @keyframes slideCart {
 0% { transform: translateX(0); }
 50% { transform: translateX(10px); }
@@ -790,7 +771,7 @@ font-size: 15px;
 padding: 10px;
 }
 .product-card h3 {
-font-size: 1.2em;
+font-size: 1.1em;
 }
 .product-card p {
 font-size: 13px;
@@ -820,16 +801,10 @@ padding: 40px 15px;
 .hero-section p {
 font-size: 1.5em;
 }
-.price-table {
-grid-template-columns: 1fr;
-gap: 20px;
+.price-table table {
+font-size: 0.9em;
 }
-.price-card {
-padding: 15px;
-}
-.price-card p {
-font-size: 1em;
-margin: 12px 0;
+.price-table th, .price-table td {
 padding: 8px;
 }
 .satisfaction-table {
@@ -851,7 +826,7 @@ font-size: 1.3em;
 grid-template-columns: 1fr;
 }
 .product-card h3 {
-font-size: 1.1em;
+font-size: 1em;
 }
 .product-card p {
 font-size: 12px;
@@ -870,14 +845,15 @@ font-size: 13px;
 font-size: 14px;
 }
 h2 {
-font-size: 1.6em;
+font-size: Pence;
 }
 .hero-section p {
 font-size: 1.2em;
 }
-.price-card p {
-font-size: 0.9em;
-margin: 10px 0;
+.price-table table {
+font-size: 0.85em;
+}
+.price-table th, .price-table td {
 padding: 6px;
 }
 .satisfaction-card h4 {
@@ -929,18 +905,28 @@ qoxunu bizimlə kəşf edin.
 Digər hərkəsdən fərqli olaraq ətirlərimizin hazırlanması zamanı 50 faiz yüksək keyfiyyətli yağ qarışımı və 50 faiz parfüm suyu istifadə edilir!
 </p>
 <div class="price-table">
-<div class="price-card">
-<h4>50 ml Ətirlər</h4>
-<p>5 ədəd: <span class="highlight">45 ₼</span></p>
-<p>10 ədəd: <span class="highlight">75 ₼</span></p>
-<p>15 ədəd: <span class="highlight">110 ₼</span></p>
-</div>
-<div class="price-card">
-<h4>30 ml Ətirlər</h4>
-<p>5 ədəd: <span class="highlight">32 ₼</span></p>
-<p>10 ədəd: <span class="highlight">64 ₼ Estes</span></p>
-<p>15 ədəd: <span class="highlight">96 ₼</span></p>
-</div>
+<table>
+<tr>
+<th>Miqdar</th>
+<th>50 ml Ətirlər</th>
+<th>30 ml Ətirlər</th>
+</tr>
+<tr>
+<td>5 ədəd</td>
+<td><span class="highlight">45 ₼</span></td>
+<td><span class="highlight">32 ₼</span></td>
+</tr>
+<tr>
+<td>10 ədəd</td>
+<td><span class="highlight">75 ₼</span></td>
+<td><span class="highlight">64 ₼</span></td>
+</tr>
+<tr>
+<td>15 ədəd</td>
+<td><span class="highlight">110 ₼</span></td>
+<td><span class="highlight">96 ₼</span></td>
+</tr>
+</table>
 </div>
 </div>
 <div class="customer-satisfaction">
