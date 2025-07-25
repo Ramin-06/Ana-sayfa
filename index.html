@@ -15,20 +15,20 @@
       --nav-bg: #1a2a44;
       --nav-text: #ffffff;
       --nav-active: #6c5ce7;
-      --card-bg: #ffffff;
+      --card-bg: #f9fafc;
       --footer-bg: #1a2a44;
       --nav-hover-bg: rgba(255, 255, 255, 0.15);
       --shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
     }
     body.dark {
-      --bg-color: #121212;
-      --text-color: #e0e0e0;
-      --primary: #a29bfe;
-      --secondary: #6c5ce7;
+      --bg-color: #1a1a1a;
+      --text-color: #c7d1e0;
+      --primary: #7c4dff;
+      --secondary: #b47cff;
       --nav-bg: #1a2a44;
       --nav-text: #ffffff;
-      --nav-active: #a29bfe;
-      --card-bg: #1e1e1e;
+      --nav-active: #7c4dff;
+      --card-bg: #2a3a4a;
       --footer-bg: #1a2a44;
       --nav-hover-bg: rgba(255, 255, 255, 0.1);
     }
@@ -117,20 +117,37 @@
     nav ul li a:hover::after {
       transform: scaleX(1);
     }
-    .theme-toggle {
+    .theme-toggle, .cart-toggle {
       background: var(--card-bg);
-      color: var(--nav-text);
-      border: 1px solid var(--nav-text);
+      color: var(--text-color);
+      border: 1px solid #ccc;
       padding: 8px 12px;
       cursor: pointer;
       font-weight: 600;
       border-radius: 8px;
       transition: all 0.3s ease;
+      margin-left: 10px;
+      position: relative;
     }
-    .theme-toggle:hover {
+    .theme-toggle:hover, .cart-toggle:hover {
       background: var(--primary);
       color: #fff;
       transform: scale(1.05);
+    }
+    .cart-toggle.slide {
+      animation: slideCart 0.5s ease-in-out;
+    }
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 12px;
+      font-weight: bold;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
     main {
       flex: 1;
@@ -175,7 +192,7 @@
       position: relative;
     }
     .product-card {
-      background: linear-gradient(135deg, var(--card-bg), #f8f9fa);
+      background: linear-gradient(135deg, var(--card-bg), #e8ecef);
       border-radius: 16px;
       overflow: hidden;
       box-shadow: var(--shadow);
@@ -183,22 +200,31 @@
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       padding: 20px;
       position: relative;
-      animation: fadeIn 0.5s ease-in-out;
       perspective: 1000px;
+    }
+    body.dark .product-card {
+      background: linear-gradient(135deg, var(--card-bg), #3a4a5a);
     }
     .product-card:hover {
       transform: translateY(-5px) rotateX(5deg) rotateY(5deg);
       box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+      border: 2px solid transparent;
+      border-image: linear-gradient(45deg, var(--primary), var(--secondary)) 1;
+      animation: borderSpin 0.6s linear infinite;
     }
     .product-card h3 {
       font-size: 1.4em;
       margin: 0 0 10px;
       color: var(--primary);
+      position: relative;
+      z-index: 1;
     }
     .product-card p {
       font-size: 14px;
       color: var(--text-color);
       margin: 5px 0;
+      position: relative;
+      z-index: 1;
     }
     .loader {
       display: none;
@@ -322,7 +348,7 @@
       opacity: 1;
     }
     .modal-content {
-      background: var(--card-bg);
+      background: linear-gradient(135deg, var(--card-bg), #e8ecef);
       padding: 25px;
       border-radius: 16px;
       max-width: 500px;
@@ -332,7 +358,9 @@
       position: relative;
       transform: scale(0.8);
       transition: transform 0.3s ease;
-      background: linear-gradient(135deg, var(--card-bg), #f8f9fa);
+    }
+    body.dark .modal-content {
+      background: linear-gradient(135deg, #3a2a4a, #4a3a5a);
     }
     .modal.active .modal-content {
       transform: scale(1);
@@ -375,6 +403,51 @@
     }
     .volume-btn.active {
       background: linear-gradient(90deg, #5a4bcb, #8c7ae6);
+    }
+    .add-to-cart-btn {
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      padding: 12px 20px;
+      margin-top: 20px;
+      transition: all 0.3s ease;
+      display: block;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      animation: pulse 2s infinite;
+    }
+    .add-to-cart-btn:hover {
+      background: linear-gradient(90deg, var(--secondary), var(--primary));
+      transform: translateY(-2px);
+    }
+    .add-to-cart-btn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.5s ease, height 0.5s ease;
+    }
+    .add-to-cart-btn:hover::after {
+      width: 200px;
+      height: 200px;
+    }
+    .quantity-input {
+      width: 60px;
+      padding: 8px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      text-align: center;
     }
     #whatsappOrderBtn {
       background: #25D366;
@@ -475,9 +548,47 @@
       background: var(--primary);
       color: #fff;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #ccc;
+    }
+    .cart-item p {
+      margin: 0;
+      font-size: 14px;
+    }
+    .cart-item .remove-btn {
+      background: #ff4d4d;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 5px 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .cart-item .remove-btn:hover {
+      background: #cc0000;
+    }
+    .cart-total {
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 20px;
+      text-align: right;
+    }
+    @keyframes borderSpin {
+      0% {
+        border-image: linear-gradient(45deg, var(--primary), var(--secondary)) 1;
+      }
+      100% {
+        border-image: linear-gradient(405deg, var(--primary), var(--secondary)) 1;
+      }
+    }
+    @keyframes slideCart {
+      0% { transform: translateX(0); }
+      50% { transform: translateX(10px); }
+      100% { transform: translateX(0); }
     }
     @keyframes spin {
       0% { transform: rotate(0deg); }
@@ -613,7 +724,13 @@
         <li><a id="nav-contact" onclick="showSection('contact')">Əlaqə</a></li>
         <li><a id="nav-catalogue" onclick="showSection('catalogue')">Kataloq</a></li>
       </ul>
-      <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">🌙</button>
+      <div>
+        <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        <button id="cartToggle" class="cart-toggle" onclick="openCartModal()">
+          <i class="fas fa-shopping-cart"></i>
+          <span id="cartCount" class="cart-count">0</span>
+        </button>
+      </div>
     </div>
   </nav>
   <main class="blur-background">
@@ -664,13 +781,26 @@
       <span class="close-btn" onclick="closeModal()">×</span>
       <h3 id="modalTitle"></h3>
       <p id="modalDescription"></p>
+      <label for="quantity">Say:</label>
+      <input type="number" id="quantity" class="quantity-input" min="1" value="1" />
       <p><strong id="modalPrice"></strong></p>
+    </div>
+  </div>
+  <div id="cartModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeCartModal()">×</span>
+      <h3>Səbət</h3>
+      <div id="cartItems"></div>
+      <p class="cart-total" id="cartTotal">Cəmi: 0 ₼</p>
+      <button id="whatsappOrderBtn" onclick="sendOrderToWhatsApp()">WhatsApp ilə Sifariş Ver</button>
     </div>
   </div>
   <footer class="blur-background">
     <p>© 2025 R-Shoppingaz. Bütün hüquqlar qorunur.</p>
   </footer>
   <script>
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
     function showSection(id) {
       const sections = document.querySelectorAll('.section');
       const links = document.querySelectorAll('nav ul li a');
@@ -683,26 +813,36 @@
         document.getElementById('nav-menu').classList.remove('active');
       }
     }
+
     function toggleTheme() {
       const body = document.body;
       const button = document.getElementById('themeToggle');
       const isDark = body.classList.toggle('dark');
       button.textContent = isDark ? '☀️' : '🌙';
-      button.style.color = isDark ? '#ffffff' : '#1a2a44';
+      button.style.color = isDark ? '#c7d1e0' : '#1a2a44';
     }
+
     function toggleMenu() {
       document.getElementById('nav-menu').classList.toggle('active');
     }
+
+    function updateCartCount() {
+      const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+      document.getElementById('cartCount').textContent = cartCount;
+    }
+
     function openModal(product) {
       document.body.classList.add('modal-open');
       const modalTitle = document.getElementById('modalTitle');
       const modalDescription = document.getElementById('modalDescription');
       const modalPrice = document.getElementById('modalPrice');
+      const quantityInput = document.getElementById('quantity');
       modalTitle.textContent = product.name;
       modalDescription.innerHTML = product.description || 'Təsvir yoxdur';
       let selectedVolume = '30 ml';
       let price = product.ml === '50' ? 13 : 10;
-      const oldBtns = document.querySelectorAll('.volume-btn, #whatsappOrderBtn');
+      quantityInput.value = 1;
+      const oldBtns = document.querySelectorAll('.volume-btn, .add-to-cart-btn');
       oldBtns.forEach(el => el.remove());
       modalPrice.textContent = `Qiymət: ${price} ₼`;
       const btn30 = document.createElement('button');
@@ -712,9 +852,9 @@
       const btn50 = document.createElement('button');
       btn50.textContent = '50 ml';
       btn50.className = 'volume-btn' + (product.ml === '50' ? ' active' : '');
-      const whatsappBtn = document.createElement('button');
-      whatsappBtn.textContent = 'WhatsApp ilə Sifariş Ver';
-      whatsappBtn.id = 'whatsappOrderBtn';
+      const addToCartBtn = document.createElement('button');
+      addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart"></i>';
+      addToCartBtn.className = 'add-to-cart-btn';
       btn30.onclick = () => {
         selectedVolume = '30 ml';
         price = 10;
@@ -729,21 +869,100 @@
         btn50.classList.add('active');
         btn30.classList.remove('active');
       };
-      whatsappBtn.onclick = () => {
-        const phoneNumber = '994515817772';
-        const message = encodeURIComponent(`Salam, mən "${product.name}" məhsulundan ${selectedVolume} almaq istəyirəm. Qiymət: ${price} ₼.`);
-        const url = `https://wa.me/${phoneNumber}?text=${message}`;
-        window.open(url, '_blank');
+      addToCartBtn.onclick = () => {
+        const quantity = parseInt(quantityInput.value);
+        if (quantity < 1) {
+          alert('Zəhmət olmasa etibarlı say daxil edin.');
+          return;
+        }
+        const cartItem = {
+          id: product.id,
+          name: product.name,
+          volume: selectedVolume,
+          price: price,
+          quantity: quantity
+        };
+        const existingItem = cart.find(item => item.id === cartItem.id && item.volume === cartItem.volume);
+        if (existingItem) {
+          existingItem.quantity += quantity;
+        } else {
+          cart.push(cartItem);
+        }
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();
+        const cartToggle = document.getElementById('cartToggle');
+        cartToggle.classList.add('slide');
+        setTimeout(() => {
+          cartToggle.classList.remove('slide');
+        }, 500);
+        closeModal();
+        alert(`${cartItem.name} (${cartItem.volume}) səbətə əlavə edildi!`);
       };
       modalPrice.insertAdjacentElement('beforebegin', btn50);
       modalPrice.insertAdjacentElement('beforebegin', btn30);
-      modalPrice.insertAdjacentElement('afterend', whatsappBtn);
+      modalPrice.insertAdjacentElement('afterend', addToCartBtn);
       document.getElementById('productModal').classList.add('active');
     }
+
     function closeModal() {
       document.getElementById('productModal').classList.remove('active');
       document.body.classList.remove('modal-open');
       document.getElementById('autocompleteSuggestions').style.display = 'none';
+    }
+
+    function openCartModal() {
+      document.body.classList.add('modal-open');
+      const cartItemsDiv = document.getElementById('cartItems');
+      const cartTotalDiv = document.getElementById('cartTotal');
+      cartItemsDiv.innerHTML = '';
+      let total = 0;
+      if (cart.length === 0) {
+        cartItemsDiv.innerHTML = '<p style="text-align:center;">Səbət boşdur.</p>';
+        cartTotalDiv.textContent = 'Cəmi: 0 ₼';
+      } else {
+        cart.forEach((item, index) => {
+          const itemDiv = document.createElement('div');
+          itemDiv.className = 'cart-item';
+          itemDiv.innerHTML = `
+            <p>${item.name} (${item.volume}) - ${item.quantity} ədəd - ${item.price * item.quantity} ₼</p>
+            <button class="remove-btn" onclick="removeFromCart(${index})">Sil</button>
+          `;
+          cartItemsDiv.appendChild(itemDiv);
+          total += item.price * item.quantity;
+        });
+        cartTotalDiv.textContent = `Cəmi: ${total} ₼`;
+      }
+      document.getElementById('cartModal').classList.add('active');
+    }
+
+    function closeCartModal() {
+      document.getElementById('cartModal').classList.remove('active');
+      document.body.classList.remove('modal-open');
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartCount();
+      openCartModal();
+    }
+
+    function sendOrderToWhatsApp() {
+      if (cart.length === 0) {
+        alert('Səbət boşdur. Zəhmət olmasa məhsul əlavə edin.');
+        return;
+      }
+      let message = 'Sifariş detalları:\n';
+      let total = 0;
+      cart.forEach(item => {
+        message += `${item.name} (${item.volume}) - ${item.quantity} ədəd - ${item.price * item.quantity} ₼\n`;
+        total += item.price * item.quantity;
+      });
+      message += `\nCəmi: ${total} ₼`;
+      const phoneNumber = '994515817772';
+      const encodedMessage = encodeURIComponent(message);
+      const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+      window.open(url, '_blank');
     }
   </script>
   <script type="module">
@@ -797,9 +1016,8 @@
           productList.innerHTML = '<p style="text-align:center; color: var(--text-color);">Axtarışa uyğun məhsul tapılmadı</p>';
           return;
         }
-        filteredProducts.forEach((product, index) => {
+        filteredProducts.forEach(product => {
           const card = createProductCard(product);
-          card.style.animationDelay = `${index * 0.1}s`;
           productList.appendChild(card);
         });
       } catch (error) {
@@ -843,12 +1061,17 @@
     document.getElementById('productModal').addEventListener('click', (e) => {
       if (e.target === e.currentTarget) closeModal();
     });
+    document.getElementById('cartModal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeCartModal();
+    });
     window.addEventListener('DOMContentLoaded', () => {
       loadProducts();
-      const closeBtn = document.querySelector('.close-btn');
-      if (closeBtn) {
-        closeBtn.addEventListener('click', closeModal);
-      }
+      updateCartCount();
+      const closeBtn = document.querySelectorAll('.close-btn');
+      closeBtn.forEach(btn => btn.addEventListener('click', () => {
+        closeModal();
+        closeCartModal();
+      }));
     });
   </script>
 </body>
