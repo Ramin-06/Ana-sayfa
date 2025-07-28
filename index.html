@@ -646,42 +646,6 @@ color: var(--text-color);
 margin-bottom: 40px;
 font-weight: 500;
 }
-.price-table {
-max-width: 600px;
-margin: 0 auto;
-margin-top: 40px;
-}
-.price-table table {
-width: 100%;
-border-collapse: collapse;
-border: 1px solid #ccc;
-background: var(--card-bg);
-}
-body.dark .price-table table {
-border: 1px solid #555;
-background: var(--card-bg);
-}
-.price-table th, .price-table td {
-padding: 10px;
-text-align: center;
-border: 1px solid #ccc;
-}
-body.dark .price-table th, body.dark .price-table td {
-border: 1px solid #555;
-}
-.price-table th {
-font-weight: 700;
-color: var(--text-color);
-background: rgba(108, 92, 231, 0.1);
-}
-.price-table td {
-font-size: 1em;
-color: var(--text-color);
-}
-.price-table .highlight {
-color: var(--primary);
-font-weight: 700;
-}
 .satisfaction-table {
 display: grid;
 grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -853,12 +817,6 @@ padding: 40px 15px;
 .hero-section p {
 font-size: 1.5em;
 }
-.price-table table {
-font-size: 0.9em;
-}
-.price-table th, .price-table td {
-padding: 8px;
-}
 .satisfaction-table {
 grid-template-columns: 1fr;
 gap: 15px;
@@ -908,12 +866,6 @@ font-size: 1.8em;
 }
 .hero-section p {
 font-size: 1.2em;
-}
-.price-table table {
-font-size: 0.85em;
-}
-.price-table th, .price-table td {
-padding: 6px;
 }
 .satisfaction-card h4 {
 font-size: 1em;
@@ -1258,10 +1210,12 @@ card.innerHTML = `
 <h3>${product.name}</h3>
 <p>Kod: ${product.code || '-'}</p>
 <p class="daily-sales">Bu gün satılıb: ${dailySales} ədəd (${todayDate})</p>
-<button class="add-to-cart-btn" onclick="addToCartDirectly('${product.id}', '${product.name}', '30 ml', 10, 1)">
-<i class="fas fa-shopping-cart"></i> Səbətə əlavə et
-</button>
+<button class="add-to-cart-btn"><i class="fas fa-shopping-cart"></i> Səbətə əlavə et</button>
 `;
+const addToCartBtn = card.querySelector('.add-to-cart-btn');
+addToCartBtn.addEventListener('click', () => {
+addToCartDirectly(product.id, product.name, '30 ml', 10, 1);
+});
 card.addEventListener('click', (e) => {
 if (e.target.className.includes('add-to-cart-btn') || e.target.parentElement.className.includes('add-to-cart-btn')) return;
 openModal(product);
