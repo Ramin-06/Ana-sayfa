@@ -956,14 +956,6 @@ mütəxəssislər tərəfindən hazırlanan qarışımların qalıcı olmasına 
 Francia və Türkiyənin premium ətir dünyasına dəvət edirik! Yüksək qalıcılıq, unikal
 qoxular və sərfəli seçimlərlə təravətinizi vurğulayın. Zövqünüzü tamamlayan ideal
 qoxunu bizimlə kəşf edin.
-<p>
-  QEYD: Yuxarıdakı qiymətlər ətirlərin topdanatışı üçün nəzərdə tutulub.
-  Bu zaman göndərmə xərci alıcı tərəfindən qarşılanır.
-  Tək-tək sifariş zamanı ətirlərin qiyməti:
-  30 ml – 10 AZN
-  50 ml – 13 AZN
-  Bu zaman göndərmə xərci ödəmirsiniz, karqo xərci tərəfimizdən qarşılanır. 
-  </p>
 </p>
 <div class="campaign-section">
 <h3>Kampaniya</h3>
@@ -996,6 +988,13 @@ Digər hərkəsdən fərqli olaraq ətirlərimizin hazırlanması zamanı 50 fai
 </table>
 </div>
 </div>
+<div class="campaign-section">
+<h3>XİDMƏTLƏR VƏ ÇATDIRILMA HAQQINDA</h3>
+<p>
+<strong>Hörmətli alıcılar!</strong><br>
+Ətirlərin tək-tək sifarişi zamanı 30 ml ətirlər üçün biri 10 AZN, 50 ml ətirlər üçün isə biri 13 AZN olacaq. Belə olan halda çatdırılma xərci ödəmirsiniz.
+Əgər topdansatış olaraq sifariş etmiş olsanız öz biznesiniz üçün ilk uğurlu addımı atmış olacaqsınız. Bu zaman çatdırılma xərci alıcıya aid olur. Sifarişlərin sayından asılı olaraq müxtəlif hədiyyələr və güzəştlər edilir.
+</p>
 <div class="customer-satisfaction">
 <h3>Müştəri Məmnuniyyəti</h3>
 <div class="satisfaction-table">
@@ -1053,6 +1052,7 @@ Digər hərkəsdən fərqli olaraq ətirlərimizin hazırlanması zamanı 50 fai
 <label for="quantity">Say:</label>
 <input type="number" id="quantity" class="quantity-input" min="1" value="1" />
 <p><strong id="modalPrice"></strong></p>
+<div id="modalButtons"></div>
 </div>
 </div>
 <div id="cartModal" class="modal">
@@ -1122,14 +1122,14 @@ const modalTitle = document.getElementById('modalTitle');
 const modalDescription = document.getElementById('modalDescription');
 const modalPrice = document.getElementById('modalPrice');
 const quantityInput = document.getElementById('quantity');
+const modalButtons = document.getElementById('modalButtons');
 modalTitle.textContent = product.name;
 modalDescription.innerHTML = product.description || 'Təsvir yoxdur';
 let selectedVolume = '30 ml';
 let price = product.ml === '50' ? 13 : 10;
 quantityInput.value = 1;
-const oldBtns = document.querySelectorAll('.volume-btn, .add-to-cart-btn');
-oldBtns.forEach(el => el.remove());
 modalPrice.textContent = `Qiymət: ${price} ₼`;
+modalButtons.innerHTML = ''; // Clear only modal buttons
 const btn30 = document.createElement('button');
 btn30.textContent = '30 ml';
 btn30.className = 'volume-btn' + (product.ml === '30' ? ' active' : '');
@@ -1183,9 +1183,9 @@ cartToggle.classList.remove('slide');
 closeModal();
 alert(`${cartItem.name} (${cartItem.volume}) səbətə əlavə edildi!`);
 };
-modalPrice.insertAdjacentElement('beforebegin', btn50);
-modalPrice.insertAdjacentElement('beforebegin', btn30);
-modalPrice.insertAdjacentElement('afterend', addToCartBtn);
+modalButtons.appendChild(btn30);
+modalButtons.appendChild(btn50);
+modalButtons.appendChild(addToCartBtn);
 document.getElementById('productModal').classList.add('active');
 }
 function closeModal() {
