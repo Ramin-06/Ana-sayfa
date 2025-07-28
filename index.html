@@ -650,9 +650,48 @@ padding: 15px;
 border-radius: 8px;
 box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
+.campaign-section p strong {
+padding: 2px 8px;
+border-radius: 4px;
+}
 body.dark .campaign-section p {
 background: linear-gradient(135deg, rgb(30, 144, 255), rgb(148, 0, 211));
+}
+.price-table {
+max-width: 600px;
+margin: 0 auto;
+margin-top: 40px;
+}
+.price-table table {
+width: 100%;
+border-collapse: collapse;
+border: 1px solid #ccc;
+background: var(--card-bg);
+}
+body.dark .price-table table {
+border: 1px solid #555;
+background: var(--card-bg);
+}
+.price-table th, .price-table td {
+padding: 10px;
+text-align: center;
+border: 1px solid #ccc;
+}
+body.dark .price-table th, body.dark .price-table td {
+border: 1px solid #555;
+}
+.price-table th {
+font-weight: 700;
+color: var(--text-color);
+background: rgba(108, 92, 231, 0.1);
+}
+.price-table td {
+font-size: 1em;
+color: var(--text-color);
+}
+.price-table .highlight {
+color: var(--primary);
+font-weight: 700;
 }
 .satisfaction-table {
 display: grid;
@@ -825,6 +864,12 @@ padding: 40px 15px;
 .hero-section p {
 font-size: 1.5em;
 }
+.price-table table {
+font-size: 0.9em;
+}
+.price-table th, .price-table td {
+padding: 8px;
+}
 .satisfaction-table {
 grid-template-columns: 1fr;
 gap: 15px;
@@ -875,6 +920,12 @@ font-size: 1.8em;
 .hero-section p {
 font-size: 1.2em;
 }
+.price-table table {
+font-size: 0.85em;
+}
+.price-table th, .price-table td {
+padding: 6px;
+}
 .satisfaction-card h4 {
 font-size: 1em;
 }
@@ -918,11 +969,42 @@ qoxular və sərfəli seçimlərlə təravətinizi vurğulayın. Zövqünüzü t
 qoxunu bizimlə kəşf edin.
 </p>
 <div class="campaign-section">
+<h3>Kampaniya</h3>
+<p>
+<strong>Yüksək Keyfiyyət!</strong><br>
+Digər hərkəsdən fərqli olaraq ətirlərimizin hazırlanması zamanı 50 faiz yüksək keyfiyyətli yağ qarışımı və 50 faiz parfüm suyu istifadə edilir!
+</p>
+<div class="price-table">
+<table>
+<tr>
+<th>Miqdar</th>
+<th>50 ml Ətirlər</th>
+<th>30 ml Ətirlər</th>
+</tr>
+<tr>
+<td>5 ədəd</td>
+<td><span class="highlight">45 ₼</span></td>
+<td><span class="highlight">32 ₼</span></td>
+</tr>
+<tr>
+<td>10 ədəd</td>
+<td><span class="highlight">75 ₼</span></td>
+<td><span class="highlight">64 ₼</span></td>
+</tr>
+<tr>
+<td>15 ədəd</td>
+<td><span class="highlight">110 ₼</span></td>
+<td><span class="highlight">96 ₼</span></td>
+</tr>
+</table>
+</div>
+</div>
+<div class="campaign-section">
 <h3>XİDMƏTLƏR VƏ ÇATDIRILMA HAQQINDA</h3>
 <p>
-<strong>Hörmətli alıcılar!</strong><br>
-Ətirlərin tək-tək sifarişi zamanı 30 ml ətirlər üçün biri 10 AZN, 50 ml ətirlər üçün isə biri 13 AZN olacaq. Belə olan halda çatdırılma xərci ödəmirsiniz.
-Əgər topdansatış olaraq sifariş etmiş olsanız öz biznesiniz üçün ilk uğurlu addımı atmış olacaqsınız. Bu zaman çatdırılma xərci alıcıya aid olur. Sifarişlərin sayından asılı olaraq müxtəlif hədiyyələr və güzəştlər edilir.
+<strong>Hörmətli alıcılar!</strong><br />
+Ətirlərin tək-tək sifariş zamanı 30 ml ətirlər üçün biri 15 AZN, 50 ml ətirlər üçün isə biri 100 AZN olacaq. Belə olan halda çatdırılma xərci ödəmirsiniz. <br/>
+Əgər topdan sifariş etmiş olsanız öz biznesiniz üçün ilk uğurlu addımı atmış olacaqsınız. Bu zaman çatdırılma xərci alıcıya aid olur. Sifarişlərin sayından asılı olaraq müxtəlif hədiyyələr və güzəştlər edilir.
 </p>
 </div>
 <div class="customer-satisfaction">
@@ -962,9 +1044,9 @@ qoxunu bizimlə kəşf edin.
 <label for="E-posta"><i class="fas fa-envelope"></i> E-poçt:</label>
 <input id="E-posta" type="email" name="E-posta" required />
 <label for="Telefon"><i class="fas fa-phone"></i> Telefon Nömrəsi:</label>
-<input id="Telefon" type="tel" name="Telefon" />
+<input id="Telefon" type="tel" name="phone" />
 <label for="Mesaj"><i class="fas fa-comment"></i> Məktubunuz:</label>
-<textarea id="Mesaj" name="Mesaj" rows="5" required></textarea>
+<textarea id="mesaj" name="message" rows="5" required></textarea>
 <button type="submit"><i class="fas fa-paper-plane"></i> Göndər</button>
 <p id="successMessage"></p>
 </form>
@@ -981,7 +1063,7 @@ qoxunu bizimlə kəşf edin.
 <p id="modalDescription"></p>
 <label for="quantity">Say:</label>
 <input type="number" id="quantity" class="quantity-input" min="1" value="1" />
-<p><strong id="modalPrice"></strong></p>
+<p><strong> id="modalPrice"></strong></p>
 <div id="modalButtons"></div>
 </div>
 </div>
@@ -1016,11 +1098,11 @@ number.textContent = Math.round(current) + suffix;
 };
 const interval = setInterval(updateNumber, 80);
 });
-}
+};
 function showSection(id) {
 const sections = document.querySelectorAll('.section');
 const links = document.querySelectorAll('nav ul li a');
-sections.forEach(sec => sec.classList.remove('active'));
+sections.forEach(section => section.classList.remove('active'));
 document.getElementById(id).classList.add('active');
 links.forEach(link => link.classList.remove('active'));
 const activeLink = document.getElementById('nav-' + id);
@@ -1037,7 +1119,7 @@ const body = document.body;
 const button = document.getElementById('themeToggle');
 const isDark = body.classList.toggle('dark');
 button.textContent = isDark ? '☀️' : '🌙';
-button.style.color = isDark ? '#c7d1e0' : '#1a2a44';
+button.style.color = isDark ? '#c7d1e0' : '#1a2a2a44';
 }
 function toggleMenu() {
 document.getElementById('nav-menu').classList.toggle('active');
@@ -1052,14 +1134,14 @@ const modalTitle = document.getElementById('modalTitle');
 const modalDescription = document.getElementById('modalDescription');
 const modalPrice = document.getElementById('modalPrice');
 const quantityInput = document.getElementById('quantity');
-const modalButtons = document.getElementById('modalButtons');
+const modalButtonsDiv = document.getElementById('modalButtons');
 modalTitle.textContent = product.name;
 modalDescription.innerHTML = product.description || 'Təsvir yoxdur';
 let selectedVolume = '30 ml';
 let price = product.ml === '50' ? 13 : 10;
 quantityInput.value = 1;
 modalPrice.textContent = `Qiymət: ${price} ₼`;
-modalButtons.innerHTML = '';
+modalButtonsDiv.innerHTML = '';
 const btn30 = document.createElement('button');
 btn30.textContent = '30 ml';
 btn30.className = 'volume-btn' + (product.ml === '30' ? ' active' : '');
@@ -1067,55 +1149,55 @@ btn30.style.marginRight = '10px';
 const btn50 = document.createElement('button');
 btn50.textContent = '50 ml';
 btn50.className = 'volume-btn' + (product.ml === '50' ? ' active' : '');
-const addToCartBtn = document.createElement('button');
-addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> Səbətə əlavə et';
-addToCartBtn.className = 'add-to-cart-btn';
+const addToCartModalBtn = document.createElement('button');
+addToCartModalBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> Səbətə əlavə et';
+addToCartModalBtn.className = 'add-to-cart-btn';
 btn30.onclick = () => {
-selectedVolume = '30 ml';
-price = 10;
-modalPrice.textContent = `Qiymət: ${price} ₼`;
-btn30.classList.add('active');
-btn50.classList.remove('active');
+    selectedVolume = '30 ml';
+    price = 10;
+    modalPrice.textContent = `Qiymət: ${price} ₼`;
+    btn30.classList.add('active');
+    btn50.classList.remove('active');
 };
 btn50.onclick = () => {
-selectedVolume = '50 ml';
-price = 13;
-modalPrice.textContent = `Qiymət: ${price} ₼`;
-btn50.classList.add('active');
-btn30.classList.remove('active');
+    selectedVolume = '50 ml';
+    price = 13;
+    modalPrice.textContent = `Qiymət: ${price} ₼`;
+    btn50.classList.add('active');
+    btn30.classList.remove('active');
 };
-addToCartBtn.onclick = () => {
-const quantity = parseInt(quantityInput.value);
-if (quantity < 1) {
-alert('Zəhmət olmasa etibarlı say daxil edin.');
-return;
-}
-const cartItem = {
-id: product.id,
-name: product.name,
-volume: selectedVolume,
-price: price,
-quantity: quantity
+addToCartModalBtn.onclick = () => {
+    const quantity = parseInt(quantityInput.value);
+    if (quantity < 1) {
+        alert('Zəhmət olmasa etibarlı say dəxil edin.');
+        return;
+    }
+    const cartItem = {
+        id: product.id,
+        name: product.name,
+        volume: selectedVolume,
+        price: price,
+        quantity: quantity
+    };
+    const existingItem = cart.find(item => item.id === cartItem.id && item.volume === cartItem.volume);
+    if (existingItem) {
+        existingItem.quantity += quantity;
+    } else {
+        cart.push(cartItem);
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
+    const cartToggleBtn = document.getElementById('cartToggle');
+    cartToggleBtn.classList.add('slide');
+    setTimeout(() => {
+        cartToggleBtn.classList.remove('slide');
+    }, 500);
+    closeModal();
+    alert(`${cartItem.name} (${cartItem.volume}) səbətə əlavə edildi!`);
 };
-const existingItem = cart.find(item => item.id === cartItem.id && item.volume === cartItem.volume);
-if (existingItem) {
-existingItem.quantity += quantity;
-} else {
-cart.push(cartItem);
-}
-localStorage.setItem('cart', JSON.stringify(cart));
-updateCartCount();
-const cartToggle = document.getElementById('cartToggle');
-cartToggle.classList.add('slide');
-setTimeout(() => {
-cartToggle.classList.remove('slide');
-}, 500);
-closeModal();
-alert(`${cartItem.name} (${cartItem.volume}) səbətə əlavə edildi!`);
-};
-modalButtons.appendChild(btn30);
-modalButtons.appendChild(btn50);
-modalButtons.appendChild(addToCartBtn);
+modalButtonsDiv.appendChild(btn30);
+modalButtonsDiv.appendChild(btn50);
+modalButtonsDiv.appendChild(addToCartModalBtn);
 document.getElementById('productModal').classList.add('active');
 }
 function closeModal() {
