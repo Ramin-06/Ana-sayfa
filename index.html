@@ -645,55 +645,14 @@ line-height: 1.7;
 color: var(--text-color);
 margin-bottom: 40px;
 font-weight: 500;
-}
-.campaign-section p strong {
-padding: 2px 8px;
-border-radius: 4px;
-}
-.campaign-section.services p {
 background: linear-gradient(135deg, rgb(70, 130, 180), rgb(138, 43, 226));
 padding: 15px;
 border-radius: 8px;
 box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-body.dark .campaign-section.services p {
+
+body.dark .campaign-section p {
 background: linear-gradient(135deg, rgb(30, 144, 255), rgb(148, 0, 211));
-}
-.price-table {
-max-width: 600px;
-margin: 0 auto;
-margin-top: 40px;
-}
-.price-table table {
-width: 100%;
-border-collapse: collapse;
-border: 1px solid #ccc;
-background: var(--card-bg);
-}
-body.dark .price-table table {
-border: 1px solid #555;
-background: var(--card-bg);
-}
-.price-table th, .price-table td {
-padding: 10px;
-text-align: center;
-border: 1px solid #ccc;
-}
-body.dark .price-table th, body.dark .price-table td {
-border: 1px solid #555;
-}
-.price-table th {
-font-weight: 700;
-color: var(--text-color);
-background: rgba(108, 92, 231, 0.1);
-}
-.price-table td {
-font-size: 1em;
-color: var(--text-color);
-}
-.price-table .highlight {
-color: var(--primary);
-font-weight: 700;
 }
 .satisfaction-table {
 display: grid;
@@ -866,12 +825,6 @@ padding: 40px 15px;
 .hero-section p {
 font-size: 1.5em;
 }
-.price-table table {
-font-size: 0.9em;
-}
-.price-table th, .price-table td {
-padding: 8px;
-}
 .satisfaction-table {
 grid-template-columns: 1fr;
 gap: 15px;
@@ -922,12 +875,6 @@ font-size: 1.8em;
 .hero-section p {
 font-size: 1.2em;
 }
-.price-table table {
-font-size: 0.85em;
-}
-.price-table th, .price-table td {
-padding: 6px;
-}
 .satisfaction-card h4 {
 font-size: 1em;
 }
@@ -971,42 +918,11 @@ qoxular və sərfəli seçimlərlə təravətinizi vurğulayın. Zövqünüzü t
 qoxunu bizimlə kəşf edin.
 </p>
 <div class="campaign-section">
-<h3>Kampaniya</h3>
-<p>
-<strong>Yüksək Keyfiyyət!</strong><br>
-Digər hərkəsdən fərqli olaraq ətirlərimizin hazırlanması zamanı 50 faiz yüksək keyfiyyətli yağ qarışımı və 50 faiz parfüm suyu istifadə edilir!
-</p>
-<div class="price-table">
-<table>
-<tr>
-<th>Miqdar</th>
-<th>50 ml Ətirlər</th>
-<th>30 ml Ətirlər</th>
-</tr>
-<tr>
-<td>5 ədəd</td>
-<td><span class="highlight">45 ₼</span></td>
-<td><span class="highlight">32 ₼</span></td>
-</tr>
-<tr>
-<td>10 ədəd</td>
-<td><span class="highlight">75 ₼</span></td>
-<td><span class="highlight">64 ₼</span></td>
-</tr>
-<tr>
-<td>15 ədəd</td>
-<td><span class="highlight">110 ₼</span></td>
-<td><span class="highlight">96 ₼</span></td>
-</tr>
-</table>
-</div>
-</div>
-<div class="campaign-section services">
 <h3>XİDMƏTLƏR VƏ ÇATDIRILMA HAQQINDA</h3>
 <p>
-<strong>Hörmətli alıcılar!</strong><br />
-Ətirlərin tək-tək sifariş zamanı 30 ml ətirlər üçün biri 15 AZN, 50 ml ətirlər üçün isə biri 100 AZN olacaq. Belə olan halda çatdırılma xərci ödəmirsiniz. <br/>
-Əgər topdan sifariş etmiş olsanız öz biznesiniz üçün ilk uğurlu addımı atmış olacaqsınız. Bu zaman çatdırılma xərci alıcıya aid olur. Sifarişlərin sayından asılı olaraq müxtəlif hədiyyələr və güzəştlər edilir.
+<strong>Hörmətli alıcılar!</strong><br>
+Ətirlərin tək-tək sifarişi zamanı 30 ml ətirlər üçün biri 10 AZN, 50 ml ətirlər üçün isə biri 13 AZN olacaq. Belə olan halda çatdırılma xərci ödəmirsiniz.
+Əgər topdansatış olaraq sifariş etmiş olsanız öz biznesiniz üçün ilk uğurlu addımı atmış olacaqsınız. Bu zaman çatdırılma xərci alıcıya aid olur. Sifarişlərin sayından asılı olaraq müxtəlif hədiyyələr və güzəştlər edilir.
 </p>
 </div>
 <div class="customer-satisfaction">
@@ -1104,7 +1020,7 @@ const interval = setInterval(updateNumber, 80);
 function showSection(id) {
 const sections = document.querySelectorAll('.section');
 const links = document.querySelectorAll('nav ul li a');
-sections.forEach(section => section.classList.remove('active'));
+sections.forEach(sec => sec.classList.remove('active'));
 document.getElementById(id).classList.add('active');
 links.forEach(link => link.classList.remove('active'));
 const activeLink = document.getElementById('nav-' + id);
@@ -1136,14 +1052,14 @@ const modalTitle = document.getElementById('modalTitle');
 const modalDescription = document.getElementById('modalDescription');
 const modalPrice = document.getElementById('modalPrice');
 const quantityInput = document.getElementById('quantity');
-const modalButtonsDiv = document.getElementById('modalButtons');
+const modalButtons = document.getElementById('modalButtons');
 modalTitle.textContent = product.name;
 modalDescription.innerHTML = product.description || 'Təsvir yoxdur';
 let selectedVolume = '30 ml';
-let price = product.ml === '50' ? 100 : 15; // Son qiymətlərə uyğunlaşdırılıb
+let price = product.ml === '50' ? 13 : 10;
 quantityInput.value = 1;
 modalPrice.textContent = `Qiymət: ${price} ₼`;
-modalButtonsDiv.innerHTML = '';
+modalButtons.innerHTML = '';
 const btn30 = document.createElement('button');
 btn30.textContent = '30 ml';
 btn30.className = 'volume-btn' + (product.ml === '30' ? ' active' : '');
@@ -1151,24 +1067,24 @@ btn30.style.marginRight = '10px';
 const btn50 = document.createElement('button');
 btn50.textContent = '50 ml';
 btn50.className = 'volume-btn' + (product.ml === '50' ? ' active' : '');
-const addToCartModalBtn = document.createElement('button');
-addToCartModalBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> Səbətə əlavə et';
-addToCartModalBtn.className = 'add-to-cart-btn';
+const addToCartBtn = document.createElement('button');
+addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> Səbətə əlavə et';
+addToCartBtn.className = 'add-to-cart-btn';
 btn30.onclick = () => {
 selectedVolume = '30 ml';
-price = 15;
+price = 10;
 modalPrice.textContent = `Qiymət: ${price} ₼`;
 btn30.classList.add('active');
 btn50.classList.remove('active');
 };
 btn50.onclick = () => {
 selectedVolume = '50 ml';
-price = 100;
+price = 13;
 modalPrice.textContent = `Qiymət: ${price} ₼`;
 btn50.classList.add('active');
 btn30.classList.remove('active');
 };
-addToCartModalBtn.onclick = () => {
+addToCartBtn.onclick = () => {
 const quantity = parseInt(quantityInput.value);
 if (quantity < 1) {
 alert('Zəhmət olmasa etibarlı say daxil edin.');
@@ -1197,9 +1113,9 @@ cartToggle.classList.remove('slide');
 closeModal();
 alert(`${cartItem.name} (${cartItem.volume}) səbətə əlavə edildi!`);
 };
-modalButtonsDiv.appendChild(btn30);
-modalButtonsDiv.appendChild(btn50);
-modalButtonsDiv.appendChild(addToCartModalBtn);
+modalButtons.appendChild(btn30);
+modalButtons.appendChild(btn50);
+modalButtons.appendChild(addToCartBtn);
 document.getElementById('productModal').classList.add('active');
 }
 function closeModal() {
@@ -1304,16 +1220,13 @@ card.innerHTML = `
 <p class="daily-sales">Bu gün satılıb: ${dailySales} ədəd (${todayDate})</p>
 <button class="add-to-cart-btn"><i class="fas fa-shopping-cart"></i> Səbətə əlavə et</button>
 `;
-card.addEventListener('click', (e) => {
-if (e.target.closest('.add-to-cart-btn')) {
-return;
-}
-openModal(product);
-});
 const addToCartBtn = card.querySelector('.add-to-cart-btn');
-addToCartBtn.addEventListener('click', (e) => {
-e.stopPropagation();
-addToCartDirectly(product.id, product.name, '30 ml', 15, 1);
+addToCartBtn.addEventListener('click', () => {
+addToCartDirectly(product.id, product.name, '30 ml', 10, 1);
+});
+card.addEventListener('click', (e) => {
+if (e.target.className.includes('add-to-cart-btn') || e.target.parentElement.className.includes('add-to-cart-btn')) return;
+openModal(product);
 });
 return card;
 }
