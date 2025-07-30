@@ -17,10 +17,80 @@
 <style>
 body {
   font-family: 'Poppins', sans-serif;
-  padding: 20px;
+  margin: 0;
   background: linear-gradient(135deg, #e0eafc, #cfdef3);
   color: #2c3e50;
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 60px; /* Daimi olaraq 60px en */
+  background: #2c3e50;
+  color: white;
+  padding: 20px 10px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.sidebar-header {
+  font-size: 1.5em;
+  margin: 0 0 20px;
+  text-align: center;
+  color: #a29bfe;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
   margin: 0;
+}
+
+.sidebar li {
+  padding: 15px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.3s ease;
+  border-radius: 6px;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar li i {
+  font-size: 18px;
+}
+
+.sidebar li:hover {
+  background: #34495e;
+}
+
+.sidebar li.active {
+  background: linear-gradient(90deg, #6c5ce7, #a29bfe);
+}
+
+.hamburger {
+  display: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #2c3e50;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1100;
+}
+
+.main-content {
+  margin-left: 80px; /* Sidebar (60px) + 20px boşluq */
+  padding: 20px;
+  flex-grow: 1;
 }
 
 h1 {
@@ -33,36 +103,21 @@ h1 {
   letter-spacing: 1px;
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.form-section {
+.form-section, .list-section {
   background: #ffffff;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 20px;
+  display: none;
 }
 
-.form-section:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+.form-section.active, .list-section.active {
+  display: block;
 }
 
-.list-section {
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.list-section:hover {
+.form-section:hover, .list-section:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
 }
@@ -315,14 +370,27 @@ button:hover {
 }
 
 @media (max-width: 768px) {
-  body {
-    padding: 15px;
+  .sidebar {
+    width: 200px;
+    transform: translateX(-100%); /* Mobil cihazlarda tam gizlənir */
   }
-  h1 {
-    font-size: 1.6em;
+  .sidebar.active {
+    transform: translateX(0);
   }
-  .container {
-    gap: 15px;
+  .sidebar-header {
+    display: block; /* Mobil cihazlarda başlıq görünür */
+  }
+  .sidebar li {
+    justify-content: flex-start;
+  }
+  .sidebar li i {
+    margin-right: 10px;
+  }
+  .main-content {
+    margin-left: 0;
+  }
+  .hamburger {
+    display: block;
   }
   .form-section, .list-section {
     padding: 15px;
@@ -361,6 +429,9 @@ button:hover {
 }
 
 @media (max-width: 480px) {
+  .sidebar {
+    width: 180px;
+  }
   h1 {
     font-size: 1.4em;
   }
@@ -410,9 +481,25 @@ button:hover {
 </style>
 </head>
 <body>
-<h1>Admin Panel</h1>
-<div class="container">
-  <div class="form-section">
+<div class="hamburger">
+  <i class="fas fa-bars"></i>
+</div>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <i class="fas fa-cog"></i>
+  </div>
+  <ul>
+    <li class="active" data-section="form-section">
+      <i class="fas fa-plus-circle"></i>
+    </li>
+    <li data-section="list-section">
+      <i class="fas fa-list"></i>
+    </li>
+  </ul>
+</div>
+<div class="main-content">
+  <h1>Admin Panel</h1>
+  <div class="form-section active">
     <h2 id="formTitle">Yeni məhsul əlavə et</h2>
     <form id="productForm">
       <label><i class="fas fa-barcode"></i> Məhsul kodu:</label>
@@ -485,6 +572,10 @@ const cancelEditBtn = document.getElementById("cancelEdit");
 const formTitle = document.getElementById("formTitle");
 const productCodeInput = document.getElementById("productCode");
 const productNameInput = document.getElementById("productName");
+const sidebar = document.querySelector(".sidebar");
+const hamburger = document.querySelector(".hamburger");
+const menuItems = document.querySelectorAll(".sidebar li");
+const sections = document.querySelectorAll(".form-section, .list-section");
 
 let selectedMl = "30";
 let selectedPrice = "10";
@@ -492,7 +583,7 @@ let editDocId = null;
 
 const quill = new Quill('#editor', {
   theme: 'snow',
-  placeholder: 'Məhsul açıqlaması',
+  placeholder: 'Məhsul açıqlaması (məsələn, **Baş notlar**: *not1, not2, not3*)',
   modules: {
     toolbar: [
       ['bold', 'italic', 'underline'],
@@ -503,6 +594,26 @@ const quill = new Quill('#editor', {
       ['clean']
     ]
   }
+});
+
+// Sidebar menyusu funksionallığı
+menuItems.forEach(item => {
+  item.addEventListener("click", () => {
+    menuItems.forEach(i => i.classList.remove("active"));
+    item.classList.add("active");
+    const sectionId = item.getAttribute("data-section");
+    sections.forEach(section => {
+      section.classList.toggle("active", section.classList.contains(sectionId));
+    });
+    if (window.innerWidth <= 768) {
+      sidebar.classList.remove("active");
+    }
+  });
+});
+
+// Hamburger menyusu funksionallığı
+hamburger.addEventListener("click", () => {
+  sidebar.classList.toggle("active");
 });
 
 // Kopyalama düyməsi funksionallığı
@@ -579,6 +690,9 @@ async function loadProducts() {
   document.querySelectorAll(".edit-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       editProduct(btn.getAttribute("data-id"));
+      menuItems.forEach(item => item.classList.remove("active"));
+      document.querySelector("[data-section='form-section']").classList.add("active");
+      sections.forEach(section => section.classList.toggle("active", section.classList.contains("form-section")));
     });
   });
 
@@ -619,6 +733,9 @@ form.addEventListener("submit", async (e) => {
       alert("Məhsul əlavə olundu.");
     }
     resetForm();
+    menuItems.forEach(item => item.classList.remove("active"));
+    document.querySelector("[data-section='list-section']").classList.add("active");
+    sections.forEach(section => section.classList.toggle("active", section.classList.contains("list-section")));
     loadProducts();
   } catch (error) {
     console.error("Xəta baş verdi: ", error);
@@ -689,6 +806,9 @@ function resetForm() {
 
 cancelEditBtn.addEventListener("click", () => {
   resetForm();
+  menuItems.forEach(item => item.classList.remove("active"));
+  document.querySelector("[data-section='list-section']").classList.add("active");
+  sections.forEach(section => section.classList.toggle("active", section.classList.contains("list-section")));
 });
 
 window.onload = () => {
