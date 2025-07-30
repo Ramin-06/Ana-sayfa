@@ -25,7 +25,7 @@ body {
 }
 
 .sidebar {
-  width: 60px; /* Daimi olaraq 60px en */
+  width: 60px;
   background: #2c3e50;
   color: white;
   padding: 20px 10px;
@@ -88,7 +88,7 @@ body {
 }
 
 .main-content {
-  margin-left: 80px; /* Sidebar (60px) + 20px boşluq */
+  margin-left: 80px;
   padding: 20px;
   flex-grow: 1;
 }
@@ -369,22 +369,89 @@ button:hover {
   margin-top: 15px;
 }
 
+.search-container {
+  max-width: 600px;
+  margin: 20px auto;
+  text-align: center;
+  padding: 0 20px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+#productSearch {
+  max-width: 100%;
+  width: 100%;
+  padding: 12px 40px 12px 12px;
+  border-radius: 8px;
+  border: 1px solid #dfe6e9;
+  font-size: 15px;
+  color: #2c3e50;
+  background: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+#productSearch:focus {
+  border-color: #6c5ce7;
+  outline: none;
+  box-shadow: 0 0 6px rgba(108, 92, 231, 0.3);
+}
+
+.search-icon {
+  position: absolute;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c5ce7;
+  font-size: 16px;
+  pointer-events: none;
+}
+
+.autocomplete-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 20px;
+  right: 20px;
+  background: #f8f9fa;
+  border: 1px solid #dfe6e9;
+  border-radius: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+}
+
+.autocomplete-suggestions div {
+  padding: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.autocomplete-suggestions div:hover {
+  background: #6c5ce7;
+  color: #fff;
+}
+
 @media (max-width: 768px) {
   .sidebar {
     width: 200px;
-    transform: translateX(-100%); /* Mobil cihazlarda tam gizlənir */
+    transform: translateX(-100%);
   }
   .sidebar.active {
     transform: translateX(0);
   }
   .sidebar-header {
-    display: block; /* Mobil cihazlarda başlıq görünür */
+    display: block;
   }
   .sidebar li {
     justify-content: flex-start;
   }
   .sidebar li i {
     margin-right: 10px;
+  }
+  .sidebar li::after {
+    content: attr(data-label);
+    font-size: 14px;
   }
   .main-content {
     margin-left: 0;
@@ -425,6 +492,13 @@ button:hover {
   }
   .copy-btn {
     font-size: 14px;
+  }
+  #productSearch {
+    font-size: 14px;
+    padding: 10px 35px 10px 10px;
+  }
+  .search-icon {
+    right: 25px;
   }
 }
 
@@ -469,9 +543,15 @@ button:hover {
   .copy-btn {
     font-size: 13px;
   }
+  #productSearch {
+    font-size: 13px;
+    padding: 8px 30px 8px 8px;
+  }
+  .search-icon {
+    right: 20px;
+  }
 }
 
-/* Quill editorunda bold və italic üçün əlavə üslublar */
 #editor strong {
   font-weight: 700;
 }
@@ -489,10 +569,10 @@ button:hover {
     <i class="fas fa-cog"></i>
   </div>
   <ul>
-    <li class="active" data-section="form-section">
+    <li class="active" data-section="form-section" data-label="Yeni məhsul əlavə et">
       <i class="fas fa-plus-circle"></i>
     </li>
-    <li data-section="list-section">
+    <li data-section="list-section" data-label="Mövcud məhsullar">
       <i class="fas fa-list"></i>
     </li>
   </ul>
@@ -528,9 +608,12 @@ button:hover {
   </div>
   <div class="list-section">
     <h2><i class="fas fa-list"></i> Mövcud məhsullar</h2>
-    <div class="product-list">
-      <!-- Məhsullar burada kart formatında görünəcək -->
+    <div class="search-container">
+      <input type="text" id="productSearch" placeholder="Məhsul axtar..." />
+      <i class="fas fa-search search-icon"></i>
+      <div class="autocomplete-suggestions" id="autocompleteSuggestions"></div>
     </div>
+    <div class="product-list"></div>
   </div>
 </div>
 
@@ -572,6 +655,8 @@ const cancelEditBtn = document.getElementById("cancelEdit");
 const formTitle = document.getElementById("formTitle");
 const productCodeInput = document.getElementById("productCode");
 const productNameInput = document.getElementById("productName");
+const productSearch = document.getElementById("productSearch");
+const autocompleteSuggestions = document.getElementById("autocompleteSuggestions");
 const sidebar = document.querySelector(".sidebar");
 const hamburger = document.querySelector(".hamburger");
 const menuItems = document.querySelectorAll(".sidebar li");
@@ -580,6 +665,7 @@ const sections = document.querySelectorAll(".form-section, .list-section");
 let selectedMl = "30";
 let selectedPrice = "10";
 let editDocId = null;
+let allProducts = [];
 
 const quill = new Quill('#editor', {
   theme: 'snow',
@@ -644,8 +730,37 @@ mlButtons.forEach(btn => {
   });
 });
 
-async function loadProducts() {
-  productList.innerHTML = "";
+function showAutocompleteSuggestions(searchTerm) {
+  autocompleteSuggestions.innerHTML = '';
+  if (!searchTerm) {
+    autocompleteSuggestions.style.display = 'none';
+    return;
+  }
+
+  const suggestions = allProducts.filter(product =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (product.code && product.code.toLowerCase().includes(searchTerm.toLowerCase()))
+  ).slice(0, 5);
+
+  if (suggestions.length > 0) {
+    suggestions.forEach(product => {
+      const div = document.createElement('div');
+      div.textContent = product.name;
+      div.addEventListener('click', () => {
+        productSearch.value = product.name;
+        autocompleteSuggestions.style.display = 'none';
+        loadProducts(product.name);
+      });
+      autocompleteSuggestions.appendChild(div);
+    });
+    autocompleteSuggestions.style.display = 'block';
+  } else {
+    autocompleteSuggestions.style.display = 'none';
+  }
+}
+
+async function loadProducts(searchTerm = '') {
+  productList.innerHTML = '';
   const querySnapshot = await getDocs(collection(db, "products"));
   if (querySnapshot.empty) {
     const emptyMessage = document.createElement("div");
@@ -655,8 +770,28 @@ async function loadProducts() {
     return;
   }
 
+  allProducts = [];
   querySnapshot.forEach(docSnap => {
-    const product = docSnap.data();
+    const product = { ...docSnap.data(), id: docSnap.id };
+    allProducts.push(product);
+  });
+
+  const filteredProducts = searchTerm
+    ? allProducts.filter(product =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (product.code && product.code.toLowerCase().includes(searchTerm.toLowerCase()))
+      )
+    : allProducts;
+
+  if (filteredProducts.length === 0) {
+    const emptyMessage = document.createElement("div");
+    emptyMessage.className = "empty-message";
+    emptyMessage.textContent = "Axtarışa uyğun məhsul tapılmadı";
+    productList.appendChild(emptyMessage);
+    return;
+  }
+
+  filteredProducts.forEach(product => {
     const card = document.createElement("div");
     card.className = "product-card";
     card.innerHTML = `
@@ -669,8 +804,8 @@ async function loadProducts() {
         <p><strong>Ölçü:</strong> ${product.ml} ml</p>
         <p><strong>Qiymət:</strong> ${product.price}</p>
         <div class="action-buttons">
-          <button class="edit-btn" data-id="${docSnap.id}"><i class="fas fa-edit"></i> Düzəlt</button>
-          <button class="delete-btn" data-id="${docSnap.id}"><i class="fas fa-trash-alt"></i> Sil</button>
+          <button class="edit-btn" data-id="${product.id}"><i class="fas fa-edit"></i> Düzəlt</button>
+          <button class="delete-btn" data-id="${product.id}"><i class="fas fa-trash-alt"></i> Sil</button>
         </div>
       </div>
     `;
@@ -702,6 +837,12 @@ async function loadProducts() {
     });
   });
 }
+
+productSearch.addEventListener('input', (e) => {
+  const searchTerm = e.target.value;
+  showAutocompleteSuggestions(searchTerm);
+  loadProducts(searchTerm);
+});
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
