@@ -190,14 +190,14 @@
             text-align: justify;
             font-weight: 500;
         }
-        #product-list {
+        #product-list, #bestsellers-list {
             display: grid;
             gap: 20px;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             margin-top: 20px;
             position: relative;
         }
-        .product-card {
+        .product-card, .bestseller-card {
             background: linear-gradient(135deg, var(--card-bg), #e8ecef);
             border-radius: 16px;
             overflow: hidden;
@@ -211,19 +211,19 @@
             justify-content: space-between;
             box-sizing: border-box;
         }
-        body.dark .product-card {
+        body.dark .product-card, body.dark .bestseller-card {
             background: linear-gradient(135deg, var(--card-bg), #3a4a5a);
         }
-        .product-card:hover {
+        .product-card:hover, .bestseller-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
         }
-        .product-card h3 {
+        .product-card h3, .bestseller-card h3 {
             font-size: 1.2em;
             margin: 0 0 10px;
             color: var(--primary);
         }
-        .product-card p {
+        .product-card p, .bestseller-card p {
             font-size: 14px;
             color: var(--text-color);
             margin: 5px 0;
@@ -235,7 +235,7 @@
             margin: 5px 0;
             animation: fadeIn 1s ease-in-out;
         }
-        .product-card .add-to-cart-btn {
+        .product-card .add-to-cart-btn, .bestseller-card .add-to-cart-btn {
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             color: white;
             border: none;
@@ -249,11 +249,11 @@
             overflow: hidden;
             animation: pulse 2s infinite;
         }
-        .product-card .add-to-cart-btn:hover {
+        .product-card .add-to-cart-btn:hover, .bestseller-card .add-to-cart-btn:hover {
             background: linear-gradient(90deg, var(--secondary), var(--primary));
             transform: translateY(-2px);
         }
-        .product-card .add-to-cart-btn::after {
+        .product-card .add-to-cart-btn::after, .bestseller-card .add-to-cart-btn::after {
             content: '';
             position: absolute;
             top: 50%;
@@ -265,7 +265,7 @@
             transform: translate(-50%, -50%);
             transition: width 0.5s ease, height 0.5s ease;
         }
-        .product-card .add-to-cart-btn:hover::after {
+        .product-card .add-to-cart-btn:hover::after, .bestseller-card .add-to-cart-btn:hover::after {
             width: 200px;
             height: 200px;
         }
@@ -806,7 +806,7 @@
                 justify-content: space-between;
                 align-items: center;
             }
-            #product-list {
+            #product-list, #bestsellers-list {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 15px;
             }
@@ -822,16 +822,16 @@
                 font-size: 15px;
                 padding: 10px;
             }
-            .product-card h3 {
+            .product-card h3, .bestseller-card h3 {
                 font-size: 1.1em;
             }
-            .product-card p {
+            .product-card p, .bestseller-card p {
                 font-size: 13px;
             }
             .product-card .daily-sales {
                 font-size: 12px;
             }
-            .product-card .add-to-cart-btn {
+            .product-card .add-to-cart-btn, .bestseller-card .add-to-cart-btn {
                 padding: 8px;
                 font-size: 13px;
             }
@@ -875,19 +875,19 @@
             }
         }
         @media (max-width: 480px) {
-            #product-list {
+            #product-list, #bestsellers-list {
                 grid-template-columns: 1fr;
             }
-            .product-card h3 {
+            .product-card h3, .bestseller-card h3 {
                 font-size: 1em;
             }
-            .product-card p {
+            .product-card p, .bestseller-card p {
                 font-size: 12px;
             }
             .product-card .daily-sales {
                 font-size: 11px;
             }
-            .product-card .add-to-cart-btn {
+            .product-card .add-to-cart-btn, .bestseller-card .add-to-cart-btn {
                 padding: 6px;
                 font-size: 12px;
             }
@@ -943,6 +943,8 @@
     </nav>
     <main class="blur-background">
         <div id="about" class="section active">
+            <h2>Çox Satılanlar</h2>
+            <div id="bestsellers-list"></div>
             <h2>Haqqımızda</h2>
             <p>
                 <b>R-Shoppingaz</b> komandası olaraq deluxe keyfiyyətdə olan ətirləri sizə təqdim edirik.
@@ -956,8 +958,8 @@
                 <h3>Kampaniya</h3>
                 <p>
                     <strong>Dəyərli istifadəçilər</strong><br>
-                    Kampaniya çərçivəsində etmiş olduğunuz alışlar zamanı aşağıdakı cədəvləd yazılan tariflər tətbiq olunacaq. 
-                    Xüsusi qablaşdırma və zövqünüzə uyğun olan <b>1000-ə</b> yaxın ətir çeşidi ilə kampaniyadan faydalana bilərsiniz. 
+                    Kampaniya çərçivəsində etmiş olduğunuz alışlar zamanı aşağıdakı cədəvləd yazılan tariflər tətbiq olunacaq.
+                    Xüsusi qablaşdırma və zövqünüzə uyğun olan <b>1000-ə</b> yaxın ətir çeşidi ilə kampaniyadan faydalana bilərsiniz.
                     Əlavə məlumatlar <b>Xidmətlər və çatdırılma</b>-da verilmişdir. Dəstək və əməkdaşlıq üçün <b>Əlaqə</b> bölməsindən bizə yaza bilərsiniz.
                 </p>
                 <div class="price-table">
@@ -1299,6 +1301,20 @@
             });
             return card;
         }
+        function createBestsellerCard(product) {
+            const card = document.createElement('div');
+            card.className = 'bestseller-card';
+            card.innerHTML = `
+                <h3>${product.name}</h3>
+                <p>Kod: ${product.code || '-'}</p>
+                <button class="add-to-cart-btn"><i class="fas fa-shopping-cart"></i> Səbətə əlavə et</button>
+            `;
+            const addToCartBtn = card.querySelector('.add-to-cart-btn');
+            addToCartBtn.addEventListener('click', () => {
+                addToCartDirectly(product.id, product.name, '30 ml', 10, 1);
+            });
+            return card;
+        }
         function addToCartDirectly(id, name, volume, price, quantity) {
             const cartItem = {
                 id: id,
@@ -1352,6 +1368,13 @@
                 filteredProducts.forEach(product => {
                     const card = createProductCard(product);
                     productList.appendChild(card);
+                });
+                const bestsellersList = document.getElementById('bestsellers-list');
+                bestsellersList.innerHTML = '';
+                const bestsellers = allProducts.slice(0, 3);
+                bestsellers.forEach(product => {
+                    const card = createBestsellerCard(product);
+                    bestsellersList.appendChild(card);
                 });
             } catch (error) {
                 console.error("Məhsullar yüklənərkən xəta:", error);
