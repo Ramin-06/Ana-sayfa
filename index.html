@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>R-Shoppingaz</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@500;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
         :root {
@@ -22,6 +22,9 @@
             --satisfaction-color-1: #ff6347;
             --satisfaction-color-2: #6ab04c;
             --satisfaction-color-3: #feca57;
+            --bestseller-bg-start: #8e44ad;
+            --bestseller-bg-end: #ff2e63;
+            --bestseller-btn-bg: #00d4ff;
         }
         body.dark {
             --bg-color: #1a1a1a;
@@ -37,6 +40,9 @@
             --satisfaction-color-1: #dc143c;
             --satisfaction-color-2: #3cb371;
             --satisfaction-color-3: #daa520;
+            --bestseller-bg-start: #6d2077;
+            --bestseller-bg-end: #d81b60;
+            --bestseller-btn-bg: #00b7eb;
         }
         body {
             margin: 0;
@@ -197,7 +203,7 @@
             margin-top: 20px;
             position: relative;
         }
-        .product-card, .bestseller-card {
+        .product-card {
             background: linear-gradient(135deg, var(--card-bg), #e8ecef);
             border-radius: 16px;
             overflow: hidden;
@@ -211,22 +217,62 @@
             justify-content: space-between;
             box-sizing: border-box;
         }
-        body.dark .product-card, body.dark .bestseller-card {
+        .bestseller-card {
+            background: linear-gradient(135deg, var(--bestseller-bg-start), var(--bestseller-bg-end));
+            border-radius: 20px;
+            width: 280px;
+            height: 220px;
+            margin: auto;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(142, 68, 173, 0.5), 0 0 40px rgba(255, 46, 99, 0.3);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+        }
+        body.dark .product-card {
             background: linear-gradient(135deg, var(--card-bg), #3a4a5a);
         }
-        .product-card:hover, .bestseller-card:hover {
+        body.dark .bestseller-card {
+            background: linear-gradient(135deg, var(--bestseller-bg-start), var(--bestseller-bg-end));
+            box-shadow: 0 0 20px rgba(109, 32, 119, 0.5), 0 0 40px rgba(216, 27, 96, 0.3);
+        }
+        .product-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+        .bestseller-card:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(142, 68, 173, 0.7), 0 0 60px rgba(255, 46, 99, 0.5);
         }
         .product-card h3, .bestseller-card h3 {
             font-size: 1.2em;
             margin: 0 0 10px;
             color: var(--primary);
         }
+        .bestseller-card h3 {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+            margin-bottom: 8px;
+        }
         .product-card p, .bestseller-card p {
             font-size: 14px;
             color: var(--text-color);
             margin: 5px 0;
+        }
+        .bestseller-card p {
+            font-size: 13px;
+            color: #ffffff;
+            font-weight: 500;
+            margin-bottom: 10px;
+            background: transparent;
         }
         .product-card .daily-sales {
             font-size: 13px;
@@ -249,9 +295,27 @@
             overflow: hidden;
             animation: pulse 2s infinite;
         }
+        .bestseller-card .add-to-cart-btn {
+            background: var(--bestseller-btn-bg);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            font-size: 20px;
+            animation: ripple 2s infinite;
+        }
         .product-card .add-to-cart-btn:hover, .bestseller-card .add-to-cart-btn:hover {
-            background: linear-gradient(90deg, var(--secondary), var(--primary));
             transform: translateY(-2px);
+        }
+        .product-card .add-to-cart-btn:hover {
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+        }
+        .bestseller-card .add-to-cart-btn:hover {
+            background: #00a5cc;
+            transform: scale(1.2);
         }
         .product-card .add-to-cart-btn::after, .bestseller-card .add-to-cart-btn::after {
             content: '';
@@ -770,6 +834,11 @@
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
+        @keyframes ripple {
+            0% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(0, 212, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0); }
+        }
         @keyframes fadeIn {
             0% { opacity: 0; transform: translateY(10px); }
             100% { opacity: 1; transform: translateY(0); }
@@ -835,6 +904,15 @@
                 padding: 8px;
                 font-size: 13px;
             }
+            .bestseller-card {
+                width: 200px;
+                height: 180px;
+            }
+            .bestseller-card .add-to-cart-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
             #cataloguePdf {
                 height: 60vh;
             }
@@ -890,6 +968,15 @@
             .product-card .add-to-cart-btn, .bestseller-card .add-to-cart-btn {
                 padding: 6px;
                 font-size: 12px;
+            }
+            .bestseller-card {
+                width: 180px;
+                height: 160px;
+            }
+            .bestseller-card .add-to-cart-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
             }
             .modal-content h3 {
                 font-size: 1.4em;
@@ -1307,7 +1394,7 @@
             card.innerHTML = `
                 <h3>${product.name}</h3>
                 <p>Kod: ${product.code || '-'}</p>
-                <button class="add-to-cart-btn"><i class="fas fa-shopping-cart"></i> Səbətə əlavə et</button>
+                <button class="add-to-cart-btn"><i class="fas fa-shopping-cart"></i></button>
             `;
             const addToCartBtn = card.querySelector('.add-to-cart-btn');
             addToCartBtn.addEventListener('click', () => {
