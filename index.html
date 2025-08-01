@@ -875,13 +875,9 @@
                 justify-content: space-between;
                 align-items: center;
             }
-            #product-list {
+            #product-list, #bestsellers-list {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 15px;
-            }
-            #bestsellers-list {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 10px;
             }
             #contactForm {
                 padding: 15px;
@@ -909,22 +905,13 @@
                 font-size: 13px;
             }
             .bestseller-card {
-                width: 100px;
-                height: 140px;
-                padding: 10px;
-            }
-            .bestseller-card h3 {
-                font-size: 0.9em;
-                margin-bottom: 5px;
-            }
-            .bestseller-card p {
-                font-size: 11px;
-                margin-bottom: 5px;
+                width: 200px;
+                height: 180px;
             }
             .bestseller-card .add-to-cart-btn {
-                width: 35px;
-                height: 35px;
-                font-size: 16px;
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
             }
             #cataloguePdf {
                 height: 60vh;
@@ -966,43 +953,30 @@
             }
         }
         @media (max-width: 480px) {
-            #product-list {
+            #product-list, #bestsellers-list {
                 grid-template-columns: 1fr;
             }
-            #bestsellers-list {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 8px;
-            }
             .product-card h3, .bestseller-card h3 {
-                font-size: 0.9em;
+                font-size: 1em;
             }
             .product-card p, .bestseller-card p {
-                font-size: 11px;
+                font-size: 12px;
             }
             .product-card .daily-sales {
-                font-size: 10px;
+                font-size: 11px;
             }
             .product-card .add-to-cart-btn, .bestseller-card .add-to-cart-btn {
                 padding: 6px;
-                font-size: 11px;
+                font-size: 12px;
             }
             .bestseller-card {
-                width: 90px;
-                height: 120px;
-                padding: 8px;
-            }
-            .bestseller-card h3 {
-                font-size: 0.8em;
-                margin-bottom: 4px;
-            }
-            .bestseller-card p {
-                font-size: 10px;
-                margin-bottom: 4px;
+                width: 180px;
+                height: 160px;
             }
             .bestseller-card .add-to-cart-btn {
-                width: 30px;
-                height: 30px;
-                font-size: 14px;
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
             }
             .modal-content h3 {
                 font-size: 1.4em;
@@ -1454,27 +1428,20 @@
         async function loadProducts(searchTerm = '') {
             const productList = document.getElementById('product-list');
             const loader = document.getElementById('loader');
-            const bestsellersList = document.getElementById('bestsellers-list');
             loader.classList.add('active');
             productList.innerHTML = '';
-            bestsellersList.innerHTML = '';
-            const testProducts = [
-                { id: "1", name: "Ətir 1", code: "P001", ml: "30" },
-                { id: "2", name: "Ətir 2", code: "P002", ml: "50" },
-                { id: "3", name: "Ətir 3", code: "P003", ml: "30" }
-            ];
             try {
                 const querySnapshot = await getDocs(collection(db, "products"));
                 loader.classList.remove('active');
-                allProducts = [];
                 if (querySnapshot.empty) {
-                    allProducts = testProducts;
-                } else {
-                    querySnapshot.forEach(docSnap => {
-                        const product = { ...docSnap.data(), id: docSnap.id };
-                        allProducts.push(product);
-                    });
+                    productList.innerHTML = '<p style="text-align:center; color: var(--text-color);">Məhsul tapılmadı</p>';
+                    return;
                 }
+                allProducts = [];
+                querySnapshot.forEach(docSnap => {
+                    const product = { ...docSnap.data(), id: docSnap.id };
+                    allProducts.push(product);
+                });
                 const filteredProducts = searchTerm
                     ? allProducts.filter(product =>
                         product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -1483,31 +1450,23 @@
                     : allProducts;
                 if (filteredProducts.length === 0) {
                     productList.innerHTML = '<p style="text-align:center; color: var(--text-color);">Axtarışa uyğun məhsul tapılmadı</p>';
-                } else {
-                    filteredProducts.forEach(product => {
-                        const card = createProductCard(product);
-                        productList.appendChild(card);
-                    });
+                    return;
                 }
+                filteredProducts.forEach(product => {
+                    const card = createProductCard(product);
+                    productList.appendChild(card);
+                });
+                const bestsellersList = document.getElementById('bestsellers-list');
+                bestsellersList.innerHTML = '';
                 const bestsellers = allProducts.slice(0, 3);
-                if (bestsellers.length === 0) {
-                    bestsellersList.innerHTML = '<p style="text-align:center; color: var(--text-color);">Çox satılan məhsul yoxdur</p>';
-                } else {
-                    bestsellers.forEach(product => {
-                        const card = createBestsellerCard(product);
-                        bestsellersList.appendChild(card);
-                    });
-                }
-            } catch (error) {
-                console.error("Məhsullar yüklənərkən xəta:", error);
-                loader.classList.remove('active');
-                allProducts = testProducts;
-                testProducts.forEach(product => {
+                bestsellers.forEach(product => {
                     const card = createBestsellerCard(product);
                     bestsellersList.appendChild(card);
-                    const productCard = createProductCard(product);
-                    productList.appendChild(productCard);
                 });
+            } catch (error) {
+                console.error("Məhsullar yüklənərkən xəta:", error);
+                productList.innerHTML = '<p style="color:red; text-align:center;">Məhsullar yüklənərkən xəta baş verdi</p>';
+                loader.classList.remove('active');
             }
         }
         function showAutocompleteSuggestions(searchTerm) {
