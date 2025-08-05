@@ -430,10 +430,23 @@
         footer {
             background: var(--footer-bg);
             color: var(--nav-text);
-            text-align: center;
             padding: 20px;
             margin-top: auto;
             font-size: 14px;
+        }
+        .footer-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        .footer-logo {
+            height: 40px;
+            margin-left: 20px;
+        }
+        .footer-text {
+            flex-grow: 1;
+            text-align: center;
         }
         .modal {
             display: none;
@@ -1003,6 +1016,49 @@
                 font-size: 1.2em;
             }
         }
+        /* Footer-specific styles */
+        .footer-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        .footer-logo {
+            height: 40px;
+            margin-left: 20px;
+        }
+        .footer-text {
+            flex-grow: 1;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .footer-container {
+                flex-direction: column;
+                align-items: center;
+                padding: 20px;
+            }
+            .footer-logo {
+                height: 30px;
+                margin-left: 0;
+                margin-bottom: 10px;
+            }
+            .footer-text {
+                text-align: center;
+            }
+            .footer-text p {
+                font-size: 12px;
+                margin: 5px 0;
+            }
+        }
+        @media (max-width: 480px) {
+            .footer-logo {
+                height: 25px;
+                margin-bottom: 8px;
+            }
+            .footer-text p {
+                font-size: 11px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1047,7 +1103,6 @@
                     Kampaniya çərçivəsində etmiş olduğunuz alışlar zamanı aşağıdakı cədəvləd yazılan tariflər tətbiq olunacaq.
                     Xüsusi qablaşdırma və zövqünüzə uyğun olan <b>1000-ə</b> yaxın ətir çeşidi ilə kampaniyadan faydalana bilərsiniz.
                     Əlavə məlumatlar <b>Xidmətlər və çatdırılma</b>-da verilmişdir. Dəstək və əməkdaşlıq üçün <b>Əlaqə</b> bölməsindən bizə yaza bilərsiniz.
-                    
                 </p>
                 <div class="price-table">
                     <table>
@@ -1094,7 +1149,7 @@
                     <strong style="color:green;">200 Rcoin – 80 AZN</strong><br>
                     <strong style="color:green;">400 Rcoin – 150 AZN</strong><br>
                     <strong style="color:green;">600 Rcoin – 200 AZN</strong><br>
-                     <br>
+                    <br>
                     <br>
                     <strong style="color:red;">Diqqət: Rcoin R-Shoppingaz online platformasının rəsmi tokeni olaraq qəbul edilmişdir.</strong><br>
                 </p>
@@ -1169,13 +1224,13 @@
         </div>
     </div>
     <footer class="blur-background">
-        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0 20px;">
-        <img src="urunlerim/logo.png" alt="R-Shoppingaz Logo" style="height: 40px; margin-left: 20px;">
-        <div style="flex-grow: 1; text-align: center;">
-            <p>Təhlükəsiz alış veriş | Online sifariş qəbulu | 1000-dən çox çeşid</p>
-            <p>© 2025 R-Shoppingaz. Bütün hüquqlar qorunur.</p>
+        <div class="footer-container">
+            <img src="urunlerim/logo.png" alt="R-Shoppingaz Logo" class="footer-logo">
+            <div class="footer-text">
+                <p>Təhlükəsiz alış veriş | Online sifariş qəbulu | 1000-dən çox çeşid</p>
+                <p>© 2025 R-Shoppingaz. Bütün hüquqlar qorunur.</p>
+            </div>
         </div>
-    </div>
     </footer>
     <script>
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
