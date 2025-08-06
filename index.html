@@ -1113,23 +1113,23 @@
     </div>
     <nav class="blur-background">
         <div class="nav-container">
-            <div class="hamburger" onclick="toggleMenu()">☰</div>
+            <div class="hamburger" onclick="window.toggleMenu()">☰</div>
             <ul id="nav-menu">
-                <li><a id="nav-about" class="active" onclick="showSection('about')">Haqqımızda</a></li>
-                <li><a id="nav-projects" onclick="showSection('projects')">Ətirlər</a></li>
-                <li><a id="nav-contact" onclick="showSection('contact')">Əlaqə</a></li>
-                <li><a id="nav-catalogue" onclick="showSection('catalogue')">Kataloq</a></li>
-                <li id="nav-account-li" style="display: none;"><a id="nav-account" onclick="showSection('account')">Hesabım</a></li>
+                <li><a id="nav-about" class="active" onclick="window.showSection('about')">Haqqımızda</a></li>
+                <li><a id="nav-projects" onclick="window.showSection('projects')">Ətirlər</a></li>
+                <li><a id="nav-contact" onclick="window.showSection('contact')">Əlaqə</a></li>
+                <li><a id="nav-catalogue" onclick="window.showSection('catalogue')">Kataloq</a></li>
+                <li id="nav-account-li" style="display: none;"><a id="nav-account" onclick="window.showSection('account')">Hesabım</a></li>
             </ul>
             <div>
-                <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">🌙</button>
-                <button id="cartToggle" class="cart-toggle" onclick="openCartModal()">
+                <button id="themeToggle" class="theme-toggle" onclick="window.toggleTheme()">🌙</button>
+                <button id="cartToggle" class="cart-toggle" onclick="window.openCartModal()">
                     <i class="fas fa-shopping-cart"></i>
                     <span id="cartCount" class="cart-count">0</span>
                 </button>
-                <button id="loginBtn" class="auth-btn" onclick="openLoginModal()">Giriş</button>
-                <button id="registerBtn" class="auth-btn" onclick="openRegisterModal()">Qeydiyyat</button>
-                <button id="logoutBtn" class="logout-btn" onclick="logout()" style="display: none;">Çıxış</button>
+                <button id="loginBtn" class="auth-btn" onclick="window.openLoginModal()">Giriş</button>
+                <button id="registerBtn" class="auth-btn" onclick="window.openRegisterModal()">Qeydiyyat</button>
+                <button id="logoutBtn" class="logout-btn" onclick="window.logout()" style="display: none;">Çıxış</button>
             </div>
         </div>
     </nav>
@@ -1279,7 +1279,7 @@
     </main>
     <div id="productModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeModal()">×</span>
+            <span class="close-btn" onclick="window.closeModal()">×</span>
             <h3 id="modalTitle"></h3>
             <p id="modalDescription"></p>
             <label for="quantity">Say:</label>
@@ -1290,16 +1290,16 @@
     </div>
     <div id="cartModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeCartModal()">×</span>
+            <span class="close-btn" onclick="window.closeCartModal()">×</span>
             <h3>Səbət</h3>
             <div id="cartItems"></div>
             <p class="cart-total" id="cartTotal">Cəmi: 0 ₼</p>
-            <button id="whatsappOrderBtn" onclick="sendOrderToWhatsApp()">WhatsApp ilə Sifariş Ver</button>
+            <button id="whatsappOrderBtn" onclick="window.sendOrderToWhatsApp()">WhatsApp ilə Sifariş Ver</button>
         </div>
     </div>
     <div id="registerModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeRegisterModal()">×</span>
+            <span class="close-btn" onclick="window.closeRegisterModal()">×</span>
             <form id="registerForm">
                 <h2>Qeydiyyat</h2>
                 <label for="registerFirstName"><i class="fas fa-user"></i> Ad:</label>
@@ -1317,7 +1317,7 @@
     </div>
     <div id="loginModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeLoginModal()">×</span>
+            <span class="close-btn" onclick="window.closeLoginModal()">×</span>
             <form id="loginForm">
                 <h2>Giriş</h2>
                 <label for="loginEmail"><i class="fas fa-envelope"></i> E-poçt:</label>
@@ -1338,11 +1338,10 @@
             </div>
         </div>
     </footer>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, getDocs, addDoc, getDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+    <script>
         const firebaseConfig = {
             apiKey: "AIzaSyCSaiU9DguIk47O8LPZ_Oa6StJgHbPqZ6I",
             authDomain: "perfume-8b7f7.firebaseapp.com",
@@ -1352,15 +1351,15 @@
             appId: "1:899731999798:web:750af78287f56d15d41c97"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
 
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         let currentUser = null;
         let products = [];
 
-        function animateNumbers() {
+        window.animateNumbers = function() {
             const numbers = document.querySelectorAll('.number');
             numbers.forEach(number => {
                 const target = parseInt(number.getAttribute('data-target'));
@@ -1377,9 +1376,9 @@
                 };
                 const interval = setInterval(updateNumber, 80);
             });
-        }
+        };
 
-        function showSection(id) {
+        window.showSection = function(id) {
             const sections = document.querySelectorAll('.section');
             const links = document.querySelectorAll('nav ul li a');
             sections.forEach(sec => sec.classList.remove('active'));
@@ -1391,49 +1390,49 @@
                 document.getElementById('nav-menu').classList.remove('active');
             }
             if (id === 'about') {
-                setTimeout(animateNumbers, 100);
+                setTimeout(window.animateNumbers, 100);
             }
             if (id === 'account' && currentUser) {
-                loadUserAccount();
+                window.loadUserAccount();
             }
-        }
+        };
 
-        function toggleTheme() {
+        window.toggleTheme = function() {
             const body = document.body;
             const button = document.getElementById('themeToggle');
             const isDark = body.classList.toggle('dark');
             button.textContent = isDark ? '☀️' : '🌙';
             button.style.color = isDark ? '#c7d1e0' : '#1a2a44';
-        }
+        };
 
-        function toggleMenu() {
+        window.toggleMenu = function() {
             document.getElementById('nav-menu').classList.toggle('active');
-        }
+        };
 
-        function updateCartCount() {
+        window.updateCartCount = function() {
             const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
             document.getElementById('cartCount').textContent = cartCount;
-        }
+        };
 
-        async function loadProducts() {
+        window.loadProducts = async function() {
             const loader = document.getElementById('loader');
             loader.classList.add('active');
             try {
-                const querySnapshot = await getDocs(collection(db, 'products'));
+                const querySnapshot = await db.collection('products').get();
                 products = [];
                 querySnapshot.forEach(doc => {
                     products.push({ id: doc.id, ...doc.data() });
                 });
-                displayProducts(products);
-                displayBestsellers(products);
+                window.displayProducts(products);
+                window.displayBestsellers(products);
             } catch (error) {
                 console.error('Məhsullar yüklənərkən xəta:', error);
             } finally {
                 loader.classList.remove('active');
             }
-        }
+        };
 
-        function displayProducts(products) {
+        window.displayProducts = function(products) {
             const productList = document.getElementById('product-list');
             productList.innerHTML = '';
             products.forEach(product => {
@@ -1444,15 +1443,15 @@
                     <p>Kod: ${product.code}</p>
                     <p>Həcm: ${product.ml} ml</p>
                     <p class="daily-sales">Gündəlik satış: ${Math.floor(Math.random() * 50) + 10}</p>
-                    <button class="add-to-cart-btn" onclick="openModal({ id: '${product.id}', name: '${product.name}', code: '${product.code}', ml: '${product.ml}' })">
+                    <button class="add-to-cart-btn" onclick="window.openModal({ id: '${product.id}', name: '${product.name}', code: '${product.code}', ml: '${product.ml}' })">
                         <i class="fas fa-shopping-cart"></i> Səbətə əlavə et
                     </button>
                 `;
                 productList.appendChild(card);
             });
-        }
+        };
 
-        function displayBestsellers(products) {
+        window.displayBestsellers = function(products) {
             const bestsellersList = document.getElementById('bestsellers-list');
             bestsellersList.innerHTML = '';
             const bestsellers = products.slice(0, 3);
@@ -1463,15 +1462,15 @@
                     <h3>${product.name}</h3>
                     <p>Kod: ${product.code}</p>
                     <p>Həcm: ${product.ml} ml</p>
-                    <button class="add-to-cart-btn" onclick="openModal({ id: '${product.id}', name: '${product.name}', code: '${product.code}', ml: '${product.ml}' })">
+                    <button class="add-to-cart-btn" onclick="window.openModal({ id: '${product.id}', name: '${product.name}', code: '${product.code}', ml: '${product.ml}' })">
                         <i class="fas fa-shopping-cart"></i>
                     </button>
                 `;
                 bestsellersList.appendChild(card);
             });
-        }
+        };
 
-        function openModal(product) {
+        window.openModal = function(product) {
             document.body.classList.add('modal-open');
             const modalTitle = document.getElementById('modalTitle');
             const modalDescription = document.getElementById('modalDescription');
@@ -1529,28 +1528,28 @@
                     cart.push(cartItem);
                 }
                 localStorage.setItem('cart', JSON.stringify(cart));
-                updateCartCount();
+                window.updateCartCount();
                 const cartToggle = document.getElementById('cartToggle');
                 cartToggle.classList.add('slide');
                 setTimeout(() => {
                     cartToggle.classList.remove('slide');
                 }, 500);
-                closeModal();
+                window.closeModal();
                 alert(`${cartItem.name} (${cartItem.volume}) səbətə əlavə edildi!`);
             };
             modalButtons.appendChild(btn30);
             modalButtons.appendChild(btn50);
             modalButtons.appendChild(addToCartBtn);
             document.getElementById('productModal').classList.add('active');
-        }
+        };
 
-        function closeModal() {
+        window.closeModal = function() {
             document.getElementById('productModal').classList.remove('active');
             document.body.classList.remove('modal-open');
             document.getElementById('autocompleteSuggestions').style.display = 'none';
-        }
+        };
 
-        function openCartModal() {
+        window.openCartModal = function() {
             document.body.classList.add('modal-open');
             const cartItemsDiv = document.getElementById('cartItems');
             const cartTotalDiv = document.getElementById('cartTotal');
@@ -1565,7 +1564,7 @@
                     itemDiv.className = 'cart-item';
                     itemDiv.innerHTML = `
                         <p>${item.name} (${item.volume}) - ${item.quantity} ədəd - ${item.price * item.quantity} ₼</p>
-                        <button class="remove-btn" onclick="removeFromCart(${index})">Sil</button>
+                        <button class="remove-btn" onclick="window.removeFromCart(${index})">Sil</button>
                     `;
                     cartItemsDiv.appendChild(itemDiv);
                     total += item.price * item.quantity;
@@ -1573,28 +1572,28 @@
                 cartTotalDiv.textContent = `Cəmi: ${total} ₼`;
             }
             document.getElementById('cartModal').classList.add('active');
-        }
+        };
 
-        function closeCartModal() {
+        window.closeCartModal = function() {
             document.getElementById('cartModal').classList.remove('active');
             document.body.classList.remove('modal-open');
-        }
+        };
 
-        function removeFromCart(index) {
+        window.removeFromCart = function(index) {
             cart.splice(index, 1);
             localStorage.setItem('cart', JSON.stringify(cart));
-            updateCartCount();
-            openCartModal();
-        }
+            window.updateCartCount();
+            window.openCartModal();
+        };
 
-        async function sendOrderToWhatsApp() {
+        window.sendOrderToWhatsApp = async function() {
             if (cart.length === 0) {
                 alert('Səbət boşdur. Zəhmət olmasa məhsul əlavə edin.');
                 return;
             }
             if (!currentUser) {
                 alert('Sifariş vermək üçün daxil olun.');
-                openLoginModal();
+                window.openLoginModal();
                 return;
             }
             let message = 'Sifariş detalları:\n';
@@ -1615,58 +1614,58 @@
                 status: 'pending'
             };
             try {
-                await addDoc(collection(db, 'orders'), orderData);
-                const userRef = doc(db, 'users', currentUser.uid);
-                const userDoc = await getDoc(userRef);
-                let currentRcoins = userDoc.exists() ? userDoc.data().rcoins || 0 : 0;
+                await db.collection('orders').add(orderData);
+                const userRef = db.doc(`users/${currentUser.uid}`);
+                const userDoc = await userRef.get();
+                let currentRcoins = userDoc.exists ? userDoc.data().rcoins || 0 : 0;
                 currentRcoins += totalItems * 2;
                 let salary = 0;
                 if (currentRcoins >= 600) salary = 200;
                 else if (currentRcoins >= 400) salary = 150;
                 else if (currentRcoins >= 200) salary = 80;
                 else if (currentRcoins >= 100) salary = 30;
-                await setDoc(userRef, { rcoins: currentRcoins, salary }, { merge: true });
+                await userRef.set({ rcoins: currentRcoins, salary }, { merge: true });
                 cart = [];
                 localStorage.setItem('cart', JSON.stringify(cart));
-                updateCartCount();
-                closeCartModal();
+                window.updateCartCount();
+                window.closeCartModal();
                 const phoneNumber = '994515817772';
                 const encodedMessage = encodeURIComponent(message);
                 const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
                 window.open(url, '_blank');
                 alert('Sifarişiniz qeydə alındı və WhatsApp-a göndərildi!');
                 if (document.getElementById('account').classList.contains('active')) {
-                    loadUserAccount();
+                    window.loadUserAccount();
                 }
             } catch (error) {
                 console.error('Sifariş qeydə alınarkən xəta:', error);
                 alert('Sifariş qeydə alınarkən xəta baş verdi.');
             }
-        }
+        };
 
-        function openRegisterModal() {
+        window.openRegisterModal = function() {
             document.body.classList.add('modal-open');
             document.getElementById('registerModal').classList.add('active');
             document.getElementById('registerError').style.display = 'none';
-        }
+        };
 
-        function closeRegisterModal() {
+        window.closeRegisterModal = function() {
             document.getElementById('registerModal').classList.remove('active');
             document.body.classList.remove('modal-open');
-        }
+        };
 
-        function openLoginModal() {
+        window.openLoginModal = function() {
             document.body.classList.add('modal-open');
             document.getElementById('loginModal').classList.add('active');
             document.getElementById('loginError').style.display = 'none';
-        }
+        };
 
-        function closeLoginModal() {
+        window.closeLoginModal = function() {
             document.getElementById('loginModal').classList.remove('active');
             document.body.classList.remove('modal-open');
-        }
+        };
 
-        async function registerUser(e) {
+        window.registerUser = async function(e) {
             e.preventDefault();
             const firstName = document.getElementById('registerFirstName').value;
             const lastName = document.getElementById('registerLastName').value;
@@ -1674,9 +1673,9 @@
             const password = document.getElementById('registerPassword').value;
             const errorMessage = document.getElementById('registerError');
             try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
                 const user = userCredential.user;
-                await setDoc(doc(db, 'users', user.uid), {
+                await db.collection('users').doc(user.uid).set({
                     uid: user.uid,
                     firstName,
                     lastName,
@@ -1685,147 +1684,163 @@
                     salary: 0,
                     createdAt: new Date().toISOString()
                 });
-                closeRegisterModal();
+                window.closeRegisterModal();
                 alert('Qeydiyyat uğurla tamamlandı!');
             } catch (error) {
                 errorMessage.textContent = error.message.includes('email-already-in-use') ? 'Bu e-poçt artıq istifadə olunur.' : 'Xəta: ' + error.message;
                 errorMessage.style.display = 'block';
             }
-        }
+        };
 
-        async function loginUser(e) {
+        window.loginUser = async function(e) {
             e.preventDefault();
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
             const errorMessage = document.getElementById('loginError');
             try {
-                await signInWithEmailAndPassword(auth, email, password);
-                closeLoginModal();
+                await auth.signInWithEmailAndPassword(email, password);
+                window.closeLoginModal();
                 alert('Giriş uğurlu oldu!');
             } catch (error) {
                 errorMessage.textContent = error.message.includes('user-not-found') || error.message.includes('wrong-password') ? 'E-poçt və ya şifrə yanlışdır.' : 'Xəta: ' + error.message;
                 errorMessage.style.display = 'block';
             }
-        }
+        };
 
-        async function logout() {
+        window.logout = async function() {
             try {
-                await signOut(auth);
+                await auth.signOut();
                 alert('Çıxış etdiniz.');
                 currentUser = null;
                 document.getElementById('loginBtn').style.display = 'inline-block';
                 document.getElementById('registerBtn').style.display = 'inline-block';
                 document.getElementById('logoutBtn').style.display = 'none';
                 document.getElementById('nav-account-li').style.display = 'none';
-                showSection('about');
+                window.showSection('about');
             } catch (error) {
                 console.error('Çıxış zamanı xəta:', error);
                 alert('Çıxış zamanı xəta baş verdi.');
             }
+        };
+
+
+        window.loadUserAccount = async function() {
+    if (!currentUser) return;
+    try {
+        const userRef = db.doc(`users/${currentUser.uid}`);
+        const userDoc = await userRef.get();
+        if (userDoc.exists) {
+            const userData = userDoc.data();
+            document.getElementById('userFirstName').textContent = userData.firstName || '...';
+            document.getElementById('userLastName').textContent = userData.lastName || '...';
+            document.getElementById('userEmail').textContent = userData.email || '...';
+            document.getElementById('userRcoins').textContent = userData.rcoins || 0;
+            document.getElementById('userSalary').textContent = `${userData.salary || 0} ₼`;
         }
-async function loadUserAccount() {
-        if (!currentUser) return;
-        try {
-            const userRef = doc(db, 'users', currentUser.uid);
-            const userDoc = await getDoc(userRef);
-            if (userDoc.exists()) {
-                const userData = userDoc.data();
-                document.getElementById('userFirstName').textContent = userData.firstName || '...';
-                document.getElementById('userLastName').textContent = userData.lastName || '...';
-                document.getElementById('userEmail').textContent = userData.email || '...';
-                document.getElementById('userRcoins').textContent = userData.rcoins || 0;
-                document.getElementById('userSalary').textContent = `${userData.salary || 0} ₼`;
-            }
-            const ordersSnapshot = await getDocs(collection(db, 'orders'));
-            const ordersList = document.getElementById('ordersList');
-            ordersList.innerHTML = '';
+
+        const ordersSnapshot = await db.collection('orders').where('userId', '==', currentUser.uid).get();
+        const ordersList = document.getElementById('ordersList');
+        ordersList.innerHTML = '';
+        if (ordersSnapshot.empty) {
+            ordersList.innerHTML = '<tr><td colspan="5" style="text-align:center;">Sifariş yoxdur.</td></tr>';
+        } else {
             ordersSnapshot.forEach(doc => {
                 const order = doc.data();
-                if (order.userId === currentUser.uid) {
-                    const orderRow = document.createElement('tr');
-                    const products = order.products.map(p => `${p.name} (${p.volume}) x${p.quantity}`).join(', ');
-                    orderRow.innerHTML = `
-                        <td>${new Date(order.orderDate).toLocaleDateString('az-AZ')}</td>
-                        <td>${products}</td>
-                        <td>${order.totalPrice} ₼</td>
-                        <td>${order.rcoinsEarned}</td>
-                        <td>${order.status}</td>
-                    `;
-                    ordersList.appendChild(orderRow);
-                }
+                const products = order.products.map(p => `${p.name} (${p.volume}) - ${p.quantity} ədəd`).join(', ');
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${new Date(order.orderDate).toLocaleDateString()}</td>
+                    <td>${products}</td>
+                    <td>${order.totalPrice} ₼</td>
+                    <td>${order.rcoinsEarned}</td>
+                    <td>${order.status === 'pending' ? 'Gözləyir' : 'Tamamlandı'}</td>
+                `;
+                ordersList.appendChild(row);
             });
-        } catch (error) {
-            console.error('Hesab məlumatları yüklənərkən xəta:', error);
-            alert('Hesab məlumatları yüklənərkən xəta baş verdi.');
         }
+    } catch (error) {
+        console.error('Hesab məlumatları yüklənərkən xəta:', error);
     }
+};
 
-    function searchProducts() {
-        const searchInput = document.getElementById('productSearch').value.toLowerCase();
-        const suggestions = document.getElementById('autocompleteSuggestions');
-        suggestions.innerHTML = '';
-        if (searchInput.length === 0) {
-            suggestions.style.display = 'none';
-            displayProducts(products);
-            return;
-        }
-        const filteredProducts = products.filter(product => 
-            product.name.toLowerCase().includes(searchInput) || 
+window.searchProducts = function() {
+    const searchInput = document.getElementById('productSearch').value.toLowerCase();
+    const filteredProducts = products.filter(product =>
+        product.name.toLowerCase().includes(searchInput) ||
+        product.code.toLowerCase().includes(searchInput)
+    );
+    window.displayProducts(filteredProducts);
+
+    const suggestionsDiv = document.getElementById('autocompleteSuggestions');
+    suggestionsDiv.innerHTML = '';
+    if (searchInput.length > 0) {
+        const suggestions = products.filter(product =>
+            product.name.toLowerCase().includes(searchInput) ||
             product.code.toLowerCase().includes(searchInput)
-        );
-        displayProducts(filteredProducts);
-        filteredProducts.slice(0, 5).forEach(product => {
+        ).slice(0, 5);
+        suggestions.forEach(product => {
             const suggestion = document.createElement('div');
-            suggestion.textContent = `${product.name} (${product.ml} ml)`;
+            suggestion.textContent = `${product.name} (${product.code})`;
             suggestion.onclick = () => {
                 document.getElementById('productSearch').value = product.name;
-                suggestions.style.display = 'none';
-                displayProducts([product]);
+                suggestionsDiv.style.display = 'none';
+                window.displayProducts([product]);
             };
-            suggestions.appendChild(suggestion);
+            suggestionsDiv.appendChild(suggestion);
         });
-        suggestions.style.display = filteredProducts.length > 0 ? 'block' : 'none';
+        suggestionsDiv.style.display = suggestions.length > 0 ? 'block' : 'none';
+    } else {
+        suggestionsDiv.style.display = 'none';
+        window.displayProducts(products);
     }
+};
 
-    document.getElementById('productSearch').addEventListener('input', searchProducts);
+document.getElementById('productSearch').addEventListener('input', window.searchProducts);
 
-    document.getElementById('contactForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-        const successMessage = document.getElementById('successMessage');
+document.getElementById('registerForm').addEventListener('submit', window.registerUser);
+document.getElementById('loginForm').addEventListener('submit', window.loginUser);
+
+document.getElementById('contactForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const successMessage = document.getElementById('successMessage');
+    try {
         successMessage.textContent = 'Mesajınız uğurla göndərildi!';
         successMessage.style.display = 'block';
-        this.reset();
+        successMessage.style.color = 'green';
+        document.getElementById('contactForm').reset();
         setTimeout(() => {
             successMessage.style.display = 'none';
         }, 3000);
-    });
+    } catch (error) {
+        successMessage.textContent = 'Mesaj göndərilərkən xəta baş verdi.';
+        successMessage.style.display = 'block';
+        successMessage.style.color = 'red';
+    }
+});
 
-    document.getElementById('registerForm').addEventListener('submit', registerUser);
-    document.getElementById('loginForm').addEventListener('submit', loginUser);
-
-    onAuthStateChanged(auth, user => {
-        currentUser = user;
-        if (user) {
-            document.getElementById('loginBtn').style.display = 'none';
-            document.getElementById('registerBtn').style.display = 'none';
-            document.getElementById('logoutBtn').style.display = 'inline-block';
-            document.getElementById('nav-account-li').style.display = 'block';
-            if (document.getElementById('account').classList.contains('active')) {
-                loadUserAccount();
-            }
-        } else {
-            document.getElementById('loginBtn').style.display = 'inline-block';
-            document.getElementById('registerBtn').style.display = 'inline-block';
-            document.getElementById('logoutBtn').style.display = 'none';
-            document.getElementById('nav-account-li').style.display = 'none';
+auth.onAuthStateChanged(user => {
+    currentUser = user;
+    if (user) {
+        document.getElementById('loginBtn').style.display = 'none';
+        document.getElementById('registerBtn').style.display = 'none';
+        document.getElementById('logoutBtn').style.display = 'inline-block';
+        document.getElementById('nav-account-li').style.display = 'inline-block';
+        if (document.getElementById('account').classList.contains('active')) {
+            window.loadUserAccount();
         }
-    });
+    } else {
+        document.getElementById('loginBtn').style.display = 'inline-block';
+        document.getElementById('registerBtn').style.display = 'inline-block';
+        document.getElementById('logoutBtn').style.display = 'none';
+        document.getElementById('nav-account-li').style.display = 'none';
+    }
+});
 
-    window.onload = () => {
-        loadProducts();
-        updateCartCount();
-        animateNumbers();
-        showSection('about');
-    };
-</script>
-        
+document.addEventListener('DOMContentLoaded', () => {
+    window.updateCartCount();
+    window.loadProducts();
+    window.showSection('about');
+});
+    </script>
+</body>
+</html>
