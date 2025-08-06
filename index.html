@@ -129,7 +129,7 @@
         nav ul li a:hover::after {
             transform: scaleX(1);
         }
-        .theme-toggle, .cart-toggle {
+        .theme-toggle, .cart-toggle, .auth-btn, .logout-btn {
             background: var(--card-bg);
             color: var(--text-color);
             border: 1px solid #ccc;
@@ -141,7 +141,7 @@
             margin-left: 10px;
             position: relative;
         }
-        .theme-toggle:hover, .cart-toggle:hover {
+        .theme-toggle:hover, .cart-toggle:hover, .auth-btn:hover, .logout-btn:hover {
             background: var(--primary);
             color: #fff;
             transform: scale(1.05);
@@ -345,7 +345,7 @@
         .loader.active {
             display: block;
         }
-        #contactForm {
+        #contactForm, #registerForm, #loginForm {
             max-width: 600px;
             margin: auto;
             background: var(--card-bg);
@@ -354,18 +354,20 @@
             box-shadow: var(--shadow);
             color: var(--text-color);
         }
-        #contactForm h2 {
+        #contactForm h2, #registerForm h2, #loginForm h2 {
             color: var(--primary);
             margin-bottom: 20px;
         }
-        #contactForm label {
+        #contactForm label, #registerForm label, #loginForm label {
             font-weight: 600;
             display: block;
             margin-top: 15px;
             margin-bottom: 5px;
         }
         #contactForm input,
-        #contactForm textarea {
+        #contactForm textarea,
+        #registerForm input,
+        #loginForm input {
             width: 100%;
             padding: 12px;
             border-radius: 6px;
@@ -379,13 +381,15 @@
             transition: border-color 0.3s, background-color 0.3s;
         }
         #contactForm input:focus,
-        #contactForm textarea:focus {
+        #contactForm textarea:focus,
+        #registerForm input:focus,
+        #loginForm input:focus {
             border-color: var(--primary);
             outline: none;
             background: var(--card-bg);
             box-shadow: 0 0 6px rgba(108, 92, 231, 0.3);
         }
-        #contactForm button {
+        #contactForm button, #registerForm button, #loginForm button {
             margin-top: 20px;
             width: 100%;
             padding: 12px;
@@ -400,11 +404,11 @@
             position: relative;
             overflow: hidden;
         }
-        #contactForm button:hover {
+        #contactForm button:hover, #registerForm button:hover, #loginForm button:hover {
             background: linear-gradient(90deg, var(--secondary), var(--primary));
             transform: translateY(-2px);
         }
-        #contactForm button::after {
+        #contactForm button::after, #registerForm button::after, #loginForm button::after {
             content: '';
             position: absolute;
             top: 50%;
@@ -416,16 +420,43 @@
             transform: translate(-50%, -50%);
             transition: width 0.5s ease, height 0.5s ease;
         }
-        #contactForm button:hover::after {
+        #contactForm button:hover::after, #registerForm button:hover::after, #loginForm button:hover::after {
             width: 200px;
             height: 200px;
         }
-        #successMessage {
+        #successMessage, #registerError, #loginError {
             margin-top: 15px;
             font-weight: 600;
             text-align: center;
             color: var(--primary);
             display: none;
+        }
+        #registerError, #loginError {
+            color: #ff4d4d;
+        }
+        #account .account-info {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+        #account .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        #account .orders-table th, #account .orders-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+        }
+        #account .orders-table th {
+            background: rgba(108, 92, 231, 0.1);
+            font-weight: 700;
         }
         footer {
             background: var(--footer-bg);
@@ -445,12 +476,12 @@
             margin-left: 60px;
         }
         .footer-text {
-           flex-grow: 1;
-        display: flex; /* Yazıları tam mərkəzləşdirmək üçün */
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
         }
         .modal {
             display: none;
@@ -895,15 +926,17 @@
                 grid-template-columns: repeat(2, 1fr);
                 gap: 15px;
             }
-            #contactForm {
+            #contactForm, #registerForm, #loginForm {
                 padding: 15px;
             }
             #contactForm input,
-            #contactForm textarea {
+            #contactForm textarea,
+            #registerForm input,
+            #loginForm input {
                 font-size: 14px;
                 padding: 10px;
             }
-            #contactForm button {
+            #contactForm button, #registerForm button, #loginForm button {
                 font-size: 15px;
                 padding: 10px;
             }
@@ -967,6 +1000,10 @@
             .satisfaction-card .number {
                 font-size: 1.3em;
             }
+            #account .orders-table th, #account .orders-table td {
+                font-size: 14px;
+                padding: 10px;
+            }
         }
         @media (max-width: 480px) {
             #product-list, #bestsellers-list {
@@ -1001,10 +1038,12 @@
                 font-size: 14px;
             }
             #contactForm input,
-            #contactForm textarea {
+            #contactForm textarea,
+            #registerForm input,
+            #loginForm input {
                 font-size: 13px;
             }
-            #contactForm button {
+            #contactForm button, #registerForm button, #loginForm button {
                 font-size: 14px;
             }
             h2 {
@@ -1019,8 +1058,11 @@
             .satisfaction-card .number {
                 font-size: 1.2em;
             }
+            #account .orders-table th, #account .orders-table td {
+                font-size: 12px;
+                padding: 8px;
+            }
         }
-        /* Footer-specific styles */
         .footer-container {
             display: flex;
             align-items: center;
@@ -1077,6 +1119,7 @@
                 <li><a id="nav-projects" onclick="showSection('projects')">Ətirlər</a></li>
                 <li><a id="nav-contact" onclick="showSection('contact')">Əlaqə</a></li>
                 <li><a id="nav-catalogue" onclick="showSection('catalogue')">Kataloq</a></li>
+                <li id="nav-account-li" style="display: none;"><a id="nav-account" onclick="showSection('account')">Hesabım</a></li>
             </ul>
             <div>
                 <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">🌙</button>
@@ -1084,6 +1127,9 @@
                     <i class="fas fa-shopping-cart"></i>
                     <span id="cartCount" class="cart-count">0</span>
                 </button>
+                <button id="loginBtn" class="auth-btn" onclick="openLoginModal()">Giriş</button>
+                <button id="registerBtn" class="auth-btn" onclick="openRegisterModal()">Qeydiyyat</button>
+                <button id="logoutBtn" class="logout-btn" onclick="logout()" style="display: none;">Çıxış</button>
             </div>
         </div>
     </nav>
@@ -1104,7 +1150,7 @@
                 <h3>Kampaniya</h3>
                 <p>
                     <strong>Dəyərli istifadəçilər</strong><br>
-                    Kampaniya çərçivəsində etmiş olduğunuz alışlar zamanı aşağıdakı cədəvləd yazılan tariflər tətbiq olunacaq.
+                    Kampaniya çərçivəsində etmiş olduğunuz alışlar zamanı aşağıdakı cədvəldə yazılan tariflər tətbiq olunacaq.
                     Xüsusi qablaşdırma və zövqünüzə uyğun olan <b>1000-ə</b> yaxın ətir çeşidi ilə kampaniyadan faydalana bilərsiniz.
                     Əlavə məlumatlar <b>Xidmətlər və çatdırılma</b>-da verilmişdir. Dəstək və əməkdaşlıq üçün <b>Əlaqə</b> bölməsindən bizə yaza bilərsiniz.
                 </p>
@@ -1145,7 +1191,7 @@
                     Dəyərli müştərilər və alıcılar, <b>Bonus sistemi</b> vasitəsilə siz həm satış edərək həm də bonus toplayaraq qazanc əldə edə bilərsiniz. 
                     Evdən çalışaraq gəlir əldə etmək artıq daha asandır.
                     Belə ki, hər bir ətir <b>2 Rcoin</b> olaraq qiymətləndirilir. Bonuslarda vaxt məhdudiyyəti yoxdur və heç bir halda silinmir. 
-                    Qazancların ödənilməsi bonusların toplanmasından asılı olaraq həftəlik vəya aylıq olaraq həyata keçiriləcəkdir. 
+                    Qazancların ödənilməsi bonusların toplanmasından asılı olaraq həftəlik və ya aylıq olaraq həyata keçiriləcəkdir. 
                     Bonus sisteminin qazanc planı aşağıdakı kimidir:
                     <br>
                     <br>
@@ -1206,6 +1252,30 @@
             <h2>Kataloq</h2>
             <iframe id="cataloguePdf" src="urunlerim/KATALOQUM.pdf" allowfullscreen></iframe>
         </div>
+        <div id="account" class="section">
+            <h2>Hesabım</h2>
+            <div class="account-info">
+                <h3>İstifadəçi Məlumatları</h3>
+                <p><strong>Ad:</strong> <span id="userFirstName">...</span></p>
+                <p><strong>Soyad:</strong> <span id="userLastName">...</span></p>
+                <p><strong>E-poçt:</strong> <span id="userEmail">...</span></p>
+                <p><strong>Rcoin:</strong> <span id="userRcoins">0</span></p>
+                <p><strong>Maaş:</strong> <span id="userSalary">0 ₼</span></p>
+            </div>
+            <h3>Bütün Sifarişlərim</h3>
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Sifariş Tarixi</th>
+                        <th>Məhsullar</th>
+                        <th>Cəmi Qiymət</th>
+                        <th>Rcoin</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersList"></tbody>
+            </table>
+        </div>
     </main>
     <div id="productModal" class="modal">
         <div class="modal-content">
@@ -1227,6 +1297,38 @@
             <button id="whatsappOrderBtn" onclick="sendOrderToWhatsApp()">WhatsApp ilə Sifariş Ver</button>
         </div>
     </div>
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeRegisterModal()">×</span>
+            <form id="registerForm">
+                <h2>Qeydiyyat</h2>
+                <label for="registerFirstName"><i class="fas fa-user"></i> Ad:</label>
+                <input id="registerFirstName" type="text" required />
+                <label for="registerLastName"><i class="fas fa-user"></i> Soyad:</label>
+                <input id="registerLastName" type="text" required />
+                <label for="registerEmail"><i class="fas fa-envelope"></i> E-poçt:</label>
+                <input id="registerEmail" type="email" required />
+                <label for="registerPassword"><i class="fas fa-lock"></i> Şifrə:</label>
+                <input id="registerPassword" type="password" required />
+                <button type="submit"><i class="fas fa-user-plus"></i> Qeydiyyatdan Keç</button>
+                <p id="registerError"></p>
+            </form>
+        </div>
+    </div>
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeLoginModal()">×</span>
+            <form id="loginForm">
+                <h2>Giriş</h2>
+                <label for="loginEmail"><i class="fas fa-envelope"></i> E-poçt:</label>
+                <input id="loginEmail" type="email" required />
+                <label for="loginPassword"><i class="fas fa-lock"></i> Şifrə:</label>
+                <input id="loginPassword" type="password" required />
+                <button type="submit"><i class="fas fa-sign-in-alt"></i> Daxil Ol</button>
+                <p id="loginError"></p>
+            </form>
+        </div>
+    </div>
     <footer class="blur-background">
         <div class="footer-container">
             <img src="urunlerim/logo.png" alt="R-Shoppingaz Logo" class="footer-logo">
@@ -1236,8 +1338,28 @@
             </div>
         </div>
     </footer>
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc, getDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCSaiU9DguIk47O8LPZ_Oa6StJgHbPqZ6I",
+            authDomain: "perfume-8b7f7.firebaseapp.com",
+            projectId: "perfume-8b7f7",
+            storageBucket: "perfume-8b7f7.appspot.com",
+            messagingSenderId: "899731999798",
+            appId: "1:899731999798:web:750af78287f56d15d41c97"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let currentUser = null;
+        let products = [];
+
         function animateNumbers() {
             const numbers = document.querySelectorAll('.number');
             numbers.forEach(number => {
@@ -1256,6 +1378,7 @@
                 const interval = setInterval(updateNumber, 80);
             });
         }
+
         function showSection(id) {
             const sections = document.querySelectorAll('.section');
             const links = document.querySelectorAll('nav ul li a');
@@ -1270,7 +1393,11 @@
             if (id === 'about') {
                 setTimeout(animateNumbers, 100);
             }
+            if (id === 'account' && currentUser) {
+                loadUserAccount();
+            }
         }
+
         function toggleTheme() {
             const body = document.body;
             const button = document.getElementById('themeToggle');
@@ -1278,13 +1405,72 @@
             button.textContent = isDark ? '☀️' : '🌙';
             button.style.color = isDark ? '#c7d1e0' : '#1a2a44';
         }
+
         function toggleMenu() {
             document.getElementById('nav-menu').classList.toggle('active');
         }
+
         function updateCartCount() {
             const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
             document.getElementById('cartCount').textContent = cartCount;
         }
+
+        async function loadProducts() {
+            const loader = document.getElementById('loader');
+            loader.classList.add('active');
+            try {
+                const querySnapshot = await getDocs(collection(db, 'products'));
+                products = [];
+                querySnapshot.forEach(doc => {
+                    products.push({ id: doc.id, ...doc.data() });
+                });
+                displayProducts(products);
+                displayBestsellers(products);
+            } catch (error) {
+                console.error('Məhsullar yüklənərkən xəta:', error);
+            } finally {
+                loader.classList.remove('active');
+            }
+        }
+
+        function displayProducts(products) {
+            const productList = document.getElementById('product-list');
+            productList.innerHTML = '';
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <h3>${product.name}</h3>
+                    <p>Kod: ${product.code}</p>
+                    <p>Həcm: ${product.ml} ml</p>
+                    <p class="daily-sales">Gündəlik satış: ${Math.floor(Math.random() * 50) + 10}</p>
+                    <button class="add-to-cart-btn" onclick="openModal({ id: '${product.id}', name: '${product.name}', code: '${product.code}', ml: '${product.ml}' })">
+                        <i class="fas fa-shopping-cart"></i> Səbətə əlavə et
+                    </button>
+                `;
+                productList.appendChild(card);
+            });
+        }
+
+        function displayBestsellers(products) {
+            const bestsellersList = document.getElementById('bestsellers-list');
+            bestsellersList.innerHTML = '';
+            const bestsellers = products.slice(0, 3);
+            bestsellers.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'bestseller-card';
+                card.innerHTML = `
+                    <h3>${product.name}</h3>
+                    <p>Kod: ${product.code}</p>
+                    <p>Həcm: ${product.ml} ml</p>
+                    <button class="add-to-cart-btn" onclick="openModal({ id: '${product.id}', name: '${product.name}', code: '${product.code}', ml: '${product.ml}' })">
+                        <i class="fas fa-shopping-cart"></i>
+                    </button>
+                `;
+                bestsellersList.appendChild(card);
+            });
+        }
+
         function openModal(product) {
             document.body.classList.add('modal-open');
             const modalTitle = document.getElementById('modalTitle');
@@ -1294,7 +1480,7 @@
             const modalButtons = document.getElementById('modalButtons');
             modalTitle.textContent = product.name;
             modalDescription.innerHTML = product.description || 'Təsvir yoxdur';
-            let selectedVolume = '30 ml';
+            let selectedVolume = product.ml + ' ml';
             let price = product.ml === '50' ? 13 : 10;
             quantityInput.value = 1;
             modalPrice.textContent = `Qiymət: ${price} ₼`;
@@ -1357,11 +1543,13 @@
             modalButtons.appendChild(addToCartBtn);
             document.getElementById('productModal').classList.add('active');
         }
+
         function closeModal() {
             document.getElementById('productModal').classList.remove('active');
             document.body.classList.remove('modal-open');
             document.getElementById('autocompleteSuggestions').style.display = 'none';
         }
+
         function openCartModal() {
             document.body.classList.add('modal-open');
             const cartItemsDiv = document.getElementById('cartItems');
@@ -1386,220 +1574,258 @@
             }
             document.getElementById('cartModal').classList.add('active');
         }
+
         function closeCartModal() {
             document.getElementById('cartModal').classList.remove('active');
             document.body.classList.remove('modal-open');
         }
+
         function removeFromCart(index) {
             cart.splice(index, 1);
             localStorage.setItem('cart', JSON.stringify(cart));
             updateCartCount();
             openCartModal();
         }
-        function sendOrderToWhatsApp() {
+
+        async function sendOrderToWhatsApp() {
             if (cart.length === 0) {
                 alert('Səbət boşdur. Zəhmət olmasa məhsul əlavə edin.');
                 return;
             }
+            if (!currentUser) {
+                alert('Sifariş vermək üçün daxil olun.');
+                openLoginModal();
+                return;
+            }
             let message = 'Sifariş detalları:\n';
             let total = 0;
+            let totalItems = 0;
             cart.forEach(item => {
                 message += `${item.name} (${item.volume}) - ${item.quantity} ədəd - ${item.price * item.quantity} ₼\n`;
                 total += item.price * item.quantity;
+                totalItems += item.quantity;
             });
             message += `\nCəmi: ${total} ₼`;
-            const phoneNumber = '994515817772';
-            const encodedMessage = encodeURIComponent(message);
-            const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-            window.open(url, '_blank');
-        }
-    </script>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        const firebaseConfig = {
-            apiKey: "AIzaSyCSaiU9DguIk47O8LPZ_Oa6StJgHbPqZ6I",
-            authDomain: "perfume-8b7f7.firebaseapp.com",
-            projectId: "perfume-8b7f7",
-            storageBucket: "perfume-8b7f7.appspot.com",
-            messagingSenderId: "899731999798",
-            appId: "1:899731999798:web:750af78287f56d15d41c97"
-        };
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        let allProducts = [];
-        function generateDailySeed() {
-            const today = new Date();
-            return parseInt(`${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, '0')}${String(today.getDate()).padStart(2, '0')}`);
-        }
-        function seededRandom(seed) {
-            const x = Math.sin(seed * 1234567) * 10000;
-            return x - Math.floor(x);
-        }
-        function getRandomDailySales(productId) {
-            const seed = generateDailySeed() + parseInt(productId, 36);
-            const random = seededRandom(seed);
-            return Math.floor(random * 21) + 5;
-        }
-        function formatDate() {
-            const today = new Date();
-            const day = String(today.getDate()).padStart(2, '0');
-            const month = String(today.getMonth() + 1).padStart(2, '0');
-            const year = today.getFullYear();
-            return `${day}.${month}.${year}`;
-        }
-        function createProductCard(product) {
-            const card = document.createElement('div');
-            card.className = 'product-card';
-            const dailySales = getRandomDailySales(product.id);
-            const todayDate = formatDate();
-            card.innerHTML = `
-                <h3>${product.name}</h3>
-                <p>Kod: ${product.code || '-'}</p>
-                <p class="daily-sales">Bu gün satılıb: ${dailySales} ədəd (${todayDate})</p>
-                <button class="add-to-cart-btn"><i class="fas fa-shopping-cart"></i> Səbətə əlavə et</button>
-            `;
-            const addToCartBtn = card.querySelector('.add-to-cart-btn');
-            addToCartBtn.addEventListener('click', () => {
-                addToCartDirectly(product.id, product.name, '30 ml', 10, 1);
-            });
-            card.addEventListener('click', (e) => {
-                if (e.target.className.includes('add-to-cart-btn') || e.target.parentElement.className.includes('add-to-cart-btn')) return;
-                openModal(product);
-            });
-            return card;
-        }
-        function createBestsellerCard(product) {
-            const card = document.createElement('div');
-            card.className = 'bestseller-card';
-            card.innerHTML = `
-                <h3>${product.name}</h3>
-                <p>Kod: ${product.code || '-'}</p>
-                <button class="add-to-cart-btn"><i class="fas fa-shopping-cart"></i></button>
-            `;
-            const addToCartBtn = card.querySelector('.add-to-cart-btn');
-            addToCartBtn.addEventListener('click', () => {
-                addToCartDirectly(product.id, product.name, '30 ml', 10, 1);
-            });
-            return card;
-        }
-        function addToCartDirectly(id, name, volume, price, quantity) {
-            const cartItem = {
-                id: id,
-                name: name,
-                volume: volume,
-                price: price,
-                quantity: quantity
+            const orderData = {
+                userId: currentUser.uid,
+                products: cart,
+                totalPrice: total,
+                rcoinsEarned: totalItems * 2,
+                orderDate: new Date().toISOString(),
+                status: 'pending'
             };
-            const existingItem = cart.find(item => item.id === cartItem.id && item.volume === cartItem.volume);
-            if (existingItem) {
-                existingItem.quantity += quantity;
-            } else {
-                cart.push(cartItem);
-            }
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateCartCount();
-            const cartToggle = document.getElementById('cartToggle');
-            cartToggle.classList.add('slide');
-            setTimeout(() => {
-                cartToggle.classList.remove('slide');
-            }, 500);
-            alert(`${cartItem.name} (${cartItem.volume}) səbətə əlavə edildi!`);
-        }
-        async function loadProducts(searchTerm = '') {
-            const productList = document.getElementById('product-list');
-            const loader = document.getElementById('loader');
-            loader.classList.add('active');
-            productList.innerHTML = '';
             try {
-                const querySnapshot = await getDocs(collection(db, "products"));
-                loader.classList.remove('active');
-                if (querySnapshot.empty) {
-                    productList.innerHTML = '<p style="text-align:center; color: var(--text-color);">Məhsul tapılmadı</p>';
-                    return;
-                }
-                allProducts = [];
-                querySnapshot.forEach(docSnap => {
-                    const product = { ...docSnap.data(), id: docSnap.id };
-                    allProducts.push(product);
-                });
-                const filteredProducts = searchTerm
-                    ? allProducts.filter(product =>
-                        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        (product.code && product.code.toLowerCase().includes(searchTerm.toLowerCase()))
-                    )
-                    : allProducts;
-                if (filteredProducts.length === 0) {
-                    productList.innerHTML = '<p style="text-align:center; color: var(--text-color);">Axtarışa uyğun məhsul tapılmadı</p>';
-                    return;
-                }
-                filteredProducts.forEach(product => {
-                    const card = createProductCard(product);
-                    productList.appendChild(card);
-                });
-                const bestsellersList = document.getElementById('bestsellers-list');
-                bestsellersList.innerHTML = '';
-                const bestsellers = allProducts.slice(0, 3);
-                bestsellers.forEach(product => {
-                    const card = createBestsellerCard(product);
-                    bestsellersList.appendChild(card);
-                });
-            } catch (error) {
-                console.error("Məhsullar yüklənərkən xəta:", error);
-                productList.innerHTML = '<p style="color:red; text-align:center;">Məhsullar yüklənərkən xəta baş verdi</p>';
-                loader.classList.remove('active');
-            }
-        }
-        function showAutocompleteSuggestions(searchTerm) {
-            const suggestionsDiv = document.getElementById('autocompleteSuggestions');
-            suggestionsDiv.innerHTML = '';
-            if (!searchTerm) {
-                suggestionsDiv.style.display = 'none';
-                return;
-            }
-            const suggestions = allProducts.filter(product =>
-                product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                (product.code && product.code.toLowerCase().includes(searchTerm.toLowerCase()))
-            ).slice(0, 5);
-            if (suggestions.length > 0) {
-                suggestions.forEach(product => {
-                    const div = document.createElement('div');
-                    div.textContent = product.name;
-                    div.addEventListener('click', () => {
-                        document.getElementById('productSearch').value = product.name;
-                        suggestionsDiv.style.display = 'none';
-                        loadProducts(product.name);
-                    });
-                    suggestionsDiv.appendChild(div);
-                });
-                suggestionsDiv.style.display = 'block';
-            } else {
-                suggestionsDiv.style.display = 'none';
-            }
-        }
-        document.getElementById('productSearch').addEventListener('input', (e) => {
-            const searchTerm = e.target.value;
-            showAutocompleteSuggestions(searchTerm);
-            loadProducts(searchTerm);
-        });
-        document.getElementById('productModal').addEventListener('click', (e) => {
-            if (e.target === e.currentTarget) closeModal();
-        });
-        document.getElementById('cartModal').addEventListener('click', (e) => {
-            if (e.target === e.currentTarget) closeCartModal();
-        });
-        window.addEventListener('DOMContentLoaded', () => {
-            loadProducts();
-            updateCartCount();
-            const closeBtn = document.querySelectorAll('.close-btn');
-            closeBtn.forEach(btn => btn.addEventListener('click', () => {
-                closeModal();
+                await addDoc(collection(db, 'orders'), orderData);
+                const userRef = doc(db, 'users', currentUser.uid);
+                const userDoc = await getDoc(userRef);
+                let currentRcoins = userDoc.exists() ? userDoc.data().rcoins || 0 : 0;
+                currentRcoins += totalItems * 2;
+                let salary = 0;
+                if (currentRcoins >= 600) salary = 200;
+                else if (currentRcoins >= 400) salary = 150;
+                else if (currentRcoins >= 200) salary = 80;
+                else if (currentRcoins >= 100) salary = 30;
+                await setDoc(userRef, { rcoins: currentRcoins, salary }, { merge: true });
+                cart = [];
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCount();
                 closeCartModal();
-            }));
-            if (document.getElementById('about').classList.contains('active')) {
-                animateNumbers();
+                const phoneNumber = '994515817772';
+                const encodedMessage = encodeURIComponent(message);
+                const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+                window.open(url, '_blank');
+                alert('Sifarişiniz qeydə alındı və WhatsApp-a göndərildi!');
+                if (document.getElementById('account').classList.contains('active')) {
+                    loadUserAccount();
+                }
+            } catch (error) {
+                console.error('Sifariş qeydə alınarkən xəta:', error);
+                alert('Sifariş qeydə alınarkən xəta baş verdi.');
             }
+        }
+
+        function openRegisterModal() {
+            document.body.classList.add('modal-open');
+            document.getElementById('registerModal').classList.add('active');
+            document.getElementById('registerError').style.display = 'none';
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('registerModal').classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+
+        function openLoginModal() {
+            document.body.classList.add('modal-open');
+            document.getElementById('loginModal').classList.add('active');
+            document.getElementById('loginError').style.display = 'none';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+
+        async function registerUser(e) {
+            e.preventDefault();
+            const firstName = document.getElementById('registerFirstName').value;
+            const lastName = document.getElementById('registerLastName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const errorMessage = document.getElementById('registerError');
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                await setDoc(doc(db, 'users', user.uid), {
+                    uid: user.uid,
+                    firstName,
+                    lastName,
+                    email,
+                    rcoins: 0,
+                    salary: 0,
+                    createdAt: new Date().toISOString()
+                });
+                closeRegisterModal();
+                alert('Qeydiyyat uğurla tamamlandı!');
+            } catch (error) {
+                errorMessage.textContent = error.message.includes('email-already-in-use') ? 'Bu e-poçt artıq istifadə olunur.' : 'Xəta: ' + error.message;
+                errorMessage.style.display = 'block';
+            }
+        }
+
+        async function loginUser(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorMessage = document.getElementById('loginError');
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                closeLoginModal();
+                alert('Giriş uğurlu oldu!');
+            } catch (error) {
+                errorMessage.textContent = error.message.includes('user-not-found') || error.message.includes('wrong-password') ? 'E-poçt və ya şifrə yanlışdır.' : 'Xəta: ' + error.message;
+                errorMessage.style.display = 'block';
+            }
+        }
+
+        async function logout() {
+            try {
+                await signOut(auth);
+                alert('Çıxış etdiniz.');
+                currentUser = null;
+                document.getElementById('loginBtn').style.display = 'inline-block';
+                document.getElementById('registerBtn').style.display = 'inline-block';
+                document.getElementById('logoutBtn').style.display = 'none';
+                document.getElementById('nav-account-li').style.display = 'none';
+                showSection('about');
+            } catch (error) {
+                console.error('Çıxış zamanı xəta:', error);
+                alert('Çıxış zamanı xəta baş verdi.');
+            }
+        }
+async function loadUserAccount() {
+        if (!currentUser) return;
+        try {
+            const userRef = doc(db, 'users', currentUser.uid);
+            const userDoc = await getDoc(userRef);
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                document.getElementById('userFirstName').textContent = userData.firstName || '...';
+                document.getElementById('userLastName').textContent = userData.lastName || '...';
+                document.getElementById('userEmail').textContent = userData.email || '...';
+                document.getElementById('userRcoins').textContent = userData.rcoins || 0;
+                document.getElementById('userSalary').textContent = `${userData.salary || 0} ₼`;
+            }
+            const ordersSnapshot = await getDocs(collection(db, 'orders'));
+            const ordersList = document.getElementById('ordersList');
+            ordersList.innerHTML = '';
+            ordersSnapshot.forEach(doc => {
+                const order = doc.data();
+                if (order.userId === currentUser.uid) {
+                    const orderRow = document.createElement('tr');
+                    const products = order.products.map(p => `${p.name} (${p.volume}) x${p.quantity}`).join(', ');
+                    orderRow.innerHTML = `
+                        <td>${new Date(order.orderDate).toLocaleDateString('az-AZ')}</td>
+                        <td>${products}</td>
+                        <td>${order.totalPrice} ₼</td>
+                        <td>${order.rcoinsEarned}</td>
+                        <td>${order.status}</td>
+                    `;
+                    ordersList.appendChild(orderRow);
+                }
+            });
+        } catch (error) {
+            console.error('Hesab məlumatları yüklənərkən xəta:', error);
+            alert('Hesab məlumatları yüklənərkən xəta baş verdi.');
+        }
+    }
+
+    function searchProducts() {
+        const searchInput = document.getElementById('productSearch').value.toLowerCase();
+        const suggestions = document.getElementById('autocompleteSuggestions');
+        suggestions.innerHTML = '';
+        if (searchInput.length === 0) {
+            suggestions.style.display = 'none';
+            displayProducts(products);
+            return;
+        }
+        const filteredProducts = products.filter(product => 
+            product.name.toLowerCase().includes(searchInput) || 
+            product.code.toLowerCase().includes(searchInput)
+        );
+        displayProducts(filteredProducts);
+        filteredProducts.slice(0, 5).forEach(product => {
+            const suggestion = document.createElement('div');
+            suggestion.textContent = `${product.name} (${product.ml} ml)`;
+            suggestion.onclick = () => {
+                document.getElementById('productSearch').value = product.name;
+                suggestions.style.display = 'none';
+                displayProducts([product]);
+            };
+            suggestions.appendChild(suggestion);
         });
-    </script>
-</body>
-</html>
+        suggestions.style.display = filteredProducts.length > 0 ? 'block' : 'none';
+    }
+
+    document.getElementById('productSearch').addEventListener('input', searchProducts);
+
+    document.getElementById('contactForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const successMessage = document.getElementById('successMessage');
+        successMessage.textContent = 'Mesajınız uğurla göndərildi!';
+        successMessage.style.display = 'block';
+        this.reset();
+        setTimeout(() => {
+            successMessage.style.display = 'none';
+        }, 3000);
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', registerUser);
+    document.getElementById('loginForm').addEventListener('submit', loginUser);
+
+    onAuthStateChanged(auth, user => {
+        currentUser = user;
+        if (user) {
+            document.getElementById('loginBtn').style.display = 'none';
+            document.getElementById('registerBtn').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'inline-block';
+            document.getElementById('nav-account-li').style.display = 'block';
+            if (document.getElementById('account').classList.contains('active')) {
+                loadUserAccount();
+            }
+        } else {
+            document.getElementById('loginBtn').style.display = 'inline-block';
+            document.getElementById('registerBtn').style.display = 'inline-block';
+            document.getElementById('logoutBtn').style.display = 'none';
+            document.getElementById('nav-account-li').style.display = 'none';
+        }
+    });
+
+    window.onload = () => {
+        loadProducts();
+        updateCartCount();
+        animateNumbers();
+        showSection('about');
+    };
+</script>
+        
