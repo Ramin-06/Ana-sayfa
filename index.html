@@ -1357,26 +1357,6 @@
 
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         let currentUser = null;
-        let products = [];
-
-        window.animateNumbers = function() {
-            const numbers = document.querySelectorAll('.number');
-            numbers.forEach(number => {
-                const target = parseInt(number.getAttribute('data-target'));
-                let current = 0;
-                const increment = target / 50;
-                const suffix = number.textContent.includes('%') ? '%' : '+';
-                const updateNumber = () => {
-                    current += increment;
-                    if (current >= target) {
-                        current = target;
-                        clearInterval(interval);
-                    }
-                    number.textContent = Math.round(current) + suffix;
-                };
-                const interval = setInterval(updateNumber, 80);
-            });
-        };
 
         window.showSection = function(id) {
             const sections = document.querySelectorAll('.section');
@@ -1388,12 +1368,6 @@
             if (activeLink) activeLink.classList.add('active');
             if (window.innerWidth <= 768) {
                 document.getElementById('nav-menu').classList.remove('active');
-            }
-            if (id === 'about') {
-                setTimeout(window.animateNumbers, 100);
-            }
-            if (id === 'account' && currentUser) {
-                window.loadUserAccount();
             }
         };
 
@@ -1409,144 +1383,26 @@
             document.getElementById('nav-menu').classList.toggle('active');
         };
 
-        window.updateCartCount = function() {
-            const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
-            document.getElementById('cartCount').textContent = cartCount;
-        };
-
-        window.loadProducts = async function() {
-            const loader = document.getElementById('loader');
-            loader.classList.add('active');
-            try {
-                const querySnapshot = await db.collection('products').get();
-                products = [];
-                querySnapshot.forEach(doc => {
-                    products.push({ id: doc.id, ...doc.data() });
-                });
-                window.displayProducts(products);
-                window.displayBestsellers(products);
-            } catch (error) {
-                console.error('Məhsullar yüklənərkən xəta:', error);
-            } finally {
-                loader.classList.remove('active');
-            }
-        };
-
-        window.displayProducts = function(products) {
-            const productList = document.getElementById('product-list');
-            productList.innerHTML = '';
-            products.forEach(product => {
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                card.innerHTML = `
-                    <h3>${product.name}</h3>
-                    <p>Kod: ${product.code}</p>
-                    <p>Həcm: ${product.ml} ml</p>
-                    <p class="daily-sales">Gündəlik satış: ${Math.floor(Math.random() * 50) + 10}</p>
-                    <button class="add-to-cart-btn" onclick="window.openModal({ id: '${product.id}', name: '${product.name}', code: '${product.code}', ml: '${product.ml}' })">
-                        <i class="fas fa-shopping-cart"></i> Səbətə əlavə et
-                    </button>
-                `;
-                productList.appendChild(card);
-            });
-        };
-
-        window.displayBestsellers = function(products) {
-            const bestsellersList = document.getElementById('bestsellers-list');
-            bestsellersList.innerHTML = '';
-            const bestsellers = products.slice(0, 3);
-            bestsellers.forEach(product => {
-                const card = document.createElement('div');
-                card.className = 'bestseller-card';
-                card.innerHTML = `
-                    <h3>${product.name}</h3>
-                    <p>Kod: ${product.code}</p>
-                    <p>Həcm: ${product.ml} ml</p>
-                    <button class="add-to-cart-btn" onclick="window.openModal({ id: '${product.id}', name: '${product.name}', code: '${product.code}', ml: '${product.ml}' })">
-                        <i class="fas fa-shopping-cart"></i>
-                    </button>
-                `;
-                bestsellersList.appendChild(card);
-            });
-        };
-
-        window.openModal = function(product) {
+        window.openLoginModal = function() {
             document.body.classList.add('modal-open');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalDescription = document.getElementById('modalDescription');
-            const modalPrice = document.getElementById('modalPrice');
-            const quantityInput = document.getElementById('quantity');
-            const modalButtons = document.getElementById('modalButtons');
-            modalTitle.textContent = product.name;
-            modalDescription.innerHTML = product.description || 'Təsvir yoxdur';
-            let selectedVolume = product.ml + ' ml';
-            let price = product.ml === '50' ? 13 : 10;
-            quantityInput.value = 1;
-            modalPrice.textContent = `Qiymət: ${price} ₼`;
-            modalButtons.innerHTML = '';
-            const btn30 = document.createElement('button');
-            btn30.textContent = '30 ml';
-            btn30.className = 'volume-btn' + (product.ml === '30' ? ' active' : '');
-            btn30.style.marginRight = '10px';
-            const btn50 = document.createElement('button');
-            btn50.textContent = '50 ml';
-            btn50.className = 'volume-btn' + (product.ml === '50' ? ' active' : '');
-            const addToCartBtn = document.createElement('button');
-            addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart"></i> Səbətə əlavə et';
-            addToCartBtn.className = 'add-to-cart-btn';
-            btn30.onclick = () => {
-                selectedVolume = '30 ml';
-                price = 10;
-                modalPrice.textContent = `Qiymət: ${price} ₼`;
-                btn30.classList.add('active');
-                btn50.classList.remove('active');
-            };
-            btn50.onclick = () => {
-                selectedVolume = '50 ml';
-                price = 13;
-                modalPrice.textContent = `Qiymət: ${price} ₼`;
-                btn50.classList.add('active');
-                btn30.classList.remove('active');
-            };
-            addToCartBtn.onclick = () => {
-                const quantity = parseInt(quantityInput.value);
-                if (quantity < 1) {
-                    alert('Zəhmət olmasa etibarlı say daxil edin.');
-                    return;
-                }
-                const cartItem = {
-                    id: product.id,
-                    name: product.name,
-                    volume: selectedVolume,
-                    price: price,
-                    quantity: quantity
-                };
-                const existingItem = cart.find(item => item.id === cartItem.id && item.volume === cartItem.volume);
-                if (existingItem) {
-                    existingItem.quantity += quantity;
-                } else {
-                    cart.push(cartItem);
-                }
-                localStorage.setItem('cart', JSON.stringify(cart));
-                window.updateCartCount();
-                const cartToggle = document.getElementById('cartToggle');
-                cartToggle.classList.add('slide');
-                setTimeout(() => {
-                    cartToggle.classList.remove('slide');
-                }, 500);
-                window.closeModal();
-                alert(`${cartItem.name} (${cartItem.volume}) səbətə əlavə edildi!`);
-            };
-            modalButtons.appendChild(btn30);
-            modalButtons.appendChild(btn50);
-            modalButtons.appendChild(addToCartBtn);
-            document.getElementById('productModal').classList.add('active');
+            document.getElementById('loginModal').classList.add('active');
+            document.getElementById('loginError').style.display = 'none';
         };
 
-        window.closeModal = function() {
-            document.getElementById('productModal').classList.remove('active');
+        window.closeLoginModal = function() {
+            document.getElementById('loginModal').classList.remove('active');
             document.body.classList.remove('modal-open');
-            document.getElementById('autocompleteSuggestions').style.display = 'none';
+        };
+
+        window.openRegisterModal = function() {
+            document.body.classList.add('modal-open');
+            document.getElementById('registerModal').classList.add('active');
+            document.getElementById('registerError').style.display = 'none';
+        };
+
+        window.closeRegisterModal = function() {
+            document.getElementById('registerModal').classList.remove('active');
+            document.body.classList.remove('modal-open');
         };
 
         window.openCartModal = function() {
@@ -1586,7 +1442,12 @@
             window.openCartModal();
         };
 
-        window.sendOrderToWhatsApp = async function() {
+        window.updateCartCount = function() {
+            const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cartCount').textContent = cartCount;
+        };
+
+        window.sendOrderToWhatsApp = function() {
             if (cart.length === 0) {
                 alert('Səbət boşdur. Zəhmət olmasa məhsul əlavə edin.');
                 return;
@@ -1598,71 +1459,20 @@
             }
             let message = 'Sifariş detalları:\n';
             let total = 0;
-            let totalItems = 0;
             cart.forEach(item => {
                 message += `${item.name} (${item.volume}) - ${item.quantity} ədəd - ${item.price * item.quantity} ₼\n`;
                 total += item.price * item.quantity;
-                totalItems += item.quantity;
             });
             message += `\nCəmi: ${total} ₼`;
-            const orderData = {
-                userId: currentUser.uid,
-                products: cart,
-                totalPrice: total,
-                rcoinsEarned: totalItems * 2,
-                orderDate: new Date().toISOString(),
-                status: 'pending'
-            };
-            try {
-                await db.collection('orders').add(orderData);
-                const userRef = db.doc(`users/${currentUser.uid}`);
-                const userDoc = await userRef.get();
-                let currentRcoins = userDoc.exists ? userDoc.data().rcoins || 0 : 0;
-                currentRcoins += totalItems * 2;
-                let salary = 0;
-                if (currentRcoins >= 600) salary = 200;
-                else if (currentRcoins >= 400) salary = 150;
-                else if (currentRcoins >= 200) salary = 80;
-                else if (currentRcoins >= 100) salary = 30;
-                await userRef.set({ rcoins: currentRcoins, salary }, { merge: true });
-                cart = [];
-                localStorage.setItem('cart', JSON.stringify(cart));
-                window.updateCartCount();
-                window.closeCartModal();
-                const phoneNumber = '994515817772';
-                const encodedMessage = encodeURIComponent(message);
-                const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-                window.open(url, '_blank');
-                alert('Sifarişiniz qeydə alındı və WhatsApp-a göndərildi!');
-                if (document.getElementById('account').classList.contains('active')) {
-                    window.loadUserAccount();
-                }
-            } catch (error) {
-                console.error('Sifariş qeydə alınarkən xəta:', error);
-                alert('Sifariş qeydə alınarkən xəta baş verdi.');
-            }
-        };
-
-        window.openRegisterModal = function() {
-            document.body.classList.add('modal-open');
-            document.getElementById('registerModal').classList.add('active');
-            document.getElementById('registerError').style.display = 'none';
-        };
-
-        window.closeRegisterModal = function() {
-            document.getElementById('registerModal').classList.remove('active');
-            document.body.classList.remove('modal-open');
-        };
-
-        window.openLoginModal = function() {
-            document.body.classList.add('modal-open');
-            document.getElementById('loginModal').classList.add('active');
-            document.getElementById('loginError').style.display = 'none';
-        };
-
-        window.closeLoginModal = function() {
-            document.getElementById('loginModal').classList.remove('active');
-            document.body.classList.remove('modal-open');
+            const phoneNumber = '994515817772';
+            const encodedMessage = encodeURIComponent(message);
+            const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+            window.open(url, '_blank');
+            cart = [];
+            localStorage.setItem('cart', JSON.stringify(cart));
+            window.updateCartCount();
+            window.closeCartModal();
+            alert('Sifarişiniz WhatsApp-a göndərildi!');
         };
 
         window.registerUser = async function(e) {
@@ -1723,124 +1533,25 @@
             }
         };
 
-
-        window.loadUserAccount = async function() {
-    if (!currentUser) return;
-    try {
-        const userRef = db.doc(`users/${currentUser.uid}`);
-        const userDoc = await userRef.get();
-        if (userDoc.exists) {
-            const userData = userDoc.data();
-            document.getElementById('userFirstName').textContent = userData.firstName || '...';
-            document.getElementById('userLastName').textContent = userData.lastName || '...';
-            document.getElementById('userEmail').textContent = userData.email || '...';
-            document.getElementById('userRcoins').textContent = userData.rcoins || 0;
-            document.getElementById('userSalary').textContent = `${userData.salary || 0} ₼`;
-        }
-
-        const ordersSnapshot = await db.collection('orders').where('userId', '==', currentUser.uid).get();
-        const ordersList = document.getElementById('ordersList');
-        ordersList.innerHTML = '';
-        if (ordersSnapshot.empty) {
-            ordersList.innerHTML = '<tr><td colspan="5" style="text-align:center;">Sifariş yoxdur.</td></tr>';
-        } else {
-            ordersSnapshot.forEach(doc => {
-                const order = doc.data();
-                const products = order.products.map(p => `${p.name} (${p.volume}) - ${p.quantity} ədəd`).join(', ');
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${new Date(order.orderDate).toLocaleDateString()}</td>
-                    <td>${products}</td>
-                    <td>${order.totalPrice} ₼</td>
-                    <td>${order.rcoinsEarned}</td>
-                    <td>${order.status === 'pending' ? 'Gözləyir' : 'Tamamlandı'}</td>
-                `;
-                ordersList.appendChild(row);
-            });
-        }
-    } catch (error) {
-        console.error('Hesab məlumatları yüklənərkən xəta:', error);
-    }
-};
-
-window.searchProducts = function() {
-    const searchInput = document.getElementById('productSearch').value.toLowerCase();
-    const filteredProducts = products.filter(product =>
-        product.name.toLowerCase().includes(searchInput) ||
-        product.code.toLowerCase().includes(searchInput)
-    );
-    window.displayProducts(filteredProducts);
-
-    const suggestionsDiv = document.getElementById('autocompleteSuggestions');
-    suggestionsDiv.innerHTML = '';
-    if (searchInput.length > 0) {
-        const suggestions = products.filter(product =>
-            product.name.toLowerCase().includes(searchInput) ||
-            product.code.toLowerCase().includes(searchInput)
-        ).slice(0, 5);
-        suggestions.forEach(product => {
-            const suggestion = document.createElement('div');
-            suggestion.textContent = `${product.name} (${product.code})`;
-            suggestion.onclick = () => {
-                document.getElementById('productSearch').value = product.name;
-                suggestionsDiv.style.display = 'none';
-                window.displayProducts([product]);
-            };
-            suggestionsDiv.appendChild(suggestion);
+        auth.onAuthStateChanged(user => {
+            currentUser = user;
+            if (user) {
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('registerBtn').style.display = 'none';
+                document.getElementById('logoutBtn').style.display = 'inline-block';
+                document.getElementById('nav-account-li').style.display = 'inline-block';
+            } else {
+                document.getElementById('loginBtn').style.display = 'inline-block';
+                document.getElementById('registerBtn').style.display = 'inline-block';
+                document.getElementById('logoutBtn').style.display = 'none';
+                document.getElementById('nav-account-li').style.display = 'none';
+            }
         });
-        suggestionsDiv.style.display = suggestions.length > 0 ? 'block' : 'none';
-    } else {
-        suggestionsDiv.style.display = 'none';
-        window.displayProducts(products);
-    }
-};
 
-document.getElementById('productSearch').addEventListener('input', window.searchProducts);
-
-document.getElementById('registerForm').addEventListener('submit', window.registerUser);
-document.getElementById('loginForm').addEventListener('submit', window.loginUser);
-
-document.getElementById('contactForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const successMessage = document.getElementById('successMessage');
-    try {
-        successMessage.textContent = 'Mesajınız uğurla göndərildi!';
-        successMessage.style.display = 'block';
-        successMessage.style.color = 'green';
-        document.getElementById('contactForm').reset();
-        setTimeout(() => {
-            successMessage.style.display = 'none';
-        }, 3000);
-    } catch (error) {
-        successMessage.textContent = 'Mesaj göndərilərkən xəta baş verdi.';
-        successMessage.style.display = 'block';
-        successMessage.style.color = 'red';
-    }
-});
-
-auth.onAuthStateChanged(user => {
-    currentUser = user;
-    if (user) {
-        document.getElementById('loginBtn').style.display = 'none';
-        document.getElementById('registerBtn').style.display = 'none';
-        document.getElementById('logoutBtn').style.display = 'inline-block';
-        document.getElementById('nav-account-li').style.display = 'inline-block';
-        if (document.getElementById('account').classList.contains('active')) {
-            window.loadUserAccount();
-        }
-    } else {
-        document.getElementById('loginBtn').style.display = 'inline-block';
-        document.getElementById('registerBtn').style.display = 'inline-block';
-        document.getElementById('logoutBtn').style.display = 'none';
-        document.getElementById('nav-account-li').style.display = 'none';
-    }
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    window.updateCartCount();
-    window.loadProducts();
-    window.showSection('about');
-});
+        document.addEventListener('DOMContentLoaded', () => {
+            window.updateCartCount();
+            window.showSection('about');
+        });
     </script>
 </body>
 </html>
