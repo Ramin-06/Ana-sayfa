@@ -1810,14 +1810,136 @@
 
         auth.onAuthStateChanged(user => {
         const loginLink = document.getElementById('nav-login');
+        const accountSection = document.getElementById('account');
         if (user) {
             loginLink.textContent = 'Hesab';
             loginLink.onclick = () => showSection('account');
+            loadUserAccount(user);
         } else {
             loginLink.textContent = 'Giriş';
             loginLink.onclick = () => openLoginModal();
+            accountSection.innerHTML = '<p>Zəhmət olmasa, hesabınıza daxil olun.</p>';
         }
     });
+
+    function sendOrderToWhatsApp() {
+        if (cart.length === 0) {
+            alert('Səbətiniz boşdur!');
+            return;
+        }
+        let orderDetails = 'Sifariş Detalları:\n';
+        let total = 0;
+        cart.forEach(item => {
+            const price = parseFloat(item.price) || 0;
+            orderDetails += `${item.name} (Kod: ${item.id}) - ${item.quantity} ədəd - ${price * item.quantity} AZN\n`;
+            total += price * item.quantity;
+        });
+        orderDetails += `Ümumi: ${total.toFixed(2)} AZN`;
+        const whatsappNumber = '+994123456789'; // Öz WhatsApp nömrənizi əlavə edin
+        const encodedMessage = encodeURIComponent(orderDetails);
+        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+        window.open(whatsappUrl, '_blank');
+
+        // Sifarişi Firestore-a saxla
+        const user = auth.currentUser;
+        if (user) {
+            const orderRef = doc(collection(db, 'orders'));
+            setDoc(orderRef, {
+                userId: user.uid,
+                items: cart,
+                total: total,
+                date: new Date().toISOString(),
+                status: 'pending'
+            }).then(() => {
+                // Balları yenilə
+                const points = Math.floor(total / 10); // 100 AZN = 10 bal
+                const userRef = doc(db, 'users', user.uid);
+                getDoc(userRef).then(docSnap => {
+                    const currentPoints = docSnap.exists() ? docSnap.data().points || 0 : 0;
+                    setDoc(userRef, { points: currentPoints + points }, { merge: true });
+                });
+                alert('Sifarişiniz göndərildi!');
+                cart = [];
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCount();
+                closeCartModal();
+            }).catch(error => {
+                console.error('Sifariş saxlama xətası:', error);
+                alert('Sifariş göndərilərkən xəta: ' + error.message);
+            });
+        }
+    }
+
+    function logout() {
+        signOut(auth).then(() => {
+            alert('Hesabdan çıxış edildi!');
+            showSection('about');
+        }).catch(error => {
+            console.error('Çıxış xətası:', error);
+            alert('Xəta: ' + error.message);
+        });
+    }
+
+    function loadUserAccount(user) {
+        const accountSection = document.getElementById('account');
+        const userRef = doc(db, 'users', user.uid);
+        getDoc(userRef).then(docSnap => {
+            const data = docSnap.exists() ? docSnap.data() : { points: 0 };
+            const isAdmin = data.isAdmin || false;
+            let accountHtml = `
+                <h2>Hesab Məlumatları</h2>
+                <div class="account-section">
+                    <h3>Ballar</h3>
+                    <p>Cari Ballar: ${data.points || 0}</p>
+                </div>
+                <div class="account-section">
+                    <h3>Sifarişlər</h3>
+                    <div id="ordersList"></div>
+                </div>
+            `;
+            if (isAdmin) {
+                accountHtml += `
+                    <div class="account-section">
+                        <h3>Qazanc</h3>
+                        <p id="totalEarnings">Hesablanır...</p>
+                    </div>
+                `;
+            }
+            accountHtml += `<button onclick="logout()">Çıxış</button>`;
+            accountSection.innerHTML = accountHtml;
+
+            // Sifarişləri yüklə
+            const ordersRef = collection(db, 'orders');
+            getDocs(ordersRef).then(querySnapshot => {
+                const ordersList = document.getElementById('ordersList');
+                let ordersHtml = '<ul>';
+                querySnapshot.forEach(doc => {
+                    const order = doc.data();
+                    if (order.userId === user.uid || isAdmin) {
+                        ordersHtml += `
+                            <li>
+                                Sifariş ID: ${doc.id}<br>
+                                Ümumi: ${order.total.toFixed(2)} AZN<br>
+                                Status: ${order.status}<br>
+                                Tarix: ${new Date(order.date).toLocaleDateString()}
+                            </li>
+                        `;
+                    }
+                });
+                ordersHtml += '</ul>';
+                ordersList.innerHTML = ordersHtml;
+
+                // Admin üçün qazancı hesabla
+                if (isAdmin) {
+                    let totalEarnings = 0;
+                    querySnapshot.forEach(doc => {
+                        totalEarnings += doc.data().total;
+                    });
+                    document.getElementById('totalEarnings').textContent = `Ümumi Qazanc: ${totalEarnings.toFixed(2)} AZN`;
+                }
+            });
+        });
+    }
 
     document.getElementById('contactForm').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -1845,6 +1967,7 @@
     window.closeRegisterModal = closeRegisterModal;
     window.login = login;
     window.register = register;
+    window.logout = logout;
 
     updateCartCount();
     loadProducts();
