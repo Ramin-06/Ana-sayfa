@@ -106,7 +106,6 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            cursor: pointer;
         }
         nav ul li a:hover {
             background-color: var(--nav-hover-bg);
@@ -267,21 +266,19 @@
             font-size: 14px;
             color: var(--text-color);
             margin: 5px 0;
-            background: none !important;
         }
         .bestseller-card p {
             font-size: 13px;
             font-weight: 500;
             margin-bottom: 10px;
-            background: none !important;
+            background: transparent;
         }
         .product-card .daily-sales {
-            font-size: 11px;
+            font-size: 13px;
             color: var(--satisfaction-color-2);
             font-weight: 600;
             margin: 5px 0;
             animation: fadeIn 1s ease-in-out;
-            background: none !important;
         }
         .product-card .add-to-cart-btn, .bestseller-card .add-to-cart-btn {
             background: linear-gradient(90deg, var(--primary), var(--secondary));
@@ -348,7 +345,7 @@
         .loader.active {
             display: block;
         }
-        #contactForm, #loginForm, #registerForm {
+        #contactForm {
             max-width: 600px;
             margin: auto;
             background: var(--card-bg);
@@ -357,20 +354,18 @@
             box-shadow: var(--shadow);
             color: var(--text-color);
         }
-        #contactForm h2, #loginForm h2, #registerForm h2 {
+        #contactForm h2 {
             color: var(--primary);
             margin-bottom: 20px;
         }
-        #contactForm label, #loginForm label, #registerForm label {
+        #contactForm label {
             font-weight: 600;
             display: block;
             margin-top: 15px;
             margin-bottom: 5px;
         }
         #contactForm input,
-        #contactForm textarea,
-        #loginForm input,
-        #registerForm input {
+        #contactForm textarea {
             width: 100%;
             padding: 12px;
             border-radius: 6px;
@@ -384,15 +379,13 @@
             transition: border-color 0.3s, background-color 0.3s;
         }
         #contactForm input:focus,
-        #contactForm textarea:focus,
-        #loginForm input:focus,
-        #registerForm input:focus {
+        #contactForm textarea:focus {
             border-color: var(--primary);
             outline: none;
             background: var(--card-bg);
             box-shadow: 0 0 6px rgba(108, 92, 231, 0.3);
         }
-        #contactForm button, #loginForm button, #registerForm button {
+        #contactForm button {
             margin-top: 20px;
             width: 100%;
             padding: 12px;
@@ -407,11 +400,11 @@
             position: relative;
             overflow: hidden;
         }
-        #contactForm button:hover, #loginForm button:hover, #registerForm button:hover {
+        #contactForm button:hover {
             background: linear-gradient(90deg, var(--secondary), var(--primary));
             transform: translateY(-2px);
         }
-        #contactForm button::after, #loginForm button::after, #registerForm button::after {
+        #contactForm button::after {
             content: '';
             position: absolute;
             top: 50%;
@@ -423,7 +416,7 @@
             transform: translate(-50%, -50%);
             transition: width 0.5s ease, height 0.5s ease;
         }
-        #contactForm button:hover::after, #loginForm button:hover::after, #registerForm button::after {
+        #contactForm button:hover::after {
             width: 200px;
             height: 200px;
         }
@@ -449,15 +442,15 @@
         }
         .footer-logo {
             height: 40px;
-            margin-left: 20px;
+            margin-left: 60px;
         }
         .footer-text {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
+           flex-grow: 1;
+        display: flex; /* Yazıları tam mərkəzləşdirmək üçün */
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
         }
         .modal {
             display: none;
@@ -843,63 +836,6 @@
             color: var(--primary);
             font-weight: 700;
         }
-        #account p {
-            font-size: 16px;
-            color: var(--text-color);
-            margin: 10px 0;
-        }
-        #account button {
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            padding: 12px 20px;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-            display: block;
-            width: 100%;
-            max-width: 200px;
-            margin-left: auto;
-            margin-right: auto;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            animation: pulse 2s infinite;
-        }
-        #account button:hover {
-            background: linear-gradient(90deg, var(--secondary), var(--primary));
-            transform: translateY(-2px);
-        }
-        #account button::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.5s ease, height 0.5s ease;
-        }
-        #account button:hover::after {
-            width: 200px;
-            height: 200px;
-        }
-        #orders {
-            margin-top: 20px;
-        }
-        #orders p {
-            font-size: 14px;
-            color: var(--text-color);
-            margin: 5px 0;
-        }
-        #orders hr {
-            border: 0;
-            border-top: 1px solid #ccc;
-            margin: 10px 0;
-        }
         @keyframes slideCart {
             0% { transform: translateX(0); }
             50% { transform: translateX(10px); }
@@ -928,7 +864,6 @@
             font-size: 24px;
             color: var(--nav-text);
             cursor: pointer;
-            z-index: 1001;
         }
         @media (max-width: 768px) {
             .hamburger {
@@ -943,7 +878,6 @@
                 top: 60px;
                 left: 0;
                 padding: 10px 20px;
-                z-index: 1000;
             }
             nav ul.active {
                 display: flex;
@@ -951,9 +885,6 @@
             nav ul li a {
                 padding: 10px;
                 font-size: 14px;
-                display: block;
-                width: 100%;
-                text-align: center;
             }
             .nav-container {
                 flex-direction: row;
@@ -964,17 +895,15 @@
                 grid-template-columns: repeat(2, 1fr);
                 gap: 15px;
             }
-            #contactForm, #loginForm, #registerForm {
+            #contactForm {
                 padding: 15px;
             }
             #contactForm input,
-            #contactForm textarea,
-            #loginForm input,
-            #registerForm input {
+            #contactForm textarea {
                 font-size: 14px;
                 padding: 10px;
             }
-            #contactForm button, #loginForm button, #registerForm button {
+            #contactForm button {
                 font-size: 15px;
                 padding: 10px;
             }
@@ -985,7 +914,7 @@
                 font-size: 13px;
             }
             .product-card .daily-sales {
-                font-size: 10px;
+                font-size: 12px;
             }
             .product-card .add-to-cart-btn, .bestseller-card .add-to-cart-btn {
                 padding: 8px;
@@ -1050,7 +979,7 @@
                 font-size: 12px;
             }
             .product-card .daily-sales {
-                font-size: 9px;
+                font-size: 11px;
             }
             .product-card .add-to-cart-btn, .bestseller-card .add-to-cart-btn {
                 padding: 6px;
@@ -1072,12 +1001,10 @@
                 font-size: 14px;
             }
             #contactForm input,
-            #contactForm textarea,
-            #loginForm input,
-            #registerForm input {
+            #contactForm textarea {
                 font-size: 13px;
             }
-            #contactForm button, #loginForm button, #registerForm button {
+            #contactForm button {
                 font-size: 14px;
             }
             h2 {
@@ -1093,6 +1020,7 @@
                 font-size: 1.2em;
             }
         }
+        /* Footer-specific styles */
         .footer-container {
             display: flex;
             align-items: center;
@@ -1149,7 +1077,6 @@
                 <li><a id="nav-projects" onclick="showSection('projects')">Ətirlər</a></li>
                 <li><a id="nav-contact" onclick="showSection('contact')">Əlaqə</a></li>
                 <li><a id="nav-catalogue" onclick="showSection('catalogue')">Kataloq</a></li>
-                <li><a id="nav-login" onclick="openLoginModal()">Giriş</a></li>
             </ul>
             <div>
                 <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">🌙</button>
@@ -1279,16 +1206,6 @@
             <h2>Kataloq</h2>
             <iframe id="cataloguePdf" src="urunlerim/KATALOQUM.pdf" allowfullscreen></iframe>
         </div>
-        <div id="account" class="section">
-            <h2>Hesab</h2>
-            <p id="rcoin">Rcoin: 0</p>
-            <p id="earnings">Qazanc: 0 ₼</p>
-            <button onclick="signOut(auth).then(() => showSection('about'))">Çıxış</button>
-            <div id="orders">
-                <h3>Sifarişlər</h3>
-                <p>Sifariş yoxdur.</p>
-            </div>
-        </div>
     </main>
     <div id="productModal" class="modal">
         <div class="modal-content">
@@ -1319,27 +1236,8 @@
             </div>
         </div>
     </footer>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCSaiU9DguIk47O8LPZ_Oa6StJgHbPqZ6I",
-            authDomain: "perfume-8b7f7.firebaseapp.com",
-            projectId: "perfume-8b7f7",
-            storageBucket: "perfume-8b7f7.appspot.com",
-            messagingSenderId: "899731999798",
-            appId: "1:899731999798:web:750af78287f56d15d41c97"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
+    <script>
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        let allProducts = [];
-        const bestsellerProductIds = ['P0266', 'P0259', 'P0089'];
-
         function animateNumbers() {
             const numbers = document.querySelectorAll('.number');
             numbers.forEach(number => {
@@ -1358,7 +1256,6 @@
                 const interval = setInterval(updateNumber, 80);
             });
         }
-
         function showSection(id) {
             const sections = document.querySelectorAll('.section');
             const links = document.querySelectorAll('nav ul li a');
@@ -1372,12 +1269,8 @@
             }
             if (id === 'about') {
                 setTimeout(animateNumbers, 100);
-            } else if (id === 'account') {
-                loadUserAccount();
-                loadUserOrders();
             }
         }
-
         function toggleTheme() {
             const body = document.body;
             const button = document.getElementById('themeToggle');
@@ -1385,162 +1278,13 @@
             button.textContent = isDark ? '☀️' : '🌙';
             button.style.color = isDark ? '#c7d1e0' : '#1a2a44';
         }
-
         function toggleMenu() {
-            const navMenu = document.getElementById('nav-menu');
-            navMenu.classList.toggle('active');
+            document.getElementById('nav-menu').classList.toggle('active');
         }
-
         function updateCartCount() {
             const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
             document.getElementById('cartCount').textContent = cartCount;
         }
-
-        function openLoginModal() {
-            document.body.classList.add('modal-open');
-            const modal = document.createElement('div');
-            modal.id = 'loginModal';
-            modal.className = 'modal';
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <span class="close-btn" onclick="closeLoginModal()">×</span>
-                    <form id="loginForm">
-                        <h2>Giriş</h2>
-                        <label for="loginEmail"><i class="fas fa-envelope"></i> E-poçt:</label>
-                        <input id="loginEmail" type="email" placeholder="E-poçt" required />
-                        <label for="loginPassword"><i class="fas fa-lock"></i> Şifrə:</label>
-                        <input id="loginPassword" type="password" placeholder="Şifrə" required />
-                        <button type="button" onclick="login()">Giriş et</button>
-                        <p>Hesabınız yoxdur? <a href="#" onclick="openRegisterModal()">Qeydiyyat</a></p>
-                    </form>
-                </div>
-            `;
-            document.body.appendChild(modal);
-            modal.classList.add('active');
-        }
-
-        function openRegisterModal() {
-            closeLoginModal();
-            const modal = document.createElement('div');
-            modal.id = 'registerModal';
-            modal.className = 'modal';
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <span class="close-btn" onclick="closeRegisterModal()">×</span>
-                    <form id="registerForm">
-                        <h2>Qeydiyyat</h2>
-                        <label for="registerEmail"><i class="fas fa-envelope"></i> E-poçt:</label>
-                        <input id="registerEmail" type="email" placeholder="E-poçt" required />
-                        <label for="registerPassword"><i class="fas fa-lock"></i> Şifrə:</label>
-                        <input id="registerPassword" type="password" placeholder="Şifrə" required />
-                        <button type="button" onclick="register()">Qeydiyyatdan keç</button>
-                        <p>Hesabınız var? <a href="#" onclick="openLoginModal()">Giriş</a></p>
-                    </form>
-                </div>
-            `;
-            document.body.appendChild(modal);
-            modal.classList.add('active');
-        }
-
-        function closeLoginModal() {
-            const modal = document.getElementById('loginModal');
-            if (modal) {
-                modal.classList.remove('active');
-                setTimeout(() => modal.remove(), 300);
-            }
-            document.body.classList.remove('modal-open');
-        }
-
-        function closeRegisterModal() {
-            const modal = document.getElementById('registerModal');
-            if (modal) {
-                modal.classList.remove('active');
-                setTimeout(() => modal.remove(), 300);
-            }
-            document.body.classList.remove('modal-open');
-        }
-
-        function login() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    alert('Giriş uğurlu oldu!');
-                    closeLoginModal();
-                    showSection('account');
-                })
-                .catch((error) => {
-                    alert('Xəta: ' + error.message);
-                });
-        }
-
-        function register() {
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-            createUserWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    alert('Qeydiyyat uğurlu oldu!');
-                    closeRegisterModal();
-                    showSection('account');
-                })
-                .catch((error) => {
-                    alert('Xəta: ' + error.message);
-                });
-        }
-
-        async function loadUserAccount() {
-            const user = auth.currentUser;
-            if (!user) {
-                alert('Hesaba daxil olun!');
-                showSection('about');
-                return;
-            }
-            const userRef = doc(db, 'users', user.uid);
-            const userSnap = await getDoc(userRef);
-            const rcoin = userSnap.exists() ? userSnap.data().rcoin || 0 : 0;
-            const earnings = calculateEarnings(rcoin);
-            document.getElementById('rcoin').textContent = `Rcoin: ${rcoin}`;
-            document.getElementById('earnings').textContent = `Qazanc: ${earnings} ₼`;
-        }
-
-        async function loadUserOrders() {
-            const user = auth.currentUser;
-            if (!user) return;
-            const ordersRef = collection(db, 'users', user.uid, 'orders');
-            const querySnapshot = await getDocs(ordersRef);
-            const ordersList = document.getElementById('orders');
-            ordersList.innerHTML = '<h3>Sifarişlər</h3>';
-            if (querySnapshot.empty) {
-                ordersList.innerHTML += '<p>Sifariş yoxdur.</p>';
-            } else {
-                querySnapshot.forEach(doc => {
-                    const order = doc.data();
-                    ordersList.innerHTML += `
-                        <p>Sifariş ID: ${doc.id}</p>
-                        <p>Məhsullar: ${order.products.map(p => `${p.name} (${p.volume})`).join(', ')}</p>
-                        <p>Cəmi: ${order.total} ₼</p>
-                        <p>Tarix: ${order.date}</p>
-                        <hr>
-                    `;
-                });
-            }
-        }
-
-        function calculateEarnings(rcoin) {
-            if (rcoin >= 600) return 200;
-            if (rcoin >= 400) return 150;
-            if (rcoin >= 200) return 80;
-            if (rcoin >= 100) return 30;
-            return 0;
-        }
-
-        async function addRcoin(userId, amount) {
-            const userRef = doc(db, 'users', userId);
-            const userSnap = await getDoc(userRef);
-            let currentRcoin = userSnap.exists() ? userSnap.data().rcoin || 0 : 0;
-            await setDoc(userRef, { rcoin: currentRcoin + amount }, { merge: true });
-        }
-
         function openModal(product) {
             document.body.classList.add('modal-open');
             const modalTitle = document.getElementById('modalTitle');
@@ -1585,21 +1329,39 @@
                     alert('Zəhmət olmasa etibarlı say daxil edin.');
                     return;
                 }
-                addToCartDirectly(product.id, product.name, selectedVolume, price, quantity);
+                const cartItem = {
+                    id: product.id,
+                    name: product.name,
+                    volume: selectedVolume,
+                    price: price,
+                    quantity: quantity
+                };
+                const existingItem = cart.find(item => item.id === cartItem.id && item.volume === cartItem.volume);
+                if (existingItem) {
+                    existingItem.quantity += quantity;
+                } else {
+                    cart.push(cartItem);
+                }
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCount();
+                const cartToggle = document.getElementById('cartToggle');
+                cartToggle.classList.add('slide');
+                setTimeout(() => {
+                    cartToggle.classList.remove('slide');
+                }, 500);
                 closeModal();
+                alert(`${cartItem.name} (${cartItem.volume}) səbətə əlavə edildi!`);
             };
             modalButtons.appendChild(btn30);
             modalButtons.appendChild(btn50);
             modalButtons.appendChild(addToCartBtn);
             document.getElementById('productModal').classList.add('active');
         }
-
         function closeModal() {
             document.getElementById('productModal').classList.remove('active');
             document.body.classList.remove('modal-open');
             document.getElementById('autocompleteSuggestions').style.display = 'none';
         }
-
         function openCartModal() {
             document.body.classList.add('modal-open');
             const cartItemsDiv = document.getElementById('cartItems');
@@ -1624,20 +1386,17 @@
             }
             document.getElementById('cartModal').classList.add('active');
         }
-
         function closeCartModal() {
             document.getElementById('cartModal').classList.remove('active');
             document.body.classList.remove('modal-open');
         }
-
         function removeFromCart(index) {
             cart.splice(index, 1);
             localStorage.setItem('cart', JSON.stringify(cart));
             updateCartCount();
             openCartModal();
         }
-
-        async function sendOrderToWhatsApp() {
+        function sendOrderToWhatsApp() {
             if (cart.length === 0) {
                 alert('Səbət boşdur. Zəhmət olmasa məhsul əlavə edin.');
                 return;
@@ -1649,49 +1408,55 @@
                 total += item.price * item.quantity;
             });
             message += `\nCəmi: ${total} ₼`;
-            const user = auth.currentUser;
-            if (user) {
-                const orderRef = doc(collection(db, 'users', user.uid, 'orders'));
-                await setDoc(orderRef, {
-                    products: cart,
-                    total: total,
-                    date: new Date().toISOString()
-                });
-            }
             const phoneNumber = '994515817772';
             const encodedMessage = encodeURIComponent(message);
             const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
             window.open(url, '_blank');
-            cart = [];
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateCartCount();
-            closeCartModal();
         }
-
+    </script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyCSaiU9DguIk47O8LPZ_Oa6StJgHbPqZ6I",
+            authDomain: "perfume-8b7f7.firebaseapp.com",
+            projectId: "perfume-8b7f7",
+            storageBucket: "perfume-8b7f7.appspot.com",
+            messagingSenderId: "899731999798",
+            appId: "1:899731999798:web:750af78287f56d15d41c97"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        let allProducts = [];
         function generateDailySeed() {
             const today = new Date();
             return parseInt(`${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, '0')}${String(today.getDate()).padStart(2, '0')}`);
         }
-
         function seededRandom(seed) {
             const x = Math.sin(seed * 1234567) * 10000;
             return x - Math.floor(x);
         }
-
         function getRandomDailySales(productId) {
             const seed = generateDailySeed() + parseInt(productId, 36);
             const random = seededRandom(seed);
             return Math.floor(random * 21) + 5;
         }
-
+        function formatDate() {
+            const today = new Date();
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const year = today.getFullYear();
+            return `${day}.${month}.${year}`;
+        }
         function createProductCard(product) {
             const card = document.createElement('div');
             card.className = 'product-card';
             const dailySales = getRandomDailySales(product.id);
+            const todayDate = formatDate();
             card.innerHTML = `
                 <h3>${product.name}</h3>
                 <p>Kod: ${product.code || '-'}</p>
-                <p class="daily-sales">bu gün satılıb: ${dailySales} ədəd</p>
+                <p class="daily-sales">Bu gün satılıb: ${dailySales} ədəd (${todayDate})</p>
                 <button class="add-to-cart-btn"><i class="fas fa-shopping-cart"></i> Səbətə əlavə et</button>
             `;
             const addToCartBtn = card.querySelector('.add-to-cart-btn');
@@ -1704,15 +1469,12 @@
             });
             return card;
         }
-
         function createBestsellerCard(product) {
             const card = document.createElement('div');
             card.className = 'bestseller-card';
-            const dailySales = getRandomDailySales(product.id);
             card.innerHTML = `
                 <h3>${product.name}</h3>
                 <p>Kod: ${product.code || '-'}</p>
-                <p class="daily-sales">bu gün satılıb: ${dailySales} ədəd</p>
                 <button class="add-to-cart-btn"><i class="fas fa-shopping-cart"></i></button>
             `;
             const addToCartBtn = card.querySelector('.add-to-cart-btn');
@@ -1721,7 +1483,6 @@
             });
             return card;
         }
-
         function addToCartDirectly(id, name, volume, price, quantity) {
             const cartItem = {
                 id: id,
@@ -1743,236 +1504,102 @@
             setTimeout(() => {
                 cartToggle.classList.remove('slide');
             }, 500);
-            const user = auth.currentUser;
-            if (user) {
-                addRcoin(user.uid, quantity * 2);
-            }
             alert(`${cartItem.name} (${cartItem.volume}) səbətə əlavə edildi!`);
         }
-
-        async function loadProducts() {
+        async function loadProducts(searchTerm = '') {
+            const productList = document.getElementById('product-list');
             const loader = document.getElementById('loader');
             loader.classList.add('active');
+            productList.innerHTML = '';
             try {
-                const querySnapshot = await getDocs(collection(db, 'products'));
+                const querySnapshot = await getDocs(collection(db, "products"));
+                loader.classList.remove('active');
+                if (querySnapshot.empty) {
+                    productList.innerHTML = '<p style="text-align:center; color: var(--text-color);">Məhsul tapılmadı</p>';
+                    return;
+                }
                 allProducts = [];
-                querySnapshot.forEach(doc => {
-                    allProducts.push({ id: doc.id, ...doc.data() });
+                querySnapshot.forEach(docSnap => {
+                    const product = { ...docSnap.data(), id: docSnap.id };
+                    allProducts.push(product);
                 });
-                const productList = document.getElementById('product-list');
-                productList.innerHTML = '';
-                allProducts.forEach(product => {
-                    productList.appendChild(createProductCard(product));
+                const filteredProducts = searchTerm
+                    ? allProducts.filter(product =>
+                        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        (product.code && product.code.toLowerCase().includes(searchTerm.toLowerCase()))
+                    )
+                    : allProducts;
+                if (filteredProducts.length === 0) {
+                    productList.innerHTML = '<p style="text-align:center; color: var(--text-color);">Axtarışa uyğun məhsul tapılmadı</p>';
+                    return;
+                }
+                filteredProducts.forEach(product => {
+                    const card = createProductCard(product);
+                    productList.appendChild(card);
                 });
                 const bestsellersList = document.getElementById('bestsellers-list');
                 bestsellersList.innerHTML = '';
-                const bestsellerProducts = allProducts.filter(product => bestsellerProductIds.includes(product.id));
-                bestsellerProducts.forEach(product => {
-                    bestsellersList.appendChild(createBestsellerCard(product));
+                const bestsellers = allProducts.slice(0, 3);
+                bestsellers.forEach(product => {
+                    const card = createBestsellerCard(product);
+                    bestsellersList.appendChild(card);
                 });
             } catch (error) {
-                console.error('Məhsulları yükləyərkən xəta:', error);
+                console.error("Məhsullar yüklənərkən xəta:", error);
+                productList.innerHTML = '<p style="color:red; text-align:center;">Məhsullar yüklənərkən xəta baş verdi</p>';
+                loader.classList.remove('active');
             }
-            loader.classList.remove('active');
         }
-
-        function setupSearch() {
-            const searchInput = document.getElementById('productSearch');
+        function showAutocompleteSuggestions(searchTerm) {
             const suggestionsDiv = document.getElementById('autocompleteSuggestions');
-            searchInput.addEventListener('input', () => {
-                const query = searchInput.value.toLowerCase();
-                suggestionsDiv.innerHTML = '';
-                if (query.length === 0) {
-                    suggestionsDiv.style.display = 'none';
-                    return;
-                }
-                const filteredProducts = allProducts.filter(product =>
-                    product.name.toLowerCase().includes(query) || (product.code && product.code.toLowerCase().includes(query))
-                );
-                filteredProducts.forEach(product => {
-                    const suggestion = document.createElement('div');
-                    suggestion.textContent = `${product.name} (${product.code || '-'})`;
-                    suggestion.addEventListener('click', () => {
-                        searchInput.value = product.name;
-                        suggestionsDiv.style.display = 'none';
-                        openModal(product);
-                    });
-                    suggestionsDiv.appendChild(suggestion);
-                });
-                suggestionsDiv.style.display = filteredProducts.length > 0 ? 'block' : 'none';
-            });
-            document.addEventListener('click', (e) => {
-                if (!suggestionsDiv.contains(e.target) && e.target !== searchInput) {
-                    suggestionsDiv.style.display = 'none';
-                }
-            });
-        }
-
-        auth.onAuthStateChanged(user => {
-        const loginLink = document.getElementById('nav-login');
-        const accountSection = document.getElementById('account');
-        if (user) {
-            loginLink.textContent = 'Hesab';
-            loginLink.onclick = () => showSection('account');
-            loadUserAccount(user);
-        } else {
-            loginLink.textContent = 'Giriş';
-            loginLink.onclick = () => openLoginModal();
-            accountSection.innerHTML = '<p>Zəhmət olmasa, hesabınıza daxil olun.</p>';
-        }
-    });
-
-    function sendOrderToWhatsApp() {
-        if (cart.length === 0) {
-            alert('Səbətiniz boşdur!');
-            return;
-        }
-        let orderDetails = 'Sifariş Detalları:\n';
-        let total = 0;
-        cart.forEach(item => {
-            const price = parseFloat(item.price) || 0;
-            orderDetails += `${item.name} (Kod: ${item.id}) - ${item.quantity} ədəd - ${price * item.quantity} AZN\n`;
-            total += price * item.quantity;
-        });
-        orderDetails += `Ümumi: ${total.toFixed(2)} AZN`;
-        const whatsappNumber = '+994123456789'; // Öz WhatsApp nömrənizi əlavə edin
-        const encodedMessage = encodeURIComponent(orderDetails);
-        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-        window.open(whatsappUrl, '_blank');
-
-        // Sifarişi Firestore-a saxla
-        const user = auth.currentUser;
-        if (user) {
-            const orderRef = doc(collection(db, 'orders'));
-            setDoc(orderRef, {
-                userId: user.uid,
-                items: cart,
-                total: total,
-                date: new Date().toISOString(),
-                status: 'pending'
-            }).then(() => {
-                // Balları yenilə
-                const points = Math.floor(total / 10); // 100 AZN = 10 bal
-                const userRef = doc(db, 'users', user.uid);
-                getDoc(userRef).then(docSnap => {
-                    const currentPoints = docSnap.exists() ? docSnap.data().points || 0 : 0;
-                    setDoc(userRef, { points: currentPoints + points }, { merge: true });
-                });
-                alert('Sifarişiniz göndərildi!');
-                cart = [];
-                localStorage.setItem('cart', JSON.stringify(cart));
-                updateCartCount();
-                closeCartModal();
-            }).catch(error => {
-                console.error('Sifariş saxlama xətası:', error);
-                alert('Sifariş göndərilərkən xəta: ' + error.message);
-            });
-        }
-    }
-
-    function logout() {
-        signOut(auth).then(() => {
-            alert('Hesabdan çıxış edildi!');
-            showSection('about');
-        }).catch(error => {
-            console.error('Çıxış xətası:', error);
-            alert('Xəta: ' + error.message);
-        });
-    }
-
-    function loadUserAccount(user) {
-        const accountSection = document.getElementById('account');
-        const userRef = doc(db, 'users', user.uid);
-        getDoc(userRef).then(docSnap => {
-            const data = docSnap.exists() ? docSnap.data() : { points: 0 };
-            const isAdmin = data.isAdmin || false;
-            let accountHtml = `
-                <h2>Hesab Məlumatları</h2>
-                <div class="account-section">
-                    <h3>Ballar</h3>
-                    <p>Cari Ballar: ${data.points || 0}</p>
-                </div>
-                <div class="account-section">
-                    <h3>Sifarişlər</h3>
-                    <div id="ordersList"></div>
-                </div>
-            `;
-            if (isAdmin) {
-                accountHtml += `
-                    <div class="account-section">
-                        <h3>Qazanc</h3>
-                        <p id="totalEarnings">Hesablanır...</p>
-                    </div>
-                `;
+            suggestionsDiv.innerHTML = '';
+            if (!searchTerm) {
+                suggestionsDiv.style.display = 'none';
+                return;
             }
-            accountHtml += `<button onclick="logout()">Çıxış</button>`;
-            accountSection.innerHTML = accountHtml;
-
-            // Sifarişləri yüklə
-            const ordersRef = collection(db, 'orders');
-            getDocs(ordersRef).then(querySnapshot => {
-                const ordersList = document.getElementById('ordersList');
-                let ordersHtml = '<ul>';
-                querySnapshot.forEach(doc => {
-                    const order = doc.data();
-                    if (order.userId === user.uid || isAdmin) {
-                        ordersHtml += `
-                            <li>
-                                Sifariş ID: ${doc.id}<br>
-                                Ümumi: ${order.total.toFixed(2)} AZN<br>
-                                Status: ${order.status}<br>
-                                Tarix: ${new Date(order.date).toLocaleDateString()}
-                            </li>
-                        `;
-                    }
-                });
-                ordersHtml += '</ul>';
-                ordersList.innerHTML = ordersHtml;
-
-                // Admin üçün qazancı hesabla
-                if (isAdmin) {
-                    let totalEarnings = 0;
-                    querySnapshot.forEach(doc => {
-                        totalEarnings += doc.data().total;
+            const suggestions = allProducts.filter(product =>
+                product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                (product.code && product.code.toLowerCase().includes(searchTerm.toLowerCase()))
+            ).slice(0, 5);
+            if (suggestions.length > 0) {
+                suggestions.forEach(product => {
+                    const div = document.createElement('div');
+                    div.textContent = product.name;
+                    div.addEventListener('click', () => {
+                        document.getElementById('productSearch').value = product.name;
+                        suggestionsDiv.style.display = 'none';
+                        loadProducts(product.name);
                     });
-                    document.getElementById('totalEarnings').textContent = `Ümumi Qazanc: ${totalEarnings.toFixed(2)} AZN`;
-                }
-            });
+                    suggestionsDiv.appendChild(div);
+                });
+                suggestionsDiv.style.display = 'block';
+            } else {
+                suggestionsDiv.style.display = 'none';
+            }
+        }
+        document.getElementById('productSearch').addEventListener('input', (e) => {
+            const searchTerm = e.target.value;
+            showAutocompleteSuggestions(searchTerm);
+            loadProducts(searchTerm);
         });
-    }
-
-    document.getElementById('contactForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const successMessage = document.getElementById('successMessage');
-        successMessage.textContent = 'Mesajınız uğurla göndərildi!';
-        successMessage.style.display = 'block';
-        this.reset();
-        setTimeout(() => {
-            successMessage.style.display = 'none';
-        }, 3000);
-    });
-
-    window.toggleTheme = toggleTheme;
-    window.toggleMenu = toggleMenu;
-    window.showSection = showSection;
-    window.openModal = openModal;
-    window.closeModal = closeModal;
-    window.openCartModal = openCartModal;
-    window.closeCartModal = closeCartModal;
-    window.removeFromCart = removeFromCart;
-    window.sendOrderToWhatsApp = sendOrderToWhatsApp;
-    window.openLoginModal = openLoginModal;
-    window.closeLoginModal = closeLoginModal;
-    window.openRegisterModal = openRegisterModal;
-    window.closeRegisterModal = closeRegisterModal;
-    window.login = login;
-    window.register = register;
-    window.logout = logout;
-
-    updateCartCount();
-    loadProducts();
-    setupSearch();
-    showSection('about');
-</script>
+        document.getElementById('productModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeModal();
+        });
+        document.getElementById('cartModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeCartModal();
+        });
+        window.addEventListener('DOMContentLoaded', () => {
+            loadProducts();
+            updateCartCount();
+            const closeBtn = document.querySelectorAll('.close-btn');
+            closeBtn.forEach(btn => btn.addEventListener('click', () => {
+                closeModal();
+                closeCartModal();
+            }));
+            if (document.getElementById('about').classList.contains('active')) {
+                animateNumbers();
+            }
+        });
+    </script>
 </body>
 </html>
